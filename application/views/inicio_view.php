@@ -222,11 +222,5 @@
             </div>
         </div>    
     
-    <!-- FOOTER -->
-    <footer style="text-align: center">
-        <hr/>
-        <p>Core D</p>
-        <p>&copy; 2014</p>
-    </footer>
 </body>
 </html>
