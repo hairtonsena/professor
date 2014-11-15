@@ -30,12 +30,13 @@
                 <div class="container">
                     <div class="row" style="margin-left: 15px;">
                         <img src="<?php echo base_url('imagens/logo.gif');?>"/><br>
-                        <form>
-                            <div style="margin: 0 auto 40px auto">
-                                <input type="text" placeholder="Busque um Servico ou Pessoa" style="width: 90%; height: 50px; margin-left: 15px; font-size: 20px; text-align: center"/>
-                            </div>
-                        </form>
+                        
                     </div>
+                    <form>
+                        <div style="margin: 0 auto 40px auto">
+                            <input type="text" placeholder="Busque um Servico ou Pessoa" style="width: 90%; height: 50px; margin-left: 15px; font-size: 20px; text-align: center"/>
+                        </div>
+                    </form>
                 </div>
                 
             </div>
