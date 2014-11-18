@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
 <title>Error</title>
+<meta charset="UTF-8" />
 <style type="text/css">
 
 ::selection{ background-color: #E13300; color: white; }

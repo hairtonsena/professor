@@ -1,4 +1,7 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 class Inicio extends CI_Controller {
 
@@ -6,11 +9,11 @@ class Inicio extends CI_Controller {
         parent::__construct();
         $this->load->helper('url');
     }
-    
-    public function index()
-    {
-            $this->load->view('inicio_view');
+
+    public function index() {
+        $this->load->view('inicio_view');
     }
+
 }
 
 /* End of file welcome.php */
