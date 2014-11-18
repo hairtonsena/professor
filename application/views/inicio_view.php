@@ -12,14 +12,15 @@
         
 </head>
 <body>
-    <div class="container-fluid" style="background: #660000; color: white;">
+    <div class="container-fluid shadow" style="background: #660000; color: white; ">
         <div class="row">
-            <div style=" margin: 10px 0 0 366px; width: 100%; height: 50px;">
+            <div style=" margin-left: 34%; margin-top: 10px; width: 100%; height: 50px;">
                
                     <form>
-                            <input type="text" placeholder="Busque um Servico ou Pessoa" style="width: 50%; height: 40px; margin-left: 15px; font-size: 20px; text-align: center"/>
+                            <input type="text" placeholder="Busque um Servico ou Pessoa" style="width: 50%;font-size: 20px; text-align: center"/>
                        
                     </form>
+                
             </div>
         </div>    
     </div>
