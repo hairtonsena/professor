@@ -14,6 +14,8 @@
 <body>
     <div class="container-fluid shadow" style="background: #660000; color: white; ">
         <div class="row">
+            <img class="img-circle" src="<?php echo base_url('imagens/logo.png'); ?>" data-src="" height="55" alt="Generic placeholder image" style="float: left; margin-left: 13%; margin-top: 5px">
+
             <div style=" margin-left: 34%; margin-top: 10px; width: 100%; height: 50px;">
                
                     <form>
