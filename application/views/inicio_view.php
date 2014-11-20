@@ -59,6 +59,7 @@
                             <td>
                                 <h4>Deijane Graciele</h4><br/>TRABALHO EXCEPCIONAL!!!!!! ESTAMOS MUITO 
                                 SATISFEITOS COM NOSSO ÁLBUM.... UM LUXO!!! RECOMENDO SEMPRE!!!!!
+                                <p><a class="btn btn-default" href="#" role="button">&raquo; Entrar em Contato</a></p>
                             </td>                      
                         </tr>
                         <tr>
