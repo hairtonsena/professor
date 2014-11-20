@@ -17,12 +17,14 @@
             <img class="img-circle" src="<?php echo base_url('imagens/logo.png'); ?>" data-src="" height="55" alt="Generic placeholder image" style="float: left; margin-left: 13%; margin-top: 5px">
 
             <div style=" margin-left: 34%; margin-top: 10px; width: 100%; height: 50px;">
-               
-                    <form>
-                            <input type="text" placeholder="Busque um Servico ou Pessoa" style="width: 50%;font-size: 20px; text-align: center"/>
-                       
-                    </form>
-                
+                <form>
+                    <div class="input-group" style="width: 45%">
+                        <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                        </span>
+                    </div>
+                </form>
             </div>
         </div>    
     </div>
@@ -109,7 +111,7 @@
         </fieldset>
                    
             </div>
-        </div>    
+        </div>  
     
 </body>
 </html>
