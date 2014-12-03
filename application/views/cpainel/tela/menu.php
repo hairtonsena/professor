@@ -23,6 +23,8 @@
                         <li><a href="<?php echo base_url("cpainel/empreendimento"); ?>">Empreendimento</a></li>
                         <li><a href="<?php echo base_url("cpainel/categoria"); ?>"> Categoria </a></li>
                         <li><a href="<?php echo base_url("cpainel/palavra_chave"); ?>"> Palavras chave </a></li>
+                        <li><a href="<?php echo base_url("cpainel/localizacao"); ?>"> Localização </a></li>
+
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -36,7 +38,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Relatórios <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="<?php echo base_url("cpainel/mais_acessados"); ?>">Mais acessados</a></li>
-                      
+
                     </ul>
                 </li>
 

@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 	<title>Classificados</title>
-        
+        <meta charset="UTF-8" />
         <link href="<?php echo base_url('bt/css/bootstrap.min.css');?>" rel="stylesheet">
         <link href="<?php echo base_url('css/estilo.css');?>" rel="stylesheet">
         
