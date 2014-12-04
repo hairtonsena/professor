@@ -1,0 +1,19 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 03/12/2014, 10:22:35
+    Author     : MOABBSOM QUALIDADE
+*/
+.link_ativo a
+{
+    background-color: #dcdcdc;
+    color: #000000;
+}
+
+.link a
+{
+ color: #000000;
+}
