@@ -7,6 +7,40 @@ and open the template in the editor.
     Created on : 03/12/2014, 10:22:35
     Author     : MOABBSOM QUALIDADE
 */
+.barra_principal
+{
+    height: 80px;
+    padding-top: 10px;
+}
+
+.flutuante_barra
+{
+    position: fixed;
+    z-index:100;
+    width: 100%;
+    margin: 0px;
+}
+
+.flutuante_menu
+{
+    height: auto;
+    position: fixed;
+    z-index:100;
+    margin-top: 60px;
+}
+
+.barra_rolar
+{
+    height: 450px;
+    overflow: auto;
+}
+
+.posicao_conteiner
+{
+    margin-top: 60px;
+    margin-left: 220px;
+}
+
 .link_ativo a
 {
     background-color: #dcdcdc;
@@ -24,11 +58,17 @@ and open the template in the editor.
 {
     width: 100%;
     height: auto;
+    margin-bottom: -10px;
 }
 
 .imagen_lista img
 {
-    width: 242px;
-    height: 200px;
-    margin: 10px;
+    width: 220px;
+    height: 150px;
+    margin-top: 10px;
+}
+
+.margen_baixo
+{
+    margin-bottom:15px;
 }
