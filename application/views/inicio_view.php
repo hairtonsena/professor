@@ -44,66 +44,30 @@
             
             <div class="col-md-10" style="height: auto; background-repeat: no-repeat; ">
                 <h3 style="text-align: left;  margin-top: 50px; margin-bottom: 20px;">Destaques abc</h3>
-                <fieldset>
-       
-            <table class="table table-hover">
-                <tbody>
-                        
-                        <tr>
-                            <td style="width: 180px">
-                                <img class="img-circle" src="#" data-src="" height="140" alt="Generic placeholder image">
-                            </td>
-                            <td>
-                                <h4>Deijane Graciele</h4><br/>TRABALHO EXCEPCIONAL!!!!!! ESTAMOS MUITO 
-                                SATISFEITOS COM NOSSO ÁLBUM.... UM LUXO!!! RECOMENDO SEMPRE!!!!!
-                                <p><a class="btn btn-default" href="#" role="button">&raquo; Entrar em Contato</a></p>
-                            </td>                      
-                        </tr>
-                        <tr>
-                            <td style="width: 180px">
-                                <img class="img-circle" src="#" data-src="" height="140" alt="Generic placeholder image">
-                            </td>
-                            <td><h4>Debora Suelem</h4><br/>
-                                Vinicius Hoje quero te parabeniza pelo belissimo trabalho e te agradecer por tudo 
-                                que vc e sua equipe fizeram por mim ,e tornaram o momento mais especial da minha vida possivel um 
-                                grande abraço e nosso muito obrigrada.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width: 180px">
-                                <img class="img-circle" src="#" data-src="" height="140" alt="Generic placeholder image">
-                            </td>
-                            <td><h4>Cleonice Brito Oliveira</h4><br/>Trabalho lindo... e sem fazer força alguma.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width: 180px">
-                                <img class="img-circle" src="#" data-src="" height="140" alt="Generic placeholder image">
-                            </td>
-                            <td><h4>Graziele Fonseca</h4><br/>MAIS DO QUE FOTOS PEDAÇOS DE COISAS BOAS .....ADORO.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width: 180px">
-                                <img class="img-circle" src="#" data-src="" height="140" alt="Generic placeholder image">
-                            </td>
-                            <td><h4>Nátally Morais</h4><br/>muito lindo ameii
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width: 180px">
-                                <img class="img-circle" src="#" data-src="" height="140" alt="Generic placeholder image">
-                            </td>
-                            <td><h4>Maria Teresa</h4><br/>Muito obrigada!!! Meu álbum ficou perfeito!!!
-                            </td>
-                        </tr>
-
-                </tbody>
-            </table>
-
-             
-
-        </fieldset>
+                <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                              <div class="thumbnail">
+                                  <div class="imagen_lista"<img  src="./imagens/imagen_teste.jpg"></div>
+                                <div class="caption alinha_direita">
+                                  <h3>Thumbnail label</h3>
+                                  <p>...</p>
+                                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                                </div>
+                              </div>
+                            
+                    
+                            
+                              <div class="thumbnail">
+                                  <div class="imagen_lista"<img src="./imagens/imagen_teste.jpg"></div>
+                                <div class="caption alinha_direita">
+                                  <h3>Thumbnail label</h3>
+                                  <p>...</p>
+                                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                                </div>
+                              </div>
+                            </div>
+                </div>
+                </div>
                    
             </div>
         </div>  
