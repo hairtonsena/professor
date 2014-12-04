@@ -24,7 +24,7 @@ Localizacao = {
 CarregarPagina = {
     carregarConteudo: function (pg, parametro, local) {
         local = "#" + local;
-        $.ajax({
+        $.ajax({    
             type: "post",
             url: pg,
             data: parametro,
