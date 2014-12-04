@@ -17,3 +17,18 @@ and open the template in the editor.
 {
  color: #000000;
 }
+
+
+
+.imagen_lista
+{
+    width: 100%;
+    height: auto;
+}
+
+.imagen_lista img
+{
+    width: 242px;
+    height: 200px;
+    margin: 10px;
+}
