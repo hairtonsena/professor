@@ -150,7 +150,7 @@
             </div>
 
         </div>
-        <div>
+        <div class="fim_roda_pe">
            Roda Pé
         </div>
      
