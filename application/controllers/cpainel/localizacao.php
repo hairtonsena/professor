@@ -17,7 +17,7 @@ class Localizacao extends CI_Controller {
     }
 
     public function index() {
-
+        // utilizando
         if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
 
 
@@ -63,44 +63,87 @@ class Localizacao extends CI_Controller {
         }
     }
 
+    //Utilizando
     public function obter_cidade_estado() {
         if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
 
             $id_estado = $_POST['estado'];
-            
+
             $dados = array(
                 'cidade' => $this->localizacao_model->obter_cidade_uf($id_estado)->result(),
             );
-            
+
 //            
 //            $this->load->view('cpainel/tela/titulo');
 //            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/localizacao/ver_cidade_estado_view',$dados);
+            $this->load->view('cpainel/localizacao/ver_cidade_estado_view', $dados);
 //            $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
 
-    public function criar_nova_secretaria() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-            $this->form_validation->set_rules('titulo_secretaria', 'Titulo', 'required|trim|min_length[5]');
-            if ($this->form_validation->run() == FALSE) {
-                $this->nova();
-            } else {
-                $titulo_secretaria = $this->input->post('titulo_secretaria');
-                $id_secretaria = url_title($titulo_secretaria);
-                $dados = array(
-                    'id_secretaria' => $id_secretaria,
-                    'titulo_secretaria' => $titulo_secretaria
-                );
+    public function ativar_desativar_estado() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+            $reterno = '';
 
-                $this->secretaria_model->salvarNovoSecretaria($dados);
+            $estado = $_POST['estado'];
 
-                redirect(base_url("cpainel/secretaria/alterar_texto_secretaria/" . $id_secretaria));
+            $query = $this->localizacao_model->obter_um_uf($estado)->result();
+
+            //   echo count($query);
+            //   print_r($query);
+            if (count($query) > 0) {
+                foreach ($query as $qr) {
+                    if ($qr->status_uf == 0) {
+                        $dados = array(
+                            'status_uf' => 1
+                        );
+                        $reterno = '1';
+                    } else {
+                        $dados = array(
+                            'status_uf' => 0
+                        );
+                        $reterno = '0';
+                    }
+                    $this->localizacao_model->alterar_dados_uf($dados, $estado);
+                }
             }
+            echo $reterno;
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            //redirect(base_url("cpainel/seguranca"));
+            echo 'ola';
+        }
+    }
+    // Utilizando
+    public function ativar_desativar_cidade() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+            $reterno = '';
+
+            $cidade = $_POST['cidade'];
+
+            $query = $this->localizacao_model->obter_um_cidade($cidade)->result();
+
+            if (count($query) > 0) {
+                foreach ($query as $qr) {
+                    if ($qr->status_cidade == 0) {
+                        $dados = array(
+                            'status_cidade' => 1
+                        );
+                        $reterno = '1';
+                    } else {
+                        $dados = array(
+                            'status_cidade' => 0
+                        );
+                        $reterno = '0';
+                    }
+                    $this->localizacao_model->alterar_dados_cidade($dados, $cidade);
+                }
+            }
+            echo $reterno;
+        } else {
+            //redirect(base_url("cpainel/seguranca"));
+            echo 'ola';
         }
     }
 

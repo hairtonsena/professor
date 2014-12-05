@@ -48,10 +48,14 @@
 $active_group = 'default';
 $active_record = TRUE;
 
+// $db['default']['password'] = '';
+// $db['default']['database'] = 'siteservico';
+
+
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'siteservico';
+$db['default']['password'] = '12345';
+$db['default']['database'] = 'siteServico';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
