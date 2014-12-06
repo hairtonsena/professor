@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class secretaria extends CI_Controller {
+class Empreendimento extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -12,21 +12,21 @@ class secretaria extends CI_Controller {
         $this->load->database();
         $this->load->library('form_validation');
         $this->load->library('session');
-        $this->load->model('cpainel/secretaria_model');
+        $this->load->model('cpainel/empreendimento_model');
         $this->load->library('upload');
     }
 
     public function index() {
 
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
             $dados = array(
-                'secretarias' => $this->secretaria_model->ver_todas_secretaria()->result(),
+                'empreendimento' => $this->empreendimento_model->ver_todas_empreendimento()->result(),
             );
 
 
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/secretaria/tabela_alterar_secretarias_view', $dados);
+            $this->load->view('cpainel/empreendimento/empreendimento_view', $dados);
 
             $this->load->view('cpainel/tela/rodape');
         } else {
@@ -34,12 +34,12 @@ class secretaria extends CI_Controller {
         }
     }
 
-    public function nova() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
+    public function novo() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
 
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/secretaria/forme_criar_secretaria_view');
+            $this->load->view('cpainel/empreendimento/forme_criar_empreendimento_view');
             $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));

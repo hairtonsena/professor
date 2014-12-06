@@ -1,16 +1,15 @@
 <div class="row col-lg-12">
     <ol class="breadcrumb">
         <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
-        <li class="active">Secretaria </li>       
+        <li class="active">Empreendimento </li>       
     </ol>
-    <a class="btn btn-primary" href="<?php echo base_url("cpainel/secretaria/nova"); ?>">Nova Secretaria</a>
+    <a class="btn btn-primary" href="<?php echo base_url("cpainel/empreendimento/novo"); ?>">Novo empreendimento</a>
     <table class="table table-striped">
         <thead>
             <tr>
-                <!--<td> Id </td>-->
-                <td> Titulo </td>
-                <td> Ver Imagem </td> 
-                <td> Ver Texto </td>
+                <td> Nome </td>
+                <td> Logo </td> 
+                <td> Descrição </td>
                 <td> Excluir </td>
                 <td> Status </td>
 
@@ -18,7 +17,7 @@
         </thead>
         <tbody>
             <?php
-            foreach ($secretarias as $nt) {
+            foreach ($empreendimento as $nt) {
                 if ($nt->status_secretaria == 0) {
                     ?>
                     <tr>
