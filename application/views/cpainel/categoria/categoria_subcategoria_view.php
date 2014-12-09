@@ -1,10 +1,10 @@
 <div class="row col-lg-12">
     <ol class="breadcrumb">
         <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
-        <li class="active">Mural</li>       
+        <li class="active">Categaria</li>       
     </ol>
 
-    <a class="btn btn-primary" href="<?php echo base_url("cpainel/mural/nova"); ?>">Novo Mural</a>
+    <input type="text" name="nova_categoria" value="" id="iptNovaCategoria" /> <button class="btn btn-primary" id="btnNovaCategoria">+</button>
     <table class="table table-striped">
         <thead>
             <tr>

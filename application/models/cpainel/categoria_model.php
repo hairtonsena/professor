@@ -1,10 +1,9 @@
 <?php
 
-class mural_model extends CI_Model {
+class categoria_model extends CI_Model {
 
-    function ver_todas_murais() {
-        $this->db->order_by("ordem_mural", "desc");
-        return $this->db->get('mural');
+    function ver_todas_categoria() {
+        return $this->db->get('categoria');
     }
 
     function ver_todos_anexos_mural() {

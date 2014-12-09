@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class mural extends CI_Controller {
+class categoria extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -12,26 +12,24 @@ class mural extends CI_Controller {
         $this->load->database();
         $this->load->library('form_validation');
         $this->load->library('session');
-        $this->load->model('cpainel/mural_model');
+        $this->load->model('cpainel/categoria_model');
         $this->load->library('upload');
         date_default_timezone_set('UTC');
     }
 
     public function index() {
 
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
 
-            $todosMurais = $this->mural_model->ver_todas_murais()->result();
-
+            $todosCategoria = $this->categoria_model->ver_todas_categoria()->result();
 
             $dados = array(
-                'mural' => $todosMurais,
-                'anexo_mural' => $this->mural_model->ver_todos_anexos_mural()->result(),
+                'categaria' => $todosCategoria,
             );
 
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/mural/tabela_alterar_mural_view', $dados);
+            $this->load->view('cpainel/categoria/categoria_subcategoria_view', $dados);
             $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("seguranca"));

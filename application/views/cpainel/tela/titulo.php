@@ -9,14 +9,12 @@
         <link rel="stylesheet" href="<?php echo base_url("bt/css/bootstrap.min.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("bt/css/bootstrap-theme.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("bt/css/bootstrap-theme.min.css"); ?>">
-        <link rel="stylesheet" href="<?php echo base_url("css/estiloGeral.css"); ?>">
+        <link rel="stylesheet" href="<?php echo base_url("css/estiloGeralCpainel.css"); ?>">
         <script src="<?php echo base_url("js/jquery.js"); ?>"></script>
         <script src="<?php echo base_url("bt/js/bootstrap.min.js"); ?>"></script>
         <!--<script src="<?php // echo base_url("js/cpainel.js");  ?>"></script>-->
         <script src="<?php echo base_url("js/processamento_cpainel.js"); ?>"></script>
-        <script>
-
-        </script>
+        <script src="<?php echo base_url("js/layout_cpainel.js");?>"></script>
 
     </head>
     <body>

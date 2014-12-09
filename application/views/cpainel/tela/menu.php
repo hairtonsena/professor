@@ -1,5 +1,5 @@
-<nav class="navbar" role="navigation" style="background-color: #fff; margin: 0px 0px 0px 0px; padding: 0px 0px 0px 0px;" >
-    <div class="container" style="background-color: #fff">
+<nav class="navbar navbar-default" role="navigation" >
+    <div class="container" >
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -49,4 +49,4 @@
         </div><!-- /.navbar-collapse -->
     </div>
 </nav>
-<div class="row" >
+<div class="container col-lg-12 " >

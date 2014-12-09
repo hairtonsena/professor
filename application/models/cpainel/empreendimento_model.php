@@ -6,6 +6,10 @@ class empreendimento_model extends CI_Model {
         return $this->db->get('empreendimento');
     }
 
+    function obter_tipo_empreendimento() {
+        return $this->db->get('tipo_empreendimento');
+    }
+
     function obter_secretaria($id_secretaria) {
         return $this->db->get_where('secretaria', array('id_secretaria' => $id_secretaria));
     }

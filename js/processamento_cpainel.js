@@ -23,11 +23,11 @@ Localizacao = {
                 var linkAtivarEstado;
                 var verCidade;
                 if (retorno === '1') {
-                   
+
                     linkAtivarEstado = '<button type="button" onclick="Localizacao.ativar_desativar_estado(\'' + id + '\')" >Desativar</button>';
                     verCidade = '<button type="button" onclick="Localizacao.obter_ciadade_estado(\'' + id + '\')" >>></button>';
                 } else if (retorno === '0') {
-                     Localizacao.obter_ciadade_estado(-1);
+                    Localizacao.obter_ciadade_estado(-1);
                     linkAtivarEstado = '<button type="button" onclick="Localizacao.ativar_desativar_estado(\'' + id + '\')" >Ativar</button>';
                     verCidade = '>>';
                 } else {
@@ -35,15 +35,15 @@ Localizacao = {
                 }
                 $(btnVerCidade).html(verCidade);
                 $(btnAtivarEstado).html(linkAtivarEstado);
-                
+
             }
         });
-        
+
     },
     ativar_desativar_cidade: function (id) {
 
         var btnAtivarCidade = '#btnAtivarCidade_' + id;
-        
+
         var parametro = "cidade=" + id;
         var pg = 'http://localhost/siteservico/cpainel/localizacao/ativar_desativar_cidade';
         $.ajax({
@@ -53,22 +53,41 @@ Localizacao = {
             success: function (retorno) {
                 var linkAtivarCidade;
                 if (retorno === '1') {
-                    linkAtivarCidade = '<button type="button" onclick="Localizacao.ativar_desativar_cidade(\''+id+'\')">Desativar</button>';
-                    
+                    linkAtivarCidade = '<button type="button" onclick="Localizacao.ativar_desativar_cidade(\'' + id + '\')">Desativar</button>';
+
                 } else if (retorno === '0') {
-                    
+
                     linkAtivarCidade = '<button type="button" onclick="Localizacao.ativar_desativar_cidade(\'' + id + '\')" >Ativar</button>';
-                    
+
                 } else {
                     linkAtivarCidade = 'Falha';
                 }
                 $(btnAtivarCidade).html(linkAtivarCidade);
-                
+
             }
         });
-        
+
     }
 };
+
+Empreendimento = {
+    opcao_formulario: function () {
+        var tipo_empreendimento = $('#tipo_empreendimento').val();
+        var parametro = "tipo_empreendimento=" + tipo_empreendimento;
+        var pg = 'http://localhost/siteservico/cpainel/empreendimento/fome_opcao_tipo_empreendimento';
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                
+                $('#form_cadastro_empreendimento').html(retorno);
+
+            }
+        });
+    }
+}
+
 
 CarregarPagina = {
     carregarConteudo: function (pg, parametro, local) {

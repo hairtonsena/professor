@@ -9,67 +9,19 @@
             <div class="form-group">
                 <label for="titulo" class="col-sm-1 control-label">Tipo</label>
                 <div class="col-sm-5">
-                    <!--<input type="titulo" name="titulo_secretaria" class="form-control" id="titulo" placeholder="Titulo">-->
-                    <select name="tipo" class="form-control">
-
-                        <option value="1">aaaaa</option>
-                        <option value="1">bbbbb</option>
-
+                    <select name="tipo" id="tipo_empreendimento" class="form-control" onchange="Empreendimento.opcao_formulario()">
+                        <option value="">Selecione um Tipo</option>
+                        <?php foreach ($tipo_empreendimento as $te){ ?>
+                        <option value="<?php echo $te->id_tipo_empreendimento ?>"><?php echo $te->nome_tipo_empreendimento ?></option>
+                        <?php } ?>
                     </select>
-                    <span class="text-danger"><?php echo validation_errors() ?></span>
                 </div>
             </div>            
         </div>
         <hr/>
-        <div class="col-lg-6">
-
-            <div class="form-group">
-                <label for="titulo" class="col-sm-2 control-label">Nome:</label>
-                <div class="col-sm-10">
-                    <input type="titulo" name="titulo_secretaria" class="form-control" id="titulo" placeholder="Titulo">
-                    <span class="text-danger"><?php echo validation_errors() ?></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="titulo" class="col-sm-2 control-label">CPF:</label>
-                <div class="col-sm-10">
-                    <input type="titulo" name="titulo_secretaria" class="form-control" id="titulo" placeholder="Titulo">
-                    <span class="text-danger"><?php echo validation_errors() ?></span>
-                </div>
-            </div>
+        <div id="form_cadastro_empreendimento">
         </div>
-        <div class="col-lg-6">
-
-            <div class="form-group">
-                <label for="titulo" class="col-sm-2 control-label">Nome</label>
-                <div class="col-sm-10">
-                    <input type="titulo" name="titulo_secretaria" class="form-control" id="titulo" placeholder="Titulo">
-                    <span class="text-danger"><?php echo validation_errors() ?></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="titulo" class="col-sm-2 control-label">CPF:</label>
-                <div class="col-sm-10">
-                    <input type="titulo" name="titulo_secretaria" class="form-control" id="titulo" placeholder="Titulo">
-                    <span class="text-danger"><?php echo validation_errors() ?></span>
-                </div>
-            </div>
-
-
-        </div>
-
-
-        <div class="col-lg-12">
-
-            <div class="form-group">
-                <div class="col-md-offset-4 col-sm-4">
-                    <a class="btn btn-default" href="<?php echo base_url("cpainel/secretaria") ?>" > Cancelar </a>
-                    <button type="submit" class="btn btn-primary"> Criar</button>
-                </div>
-            </div>
-        </div>
-
+    </form>
 </div>
-</form>
+
 </div>
