@@ -6,25 +6,21 @@ class categoria_model extends CI_Model {
         return $this->db->get('categoria');
     }
 
-    function ver_todos_anexos_mural() {
-        return $this->db->get('anexo_mural');
+    function obter_uma_categoria($id_categoria) {
+        return $this->db->get_where('categoria', array('id_categoria' => $id_categoria));
     }
 
-    function obter_mural($id_mural) {
-        return $this->db->get_where('mural', array('id_mural' => $id_mural));
+    function salvar_nova_categoria($data) {
+        $this->db->insert('categoria', $data);
     }
 
-    function salvarNovoMural($data) {
-        $this->db->insert('mural', $data);
+    function alterar_dados_categoria($dados, $idcategoria) {
+        $this->db->where('id_categoria', $idcategoria);
+        $this->db->update('categoria', $dados);
     }
 
     function salvarAnexoMural($dados) {
         $this->db->insert('anexo_mural', $dados);
-    }
-
-    function alterarDadosMural($dados, $idmural) {
-        $this->db->where('id_mural', $idmural);
-        $this->db->update('mural', $dados);
     }
 
     function excluirSecretaria($idSecretaria) {

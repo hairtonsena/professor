@@ -23,7 +23,6 @@ Localizacao = {
                 var linkAtivarEstado;
                 var verCidade;
                 if (retorno === '1') {
-
                     linkAtivarEstado = '<button type="button" onclick="Localizacao.ativar_desativar_estado(\'' + id + '\')" >Desativar</button>';
                     verCidade = '<button type="button" onclick="Localizacao.obter_ciadade_estado(\'' + id + '\')" >>></button>';
                 } else if (retorno === '0') {
@@ -86,8 +85,42 @@ Empreendimento = {
             }
         });
     }
-}
+};
 
+
+Categoria = {
+    ativar_desativar_categoria: function (id) {
+
+        var btnAtivarCategoria = '#btnAtivarCategoria_' + id;
+        var btnEditarCategoria = '#btnEditarCategoria_' + id;
+
+        var parametro = "categoria=" + id;
+        var pg = 'http://localhost/siteservico/cpainel/categoria/ativar_desativar_categoria';
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                var linkAtivarCategoria;
+                var linkEditarCategoria;
+                if (retorno === '1') {
+                    linkAtivarCategoria = '<a href="#" onclick="Categoria.ativar_desativar_categoria(\''+id+'\')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a>';
+                    linkEditarCategoria = '<a href="javascript:void(0)" id="editar"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
+                } else if (retorno === '0') {
+                    linkAtivarCategoria = '<a href="#" onclick="Categoria.ativar_desativar_categoria(\''+id+'\')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a>';
+                    linkEditarCategoria = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
+                } else {
+                    //linkAtivarEstado = 'Falha';
+                }
+                $(btnEditarCategoria).html(linkEditarCategoria);
+                
+                $(btnAtivarCategoria).html(linkAtivarCategoria);
+
+            }
+        });
+
+    }
+};
 
 CarregarPagina = {
     carregarConteudo: function (pg, parametro, local) {

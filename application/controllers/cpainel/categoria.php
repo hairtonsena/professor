@@ -24,60 +24,77 @@ class categoria extends CI_Controller {
             $todosCategoria = $this->categoria_model->ver_todas_categoria()->result();
 
             $dados = array(
-                'categaria' => $todosCategoria,
+                'categoria' => $todosCategoria,
             );
 
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/categoria/categoria_subcategoria_view', $dados);
-            $this->load->view('cpainel/tela/rodape');
-        } else {
-            redirect(base_url("seguranca"));
-        }
-    }
-
-    public function nova() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $this->load->view('cpainel/tela/titulo');
-            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/mural/forme_criar_publicacao_view');
+            $this->load->view('cpainel/categoria/categoria_view', $dados);
             $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
 
-    public function criar_nova_publicacao() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
+    public function nova_categoria() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/categoria/forme_nova_categoria_view');
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
 
-            $this->form_validation->set_rules('titulo_publicacao', 'Titulo', 'required|trim|min_length[5]');
+    public function salvar_nova_categoria() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+
+            $this->form_validation->set_rules('nome_categoria', 'Nome', 'required|trim|min_length[5]');
 
             if ($this->form_validation->run() == FALSE) {
 
-                $this->nova();
+                $this->nova_categoria();
             } else {
 
-                $titulo_publicacao = $this->input->post('titulo_publicacao');
-                $id_publicacao = url_title($titulo_publicacao);
 
-                $data_publicacao = date('Y-m-d');
+                $nome_categoria = $this->input->post("nome_categoria");
+                $dados = array("nome_categoria" => $nome_categoria);
+                $this->categoria_model->salvar_nova_categoria($dados);
 
 
-
-                $dados = array(
-                    'id_mural' => $id_publicacao,
-                    'titulo_mural' => $titulo_publicacao,
-                    'data_mural' => $data_publicacao,
-                    'ordem_mural' => date('Y-m-d H:i:s')  // 2013-11-19 04:20:08
-                );
-
-                $this->mural_model->salvarNovoMural($dados);
-
-                redirect(base_url("cpainel/mural/alterar_texto_mural/" . $id_publicacao));
+                redirect(base_url("cpainel/categoria"));
             }
         } else {
             redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    public function ativar_desativar_categoria() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+            $reterno = '';
+            $categoria = $this->input->post('categoria');
+            $query = $this->categoria_model->obter_uma_categoria($categoria)->result();
+            if (count($query) > 0) {
+                foreach ($query as $qr) {
+                    if ($qr->status_categoria == 0) {
+                        $dados = array(
+                            'status_categoria' => 1
+                        );
+                        $reterno = '1';
+                    } else {
+                        $dados = array(
+                            'status_categoria' => 0
+                        );
+                        $reterno = '0';
+                    }
+                    $this->categoria_model->alterar_dados_categoria($dados, $categoria);
+                }
+            }
+            echo $reterno;
+        } else {
+            //redirect(base_url("cpainel/seguranca"));
+            echo 'ola';
         }
     }
 
@@ -107,26 +124,29 @@ class categoria extends CI_Controller {
         }
     }
 
-    public function alterar_titulo_publicacao() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
+    public function alterar_nome_categoria() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
 
-            $this->form_validation->set_rules('titulo_publicacao', 'Titulo', 'required|trim|min_length[5]');
-            $id_mural = $this->input->post('id_mural');
+            $this->form_validation->set_rules('nome_c', 'Nome', 'required|trim|min_length[5]');
             if ($this->form_validation->run() == FALSE) {
-
-                $this->forme_editar_titulo_mural($id_mural);
+                echo form_error('nome_c');
+                // echo $this->forme_validation->display_error();
             } else {
 
-                $titulo_mural = $this->input->post('titulo_publicacao');
+                $nome_categoria = $this->input->post('nome_c');
+                $id_categoria = $this->input->post('id_c');
+                $campo_categoria = $this->input->post('campo_c');
 
                 $dados = array(
-                    'titulo_mural' => $titulo_mural,
+                    'nome_categoria' => $nome_categoria,
                 );
 
 
-                $this->mural_model->alterarDadosMural($dados, $id_mural);
+                $this->categoria_model->alterar_dados_categoria($dados, $id_categoria);
 
-                redirect(base_url("cpainel/mural"));
+
+                echo '1';
+                // redirect(base_url("cpainel/mural"));
             }
         } else {
             redirect(base_url("cpainel/seguranca"));
@@ -393,16 +413,16 @@ class categoria extends CI_Controller {
     public function desativar_anexor() {
         if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
 
-        $id_anexo = $this->uri->segment(4);
+            $id_anexo = $this->uri->segment(4);
 
-        $dados = array(
-            'status_am' => 0
-        );
+            $dados = array(
+                'status_am' => 0
+            );
 
-        $this->mural_model->alterarDadosAnexo($dados, $id_anexo);
+            $this->mural_model->alterarDadosAnexo($dados, $id_anexo);
 
-        redirect(base_url("cpainel/mural"));
-                } else {
+            redirect(base_url("cpainel/mural"));
+        } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
