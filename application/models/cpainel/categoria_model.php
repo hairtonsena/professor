@@ -19,12 +19,12 @@ class categoria_model extends CI_Model {
         $this->db->update('categoria', $dados);
     }
 
-    function salvarAnexoMural($dados) {
-        $this->db->insert('anexo_mural', $dados);
+    function excluir_categoria($idCategoira) {
+        $this->db->delete('categoria', array('id_categoria' => $idCategoira));
     }
 
-    function excluirSecretaria($idSecretaria) {
-        $this->db->delete('secretaria', array('id_secretaria' => $idSecretaria));
+    function salvarAnexoMural($dados) {
+        $this->db->insert('anexo_mural', $dados);
     }
 
     function alterarDadosAnexo($dados, $id_anexo) {

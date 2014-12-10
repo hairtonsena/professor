@@ -3,13 +3,28 @@
         <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
         <li class="active">Categoria</li>       
     </ol>
-    <div class="col-lg-6">
-        <a  href="<?php echo base_url("cpainel/categoria/nova_categoria") ?>" class="btn btn-primary" id="btnNovaCategoria">Nova Categoria</a>
+    <div class="col-lg-4">
+        <div>
+            <h4 class="text-primary">Categoria</h4>
+            <h2>
+                <?php
+                foreach ($categoria as $ct) {
+                    ?>
+                    <?php echo $ct->nome_categoria; ?>
+                    <?php
+                }
+                ?>
+            </h2>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <a  href="<?php echo base_url("cpainel/categoria/nova_subcategoria") ?>" class="btn btn-primary" id="btnNovaCategoria">Nova subcategoria</a>
+        <a href="#" class="pull-right btn btn-default" >Mover</a>
         <div>
             <table class="table table-bordered" id="tabelaCategoria">
                 <thead>
                     <tr>
-                        <td class="col-lg-9"> Nome </td>
+                        <td class="col-lg-9"> Subcategoria </td>
                         <td class="col-lg-1 center"> Alterar </td>
                         <td class="col-lg-1 center"> Excluir </td>
                         <td class="col-lg-1 center"> sub </td>
@@ -34,7 +49,7 @@
                                 <td><span id="nome_<?php echo $ct->id_categoria ?>"><?php echo $ct->nome_categoria; ?></span></td>
                                 <td class="text-center"><span id="btnEditarCategoria_<?php echo $ct->id_categoria ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </span></td>
                                 <td class="text-center"><span id="btnExcluirCategoria_<?php echo $ct->id_categoria ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span></td>
-                                <td class="text-center"> <span id="btnAddSubcategoria_<?php echo $ct->id_categoria ?>"> <a href="<?php echo base_url('cpainel/categoria/subcategoria/'.$ct->id_categoria) ?>" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a></span></td>
+                                <td class="text-center"> <span id="btnAddSubcategoria_<?php echo $ct->id_categoria ?>"> <a href="<?php echo base_url('cpainel/categoria/subcategoria/' . $ct->id_categoria) ?>" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a></span></td>
                                 <td class="text-center"><span id="btnAtivarCategoria_<?php echo $ct->id_categoria ?>"> <a href="javascript:void(0)" onclick="Categoria.ativar_desativar_categoria('<?php echo $ct->id_categoria ?>')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a></span></td>
                             </tr>
                             <?php
@@ -48,7 +63,7 @@
 
 </div>
 
- <!--Comfimação de exclusão-->
+<!--Comfimação de exclusão-->
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">        
         <div class="modal-content">
@@ -67,4 +82,4 @@
         </div>
     </div>
 </div>
- <!--Final de confirmação-->
+<!--Final de confirmação-->
