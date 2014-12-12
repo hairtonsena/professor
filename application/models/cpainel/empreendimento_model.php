@@ -1,9 +1,13 @@
 <?php
 
-class secretaria_model extends CI_Model {
+class empreendimento_model extends CI_Model {
 
-    function ver_todas_secretaria() {
-        return $this->db->get('secretaria');
+    function ver_todas_empreendimento() {
+        return $this->db->get('empreendimento');
+    }
+
+    function obter_tipo_empreendimento() {
+        return $this->db->get('tipo_empreendimento');
     }
 
     function obter_secretaria($id_secretaria) {

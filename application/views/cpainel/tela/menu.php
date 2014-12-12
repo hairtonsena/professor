@@ -1,6 +1,5 @@
-
-﻿<nav class="navbar navbar-default" role="navigation">
-    <div class="container">
+<nav class="navbar navbar-default" role="navigation" >
+    <div class="container" >
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -50,4 +49,4 @@
         </div><!-- /.navbar-collapse -->
     </div>
 </nav>
-<div class="container">
+<div class="container col-lg-12 " >
