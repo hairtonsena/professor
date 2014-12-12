@@ -17,9 +17,16 @@ class Inicio extends CI_Controller {
         $this->load->view('tela/rodape');
     }
 
+    // Pagina individual de cada empreendimento
+    public function empreendimento() {
+
+        $this->load->view('tela/titulo');
+        $this->load->view('tela/menu');
+        $this->load->view('empreendimento/empreendimento_view');
+        $this->load->view('tela/rodape');
+    }
+
 }
-
-
 
 /* End of file welcome.php */
 /* Location: ./application/controllers/welcome.php */
