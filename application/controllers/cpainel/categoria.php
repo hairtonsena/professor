@@ -196,13 +196,90 @@ class categoria extends CI_Controller {
             if (count($query) == 0) {
                 redirect(base_url("cpainel/categoria"));
             }
+
+            $subcategoria_categoria = $this->categoria_model->obter_subcategorias_de_categoria($id_categoria)->result();
+
+            $dados = array(
+                'categoria' => $query,
+                'subcategorias' => $subcategoria_categoria
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/categoria/subcategoria_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    public function nova_subcategoria($categoria = null) {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+            if ($categoria == NULL) {
+                $categoria = $this->uri->segment(4);
+            }
+            $query = $this->categoria_model->obter_uma_categoria($categoria)->result();
+
+            if (count($query) == 0) {
+                redirect(base_url("cpainel/categoria"));
+            }
+
             $dados = array(
                 'categoria' => $query
             );
 
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/categoria/subcategoria_view', $dados);
+            $this->load->view('cpainel/categoria/forme_nova_subcategoria_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    public function salvar_nova_subcategoria() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+
+            $this->form_validation->set_rules('nome_subcategoria', 'Nome', 'required|trim|min_length[5]');
+
+            $categoria = $this->input->post('categoria');
+            if ($this->form_validation->run() == FALSE) {
+                $this->nova_categoria($categoria);
+            } else {
+
+                $nome_subcategoria = $this->input->post("nome_subcategoria");
+
+                $dados = array(
+                    "nome_sub_categoria" => $nome_subcategoria,
+                    "id_categoria" => $categoria,
+                );
+                $this->categoria_model->salvar_nova_subcategoria($dados);
+
+
+                redirect(base_url("cpainel/categoria/subcategoria/" . $categoria));
+            }
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    public function alterar_subcategoria($id_subcategoria = NULL) {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+            if ($id_subcategoria == NULL) {
+                $id_subcategoria = $this->uri->segment(4);
+            }
+            $query = $this->categoria_model->obter_subcategoria($id_subcategoria)->result();
+
+            if (count($query) == 0) {
+                redirect(base_url("cpainel/categoria"));
+            }
+            $dados = array(
+                'subcategoria' => $query
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/categoria/forme_editar_subcategoria_view', $dados);
             $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));

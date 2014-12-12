@@ -23,15 +23,24 @@ class categoria_model extends CI_Model {
         $this->db->delete('categoria', array('id_categoria' => $idCategoira));
     }
 
-    function salvarAnexoMural($dados) {
-        $this->db->insert('anexo_mural', $dados);
+    function salvar_nova_subcategoria($data) {
+        $this->db->insert('sub_categoria', $data);
     }
 
-    function alterarDadosAnexo($dados, $id_anexo) {
-        $this->db->where('id_am', $id_anexo);
-        $this->db->update('anexo_mural', $dados);
+    function obter_subcategorias_de_categoria($id_categoria) {
+        $this->db->where('id_categoria', $id_categoria);
+        return $this->db->get('sub_categoria');
     }
 
+    function obter_subcategoria($id_subcategoria) {
+        $this->db->where('id_sub_categoria', $id_subcategoria);
+        return $this->db->get('sub_categoria');
+    }
+
+//    function alterarDadosAnexo($dados, $id_anexo) {
+//        $this->db->where('id_am', $id_anexo);
+//        $this->db->update('anexo_mural', $dados);
+//    }
     //put your code here
 }
 
