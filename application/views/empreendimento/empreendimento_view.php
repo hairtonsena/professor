@@ -11,15 +11,13 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Contato(s)</div>
                         <div class="panel-body">
-                            (38) 3234 - 0000 Contatos@yahoo.com.br
+                            (38) 3234 - 0000 <a href="#">Contatos@yahoo.com.br</a>
                         </div>
                     </div>
-                    <button class="btn btn-primary" type="button">
-                        Curtir <span class="badge">4</span>
-                    </button>
-                    <button class="btn btn-primary" type="button">
-                        Compartilhar <span class="badge">4</span>
-                    </button>
+                    
+                    <a href="#">Curtir <span class="badge">42</span></a> 
+                    <a href="#">Compartilhar <span class="badge">42</span></a>
+                    
                 </div>
             </div>
         </div>
