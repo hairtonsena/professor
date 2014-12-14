@@ -23,6 +23,7 @@ class categoria_model extends CI_Model {
         $this->db->delete('categoria', array('id_categoria' => $idCategoira));
     }
 
+    // Trabalhando com sub categoria
     function salvar_nova_subcategoria($data) {
         $this->db->insert('sub_categoria', $data);
     }
@@ -37,10 +38,10 @@ class categoria_model extends CI_Model {
         return $this->db->get('sub_categoria');
     }
 
-//    function alterarDadosAnexo($dados, $id_anexo) {
-//        $this->db->where('id_am', $id_anexo);
-//        $this->db->update('anexo_mural', $dados);
-//    }
+    function alterar_dados_subcategoria($dados, $idsubcategoria) {
+        $this->db->where('id_sub_categoria', $idsubcategoria);
+        $this->db->update('sub_categoria', $dados);
+    }
     //put your code here
 }
 

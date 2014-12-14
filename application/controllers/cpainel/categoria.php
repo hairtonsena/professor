@@ -286,6 +286,35 @@ class categoria extends CI_Controller {
         }
     }
 
+    public function salvar_subcategoria_alterada() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+
+            $this->form_validation->set_rules('nome_subcategoria', 'Nome', 'required|trim|min_length[5]');
+            $id_subcategoria = $this->input->post('id_subcategoria');
+            if ($this->form_validation->run() == FALSE) {
+                $this->alterar_subcategoria($id_subcategoria);
+            } else {
+
+                $nome_subcategoria = $this->input->post('nome_subcategoria');
+                $dados = array(
+                    'nome_sub_categoria' => $nome_subcategoria,
+                );
+                $this->categoria_model->alterar_dados_subcategoria($dados, $id_subcategoria);
+                
+                $query = $this->categoria_model->obter_subcategoria($id_subcategoria)->result();
+                
+                $id_categoria;
+                foreach ($query as $qy){
+                    $id_categoria = $qy->id_categoria;
+                };
+                
+                redirect(base_url("cpainel/categoria/subcategoria/".$id_categoria));
+            }
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
 }
 
 ?>
