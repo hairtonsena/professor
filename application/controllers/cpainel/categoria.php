@@ -175,8 +175,15 @@ class categoria extends CI_Controller {
     public function excluir_categoria() {
         if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
             $id_categoria = $this->input->post('categoria');
-            $this->categoria_model->excluir_categoria($id_categoria);
-            echo '1';
+            $retorno = '';
+            $query = $this->categoria_model->obter_subcategorias_de_categoria($id_categoria)->result();
+            if (count($query) == 0) {
+                $this->categoria_model->excluir_categoria($id_categoria);
+                $retorno = '1';
+            } else {
+                $retorno = 'Categoria não pode ser apaganda porque exite subcategorias cadastradas!';
+            }
+            echo $retorno;
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
@@ -185,6 +192,34 @@ class categoria extends CI_Controller {
     //----------------------------------------//
     // Area para manipulação de subcategoria -//
     //----------------------------------------//
+
+    public function ativar_desativar_subcategoria() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+            $reterno = '';
+            $subcategoria = $this->input->post('subcategoria');
+            $query = $this->categoria_model->obter_subcategoria($subcategoria)->result();
+            if (count($query) > 0) {
+                foreach ($query as $qr) {
+                    if ($qr->status_sub_categoria == 0) {
+                        $dados = array(
+                            'status_sub_categoria' => 1
+                        );
+                        $reterno = '1';
+                    } else {
+                        $dados = array(
+                            'status_sub_categoria' => 0
+                        );
+                        $reterno = '0';
+                    }
+                    $this->categoria_model->alterar_dados_subcategoria($dados, $subcategoria);
+                }
+            }
+            echo $reterno;
+        } else {
+            //redirect(base_url("cpainel/seguranca"));
+            echo 'ola';
+        }
+    }
 
     public function subcategoria($id_categoria = NULL) {
         if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
@@ -244,7 +279,7 @@ class categoria extends CI_Controller {
 
             $categoria = $this->input->post('categoria');
             if ($this->form_validation->run() == FALSE) {
-                $this->nova_categoria($categoria);
+                $this->nova_subcategoria($categoria);
             } else {
 
                 $nome_subcategoria = $this->input->post("nome_subcategoria");
@@ -300,16 +335,43 @@ class categoria extends CI_Controller {
                     'nome_sub_categoria' => $nome_subcategoria,
                 );
                 $this->categoria_model->alterar_dados_subcategoria($dados, $id_subcategoria);
-                
+
                 $query = $this->categoria_model->obter_subcategoria($id_subcategoria)->result();
-                
+
                 $id_categoria;
-                foreach ($query as $qy){
+                foreach ($query as $qy) {
                     $id_categoria = $qy->id_categoria;
                 };
-                
-                redirect(base_url("cpainel/categoria/subcategoria/".$id_categoria));
+
+                redirect(base_url("cpainel/categoria/subcategoria/" . $id_categoria));
             }
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    public function excluir_subcategoria() {
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+            $id_subcategoria = $this->input->post('subcategoria');
+            $this->categoria_model->excluir_subcategoria($id_subcategoria);
+
+            echo '1';
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // obter subcategoria por json
+    public function ober_subcategoria_json() {
+
+        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+            
+            $id_categoria = $this->input->get('categoria');
+            $query = $this->categoria_model->obter_subcategorias_de_categoria($id_categoria)->result();
+
+            
+ 
+            echo json_encode($query);
         } else {
             redirect(base_url("cpainel/seguranca"));
         }

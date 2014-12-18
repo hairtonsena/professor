@@ -13,6 +13,7 @@ class Empreendimento extends CI_Controller {
         $this->load->library('form_validation');
         $this->load->library('session');
         $this->load->model('cpainel/empreendimento_model');
+        $this->load->model('cpainel/categoria_model');
         $this->load->library('upload');
     }
 
@@ -28,7 +29,7 @@ class Empreendimento extends CI_Controller {
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
             $this->load->view('cpainel/empreendimento/empreendimento_view', $dados);
-
+            
             $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
@@ -41,6 +42,7 @@ class Empreendimento extends CI_Controller {
 
             $dados = array(
                 'tipo_empreendimento' => $this->empreendimento_model->obter_tipo_empreendimento()->result(),
+                'categoria'=> $this->categoria_model->obter_categoria_ativa()->result(),
             );
 
 

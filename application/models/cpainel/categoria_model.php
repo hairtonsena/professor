@@ -10,6 +10,10 @@ class categoria_model extends CI_Model {
         return $this->db->get_where('categoria', array('id_categoria' => $id_categoria));
     }
 
+    function obter_categoria_ativa(){
+        return $this->db->get_where('categoria', array('status_categoria' => 1));
+    }
+            
     function salvar_nova_categoria($data) {
         $this->db->insert('categoria', $data);
     }
@@ -23,7 +27,7 @@ class categoria_model extends CI_Model {
         $this->db->delete('categoria', array('id_categoria' => $idCategoira));
     }
 
-    // Trabalhando com sub categoria
+    //--------- Trabalhando com sub categoria----------//
     function salvar_nova_subcategoria($data) {
         $this->db->insert('sub_categoria', $data);
     }
@@ -42,6 +46,11 @@ class categoria_model extends CI_Model {
         $this->db->where('id_sub_categoria', $idsubcategoria);
         $this->db->update('sub_categoria', $dados);
     }
+
+    function excluir_subcategoria($idSubcategoira) {
+        $this->db->delete('sub_categoria', array('id_sub_categoria' => $idSubcategoira));
+    }
+
     //put your code here
 }
 

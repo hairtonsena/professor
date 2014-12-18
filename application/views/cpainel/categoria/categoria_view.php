@@ -9,11 +9,11 @@
             <table class="table table-bordered" id="tabelaCategoria">
                 <thead>
                     <tr>
-                        <td class="col-lg-9"> Nome </td>
-                        <td class="col-lg-1 center"> Alterar </td>
-                        <td class="col-lg-1 center"> Excluir </td>
-                        <td class="col-lg-1 center"> sub </td>
-                        <td class="col-lg-1 center"> status </td>
+                        <th class="col-lg-9"> Nome </th>
+                        <th class="col-lg-1 center"> Alterar </th>
+                        <th class="col-lg-1 center"> Excluir </th>
+                        <th class="col-lg-1 center"> sub </th>
+                        <th class="col-lg-1 center"> status </th>
                     </tr>
                 </thead>
                 <tbody>
