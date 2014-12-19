@@ -25,7 +25,7 @@ class seguranca extends CI_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->load->library('session');
-        $this->load->model('cpainel/usuario_model');
+        $this->load->model('cpainel/professor_model');
     }
 
     function index() {
@@ -68,18 +68,17 @@ class seguranca extends CI_Controller {
 
             $this->index();
         } else {
-
             redirect(base_url("cpainel/inicio"));
         }
     }
 
     function validarUsuario_check() {
         $dadosLogin = array(
-            'email_admin' => $this->input->post('email'),
-            'senha_admin' => md5($this->input->post('senha'))
+            'email_professor' => $this->input->post('email'),
+            'senha_professor' => md5($this->input->post('senha'))
         );
 
-        $userLogin = $this->usuario_model->obterUsuarioLogin($dadosLogin)->result();
+        $userLogin = $this->professor_model->obterProfessorLogin($dadosLogin)->result();
 
         if (empty($userLogin)) {
 
@@ -88,11 +87,11 @@ class seguranca extends CI_Controller {
         } else {
             foreach ($userLogin as $ul) {
                 $dadosUser = array(
-                    'id_admin' => $ul->id_admin,
-                    'nome_admin' => $ul->nome_admin,
-                    'email_admin' => $ul->email_admin,
-                    'senha_admin' => $ul->senha_admin,
-                    'id_privilegio_admin' => $ul->id_privilegio_admin
+                    'id_professor' => $ul->id_professor,
+                    'nome_professor' => $ul->nome_professor,
+                    'email_professor' => $ul->email_professor,
+                    'senha_professor' => $ul->senha_professor
+                    
                 );
                 $this->session->set_userdata($dadosUser);
             }
@@ -102,7 +101,7 @@ class seguranca extends CI_Controller {
 
     function codigoValidacao_check($cod) {
         if ($this->input->post('textoImagem') != $this->session->userdata('textCaptcha')) {
-            $this->form_validation->set_message('codigoValidacao_check', 'O %s esta incorreta!');
+            $this->form_validation->set_message('codigoValidacao_check', 'O %s está incorreta!');
             return FALSE;
         } else {
             $this->session->unset_userdata('textCaptcha');
@@ -111,19 +110,23 @@ class seguranca extends CI_Controller {
     }
 
     function logoutUser() {
-        $this->session->unset_userdata('id_admin');
-        $this->session->unset_userdata('nome_admin');
-        $this->session->unset_userdata('email_admin');
-        $this->session->unset_userdata('senha_admin');
-        $this->session->unset_userdata('id_privilegio_admin');
+        $this->session->unset_userdata('id_professor');
+        $this->session->unset_userdata('nome_professor');
+        $this->session->unset_userdata('email_professor');
+        $this->session->unset_userdata('senha_professor');
+        //$this->session->unset_userdata('id_privilegio_admin');
         redirect(base_url());
     }
 
-    function cadastro_cidadao() {
 
-        $this->load->view('user_cidadao/seguranca/cadastraCidadao_view');
-    }
-
+    
+    
+    
+    
+    ////////////////////////////////////////////////   _||_
+    ///  Área reservada para cadastro de aluno  ////   \  /
+    ////////////////////////////////////////////////    \/
+    
     function cadastraCidadaoEXE() {
 
         $this->form_validation->set_rules('nomeCidadaoCadastro', 'Nome', 'required|trim|min_length[4]|max_length[50]');

@@ -3,7 +3,7 @@
     <head>
         <link rel="icon" href="<?php echo base_url("") ?>" type="image/png"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title> Site Serviço </title>
+        <title> Prefessor André </title>
 
         <link rel="stylesheet" href="<?php echo base_url("bt/css/bootstrap.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("bt/css/bootstrap.min.css"); ?>">

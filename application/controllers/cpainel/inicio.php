@@ -13,7 +13,7 @@ class Inicio extends CI_Controller {
 
     public function index() {
 
-        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');

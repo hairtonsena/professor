@@ -32,15 +32,12 @@
     <body>
         <div class="nav navbar" style="background-color: #eee;">
             <div class="col-lg-3 pull-right" >
-                Prefeitura São João da Ponte - MG
+                Professor André
             </div>
             <div class="col-lg-9">
-                <a href="<?php echo base_url()."/../../" ?>" class="btn btn-large btn-primary"> Voltar para o inicio </a> 
+                <a href="<?php echo base_url("./../") ?>" class="btn btn-large btn-primary"> Voltar para o inicio </a> 
             </div>
         </div>
-
-
-
         <div id="conteiner">
             <div class="thumbnail col-lg-3" id="pnlLogin">
                 <form name="frmLogin" action="<?php echo base_url("cpainel/seguranca/logarUsuario") ?>" method="post">
