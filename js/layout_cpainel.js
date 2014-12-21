@@ -34,24 +34,34 @@ $(function () {
 
 
 
-    $('.bs-example-modal-sm').on('show.bs.modal', function (event) {
+    $('#modelExcluirDisciplina').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        var recipient = button.data('categoria') // Extract info from data-* attributes
+        var recipient = button.data('disciplina') // Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
         //modal.find('.modal-title').text('New message to ' + recipient)
-        modal.find('#categoria_excluir').val(recipient)
+        modal.find('#disciplina_excluir').val(recipient)
     });
-    
-    $('#modelSubCategoria').on('show.bs.modal', function (event) {
+
+    $('#modelVerDescricaDisciplina').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        var recipient = button.data('subcategoria') // Extract info from data-* attributes
+        var recipient = button.data('disciplina') // Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this)
+        // var modal = $(this)
         //modal.find('.modal-title').text('New message to ' + recipient)
-        modal.find('#subcategoria_excluir').val(recipient)
+
+        var parametro = "disciplina=" + recipient;
+        var pg = Config.base_url('cpainel/disciplina/ver_descricao_disciplina');
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                $('#textoDescricao_disciplina').html(retorno);
+            }
+        });
     })
 
 });

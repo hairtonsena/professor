@@ -36,7 +36,37 @@ class disciplina extends CI_Controller {
         }
     }
 
+    // visualizando apenas a descrição de uma disciplina
+    public function ver_descricao_disciplina() {
+        // verificando usuario logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            // pagena id da disciplina
+            $id_disciplina = $this->input->post('disciplina');
+            // variavel para retornar resultado para o ajax;
+            $retorno = '';
+            // buscando no banco de dados a diciplina que será que tem a descrição
+            $query = $this->disciplina_model->obter_uma_disciplina($id_disciplina)->result();
+            // verificando se a disciplina existe;
+            if (count($query) != 0) {
+                // se existe então percorra a lista para pegar a descriçõa;
+                foreach ($query as $qy) {
+                    // pegando a descrição
+                    $retorno = $qy->descricao_disciplina;
+                    // finalizando o loop
+                    break;
+                }
+            } else {
+                $retorno = 'Disciplina não foi encontrada!';
+            }
+            // retorna o resultado para o ajax;
+            echo $retorno;
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
     public function nova_disciplina() {
+        // verificando usuario logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
@@ -48,25 +78,28 @@ class disciplina extends CI_Controller {
     }
 
     public function salvar_nova_disciplina() {
+        // veirificando usuario logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
-
-            $this->form_validation->set_rules('nome_disciplina', 'Nome', 'required|trim|min_length[5]|max_length[10]');
-
+            // validando campo nome
+            $this->form_validation->set_rules('nome_disciplina', 'Nome', 'required|trim|min_length[5]|max_length[45]');
+            // testando validação
             if ($this->form_validation->run() == FALSE) {
-
+                // rotornando para o fomulário com erros.
                 $this->nova_disciplina();
             } else {
-
-
+                // pagando o campo nome da nova disciplina
                 $nome_disciplina = $this->input->post("nome_disciplina");
+                // pegando a descrição da nova disciplina
                 $descricao_disciplina = $this->input->post('descricao_disciplina');
+                // criando array de dados
                 $dados = array(
                     "nome_disciplina" => $nome_disciplina,
-                    "descricao_disciplina"=> $descricao_disciplina,
-                    );
+                    "descricao_disciplina" => $descricao_disciplina,
+                    "status_disciplina" => 1
+                );
+                // enviando os dados para ser salvos 
                 $this->disciplina_model->salvar_nova_disciplina($dados);
-
-
+                // redirecionando para disciplina
                 redirect(base_url("cpainel/disciplina"));
             }
         } else {
@@ -74,31 +107,42 @@ class disciplina extends CI_Controller {
         }
     }
 
-    public function ativar_desativar_categoria() {
+    // função para ativar e desativar disciplina
+    public function ativar_desativar_disciplina() {
+        // verificando usuário logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            // variavel para retorno
             $reterno = '';
-            $categoria = $this->input->post('categoria');
-            $query = $this->categoria_model->obter_uma_categoria($categoria)->result();
+            // pegando o id da disciplina para ser alterado
+            $disciplina = $this->input->post('disciplina');
+            // buscado a disciplina pelo id no banco de dados
+            $query = $this->disciplina_model->obter_uma_disciplina($disciplina)->result();
+            // verificando se a disciplina existe
             if (count($query) > 0) {
+                // se existe percorra a lista;
                 foreach ($query as $qr) {
-                    if ($qr->status_categoria == 0) {
+                    // verificando se a disciplina está dessativada
+                    if ($qr->status_disciplina == 0) {
+                        // então ativa
                         $dados = array(
-                            'status_categoria' => 1
+                            'status_disciplina' => 1
                         );
                         $reterno = '1';
                     } else {
+                        // se não desativa
                         $dados = array(
-                            'status_categoria' => 0
+                            'status_disciplina' => 0
                         );
                         $reterno = '0';
                     }
-                    $this->categoria_model->alterar_dados_categoria($dados, $categoria);
+                    // enviando os dados alterados
+                    $this->disciplina_model->alterar_dados_disciplina($dados, $disciplina);
                 }
             }
+            // retonando o resultado para o ajax
             echo $reterno;
         } else {
             //redirect(base_url("cpainel/seguranca"));
-            echo 'ola';
         }
     }
 
@@ -126,8 +170,6 @@ class disciplina extends CI_Controller {
         }
     }
 
-    
-
     public function salvar_disciplina_alterada() {
         // verificando usuario logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -147,7 +189,7 @@ class disciplina extends CI_Controller {
                 // criando um array de dados para salvar a alteração no banco.
                 $dados = array(
                     'nome_disciplina' => $nome_disciplina,
-                    'descricao_disciplina'=> $descricao_disciplina
+                    'descricao_disciplina' => $descricao_disciplina
                 );
                 // enviando os dados alterados para o banco de dados.
                 $this->disciplina_model->alterar_dados_disciplina($dados, $id_disciplina);
@@ -158,17 +200,25 @@ class disciplina extends CI_Controller {
         }
     }
 
-    public function excluir_categoria() {
-        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
-            $id_categoria = $this->input->post('categoria');
+    // função para excluir um diciplina pelo id;
+    public function excluir_disciplina() {
+        // verificando usuario logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            // pagena id da disciplina que cerá excluida
+            $id_disciplina = $this->input->post('disciplina');
+            // variavel para retornar resultado para o ajax;
             $retorno = '';
-            $query = $this->categoria_model->obter_subcategorias_de_categoria($id_categoria)->result();
-            if (count($query) == 0) {
-                $this->categoria_model->excluir_categoria($id_categoria);
+            // buscando no banco de dados a diciplina que será excluida
+            $query = $this->disciplina_model->obter_uma_disciplina($id_disciplina)->result();
+            // verificando se a disciplina existe;
+            if (count($query) != 0) {
+                // se existe manda excluir
+                $this->disciplina_model->excluir_disciplina($id_disciplina);
                 $retorno = '1';
             } else {
-                $retorno = 'Categoria não pode ser apaganda porque exite subcategorias cadastradas!';
+                $retorno = 'Disciplina não foi encontrada!';
             }
+            // retorna o resultado para o ajax;
             echo $retorno;
         } else {
             redirect(base_url("cpainel/seguranca"));

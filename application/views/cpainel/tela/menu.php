@@ -19,8 +19,9 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Cadastra <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="<?php echo base_url("cpainel/empreendimento"); ?>">Empreendimento</a></li>
+
                         <li><a href="<?php echo base_url("cpainel/disciplina"); ?>"> Disciplina </a></li>
+                        <li><a href="<?php echo base_url("cpainel/turma"); ?>">Turma</a></li>
                         <li><a href="<?php echo base_url("cpainel/palavra_chave"); ?>"> Palavras chave </a></li>
                         <li><a href="<?php echo base_url("cpainel/localizacao"); ?>"> Localização </a></li>
 

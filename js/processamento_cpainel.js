@@ -1,3 +1,10 @@
+Config = {
+    base_url: function (url) {
+        var url_base = 'http://localhost/andre/';
+        return url_base + url;
+    }
+};
+
 Localizacao = {
     obter_ciadade_estado: function (estado) {
 
@@ -87,12 +94,12 @@ Empreendimento = {
     },
     obter_select_subcategoria: function () {
         var categoria = $('#categoria').val();
-       // alert(categoria);
+        // alert(categoria);
 
         $.getJSON("http://localhost/siteservico/cpainel/categoria/ober_subcategoria_json?ttt=ds", {
             'categoria': categoria,
         }, function (json) {
-           // alert(json);
+            // alert(json);
             //div.innerHTML = '';
             if (json.length == 0) {
                 alert('Errado!');
@@ -100,33 +107,34 @@ Empreendimento = {
 
             } else {
                 alert('Certo!');
-                
-                
-                
+
+
+
                 //var select_subcategoria = document.getElementById('campo_subcategoria');
-                
-                
-                var sele = document.getElementById('subcategoria'); 
-                
+
+
+                var sele = document.getElementById('subcategoria');
+
                 //var sele = document.createElement('select');
-                
-               // sele.a;
-                
-               // select_subcategoria.appendChild(sele);
-                
-                
+
+                // sele.a;
+
+                // select_subcategoria.appendChild(sele);
+
+
                 var opcao_subcategoria;
                 for (var n = 0; n <= json.length; n++) {
                     var objeto = json[n];
 
-                    opcao_subcategoria = '<option value="'+objeto.id_sub_categoria+'">'+objeto.nome_sub_categoria+'</option>';
-                       
+                    opcao_subcategoria = '<option value="' + objeto.id_sub_categoria + '">' + objeto.nome_sub_categoria + '</option>';
+
                     alert('oi');
-                };
+                }
+                ;
                 alert('opcao_subcategoria');
 //                sele.appendChild(opcao_subcategoria);
 //                
-              //  sele.innerHTML = opcao_subcategoria;
+                //  sele.innerHTML = opcao_subcategoria;
             }
             ;
         });
@@ -135,61 +143,55 @@ Empreendimento = {
 
 
 };
-Categoria = {
-    ativar_desativar_categoria: function (id) {
+Disciplina = {
+    ativar_desativar_disciplina: function (id) {
+        var btnAtivarDisciplina = '#btnAtivarDisciplina_' + id;
+        var btnEditarDisciplina = '#btnEditarDisciplina_' + id;
+        var btnExcluirDisciplina = '#btnExcluirDisciplina_' + id;
+        var btnAddTurma = '#btnAddTurma_' + id;
 
-        var btnAtivarCategoria = '#btnAtivarCategoria_' + id;
-        var btnEditarCategoria = '#btnEditarCategoria_' + id;
-        var btnExcluirCategoria = '#btnExcluirCategoria_' + id;
-        var btnAddSubCategoria = '#btnAddSubcategoria_' + id;
-
-        var campoNome = '#nome_' + id;
-        var conteudo = $(campoNome).text();
-
-        var parametro = "categoria=" + id;
-        var pg = 'http://localhost/siteservico/cpainel/categoria/ativar_desativar_categoria';
+        var parametro = "disciplina=" + id;
+        var pg = Config.base_url('cpainel/disciplina/ativar_desativar_disciplina');
         $.ajax({
             type: "post",
             url: pg,
             data: parametro,
             success: function (retorno) {
-                var linkAtivarCategoria;
-                var linkEditarCategoria;
-                var linkExcluirCategoria;
-                var linkAddSubCategoria;
+                var linkAtivarDisciplina;
+                var linkEditarDisciplina;
+                var linkExcluirDisciplina;
+                var linkAddTurma;
                 if (retorno === '1') {
-                    linkAtivarCategoria = '<a href="javascript:void(0)" onclick="Categoria.ativar_desativar_categoria(\'' + id + '\')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a>';
-                    linkEditarCategoria = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
-                    linkExcluirCategoria = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span>';
-                    linkAddSubCategoria = '<a href="http://localhost/siteservico/cpainel/categoria/subcategoria/' + id + '" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a>';
+                    linkAtivarDisciplina = '<a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina(\'' + id + '\')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a>';
+                    linkEditarDisciplina = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
+                    linkExcluirDisciplina = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span>';
+                    linkAddTurma = '<a href="http://localhost/siteservico/cpainel/categoria/subcategoria/' + id + '" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a>';
 
-                    $(campoNome).parent().parent().html('<span id="nome_' + id + '">' + conteudo + '</span>');
 
                 } else if (retorno === '0') {
-                    linkAtivarCategoria = '<a href="javascript:void(0)" onclick="Categoria.ativar_desativar_categoria(\'' + id + '\')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a>';
-                    linkEditarCategoria = '<a href="http://localhost/siteservico/cpainel/categoria/alterar_categoria/' + id + '"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
-                    linkExcluirCategoria = '<a href="javascript:void(0)" data-toggle="modal" data-target=".bs-example-modal-sm" data-categoria="' + id + '"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a>';
-                    linkAddSubCategoria = '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span>';
-
-                    $(campoNome).parent().html('<a href="javascript:void(0)" ondblclick="asfasd"><span id="nome_' + id + '">' + conteudo + '</span></a>');
+                    linkAtivarDisciplina = '<a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina(\'' + id + '\')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a>';
+                    linkEditarDisciplina = '<a href="' + Config.base_url('cpainel/disciplina/alterar_disciplina/' + id) + '"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
+                    linkExcluirDisciplina = '<a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirDisciplina" data-disciplina="' + id + '"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a>';
+                    linkAddTurma = '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span>';
 
 
                 } else {
                     //linkAtivarEstado = 'Falha';
                 }
-                $(btnEditarCategoria).html(linkEditarCategoria);
-                $(btnAtivarCategoria).html(linkAtivarCategoria);
-                $(btnExcluirCategoria).html(linkExcluirCategoria);
-                $(btnAddSubCategoria).html(linkAddSubCategoria);
+
+                $(btnAtivarDisciplina).html(linkAtivarDisciplina);
+                $(btnEditarDisciplina).html(linkEditarDisciplina);
+                $(btnExcluirDisciplina).html(linkExcluirDisciplina);
+                $(btnAddTurma).html(linkAddTurma);
 
             }
         });
 
     },
-    excluir_categoria: function () {
-        var categoria = $('#categoria_excluir').val();
-        var parametro = "categoria=" + categoria;
-        var pg = 'http://localhost/siteservico/cpainel/categoria/excluir_categoria';
+    excluir_disciplina: function () {
+        var disciplina = $('#disciplina_excluir').val();
+        var parametro = "disciplina=" + disciplina;
+        var pg = Config.base_url('cpainel/disciplina/excluir_disciplina');
 
         $.ajax({
             type: "post",
@@ -198,10 +200,10 @@ Categoria = {
             success: function (retorno) {
                 if (retorno === '1') {
                     //$(".bs-example-modal-sm").modal("hide");
-                    window.location.href = "http://localhost/siteservico/cpainel/categoria";
+                    window.location.href = Config.base_url("cpainel/disciplina");
                 } else {
                     alert(retorno);
-                    $(".bs-example-modal-sm").modal("hide");
+                    $("#modelExcluirDisciplina").modal("hide");
                 }
             }
         });
