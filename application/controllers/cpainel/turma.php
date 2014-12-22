@@ -108,6 +108,9 @@ class turma extends CI_Controller {
                 );
                 // enviando os dados para ser salvos 
                 $this->turma_model->salvar_nova_turma($dados);
+                
+                
+                
                 // redirecionando para turma
                 redirect(base_url("cpainel/turma?disciplina=" . $id_disciplina));
             }
@@ -116,39 +119,29 @@ class turma extends CI_Controller {
         }
     }
 
-    // função para ativar e desativar disciplina
-    public function ativar_desativar_disciplina() {
+    // Função para ativar e desativar turma
+    public function ativar_desativar_turma() {
         // verificando usuário logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
-            // variavel para retorno
             $reterno = '';
-            // pegando o id da disciplina para ser alterado
-            $disciplina = $this->input->post('disciplina');
-            // buscado a disciplina pelo id no banco de dados
-            $query = $this->disciplina_model->obter_uma_disciplina($disciplina)->result();
-            // verificando se a disciplina existe
+            $id_turma = $this->input->post('turma');
+            $query = $this->turma_model->obter_uma_turma($id_turma)->result();
             if (count($query) > 0) {
-                // se existe percorra a lista;
                 foreach ($query as $qr) {
-                    // verificando se a disciplina está dessativada
-                    if ($qr->status_disciplina == 0) {
-                        // então ativa
+                    if ($qr->status_turma == 0) {
                         $dados = array(
-                            'status_disciplina' => 1
+                            'status_turma' => 1
                         );
                         $reterno = '1';
                     } else {
-                        // se não desativa
                         $dados = array(
-                            'status_disciplina' => 0
+                            'status_turma' => 0
                         );
                         $reterno = '0';
                     }
-                    // enviando os dados alterados
-                    $this->disciplina_model->alterar_dados_disciplina($dados, $disciplina);
+                    $this->turma_model->alterar_dados_turma($dados, $id_turma);
                 }
             }
-            // retonando o resultado para o ajax
             echo $reterno;
         } else {
             //redirect(base_url("cpainel/seguranca"));
@@ -192,7 +185,7 @@ class turma extends CI_Controller {
                 'turma' => $turma,
                 'disciplina' => $disciplina
             );
-            // mostrando a tela.
+
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
             $this->load->view('cpainel/turma/forme_editar_turma_view', $dados);
@@ -234,33 +227,51 @@ class turma extends CI_Controller {
                     $id_disciplina = $tm->disciplina_id_disciplina;
                 }
 
-                redirect(base_url("cpainel/turma?disciplina=".$id_disciplina));
+                redirect(base_url("cpainel/turma?disciplina=" . $id_disciplina));
             }
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
 
-    // função para excluir um diciplina pelo id;
-    public function excluir_disciplina() {
+    // Função para excluir um turma;
+    public function excluir() {
         // verificando usuario logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
-            // pagena id da disciplina que cerá excluida
-            $id_disciplina = $this->input->post('disciplina');
-            // variavel para retornar resultado para o ajax;
+
+            $id_turma = $this->input->post('turma');
+
             $retorno = '';
-            // buscando no banco de dados a diciplina que será excluida
-            $query = $this->disciplina_model->obter_uma_disciplina($id_disciplina)->result();
-            // verificando se a disciplina existe;
+            $query = $this->turma_model->obter_uma_turma($id_turma)->result();
+
             if (count($query) != 0) {
-                // se existe manda excluir
-                $this->disciplina_model->excluir_disciplina($id_disciplina);
+                $this->turma_model->excluir_turma($id_turma);
                 $retorno = '1';
             } else {
-                $retorno = 'Disciplina não foi encontrada!';
+                $retorno = 'Turma não foi encontrada!';
             }
-            // retorna o resultado para o ajax;
             echo $retorno;
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // função para mostra a turma e disciplina juntas
+    public function alunos() {
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            $id_turma = $this->uri->segment(4);
+
+            $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            
+
+            $dados = array(
+                "turma_disciplina" => $query
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/turma/turma_selecionada_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
         }

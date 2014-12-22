@@ -1,20 +1,19 @@
 <?php
 
-class Localizacao_model extends CI_Model {
+class aluno_model extends CI_Model {
 
-    // Utilizando
-    function ver_todos_uf() {
-        return $this->db->get('uf');
+    // Salvando aluno
+    function salvar_novo_aluno($data) {
+        $this->db->insert('aluno', $data);
     }
 
-    // Utilizando
-    function obter_cidade_uf($id_estado) {
-        return $this->db->get_where('cidade', array('id_uf' => $id_estado));
+    function obter_aluno_salvo($cpf) {
+        return $this->db->get_where('aluno', array('cpf_aluno' => $cpf));
     }
 
-    // Utilizando
-    function obter_um_uf($id_estado) {
-        return $this->db->get_where('uf', array('id_uf' => $id_estado));
+    // Salvando um aluno em uma turma.
+    function salvar_aluno_turma($dados) {
+        $this->db->insert('aluno_has_turma', $dados);
     }
 
     // Utilizando
@@ -32,10 +31,6 @@ class Localizacao_model extends CI_Model {
     function alterar_dados_cidade($dados, $idCidade) {
         $this->db->where('id_cidade', $idCidade);
         $this->db->update('cidade', $dados);
-    }
-
-    function salvarNovoSecretaria($data) {
-        $this->db->insert('secretaria', $data);
     }
 
     function ativar_desativar_uf($dados, $idUf) {

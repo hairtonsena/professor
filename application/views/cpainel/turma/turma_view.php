@@ -25,7 +25,7 @@ foreach ($disciplina as $dc) {
                                 <th> Nome </th>
                                 <th class="col-lg-1 center"> Alterar </th>
                                 <th class="col-lg-1 center"> Excluir </th>
-                                <th class="col-lg-1 center"> Turma </th>
+                                <th class="col-lg-1 center"> Selecionar </th>
                                 <th class="col-lg-1 center"> status </th>
 
                             </tr>
@@ -35,39 +35,49 @@ foreach ($disciplina as $dc) {
                             foreach ($turma as $tm) {
                                 if ($tm->status_turma == 0) {
                                     ?>
-                                    <tr>
+                                    <tr id="linha_<?php echo $tm->id_turma ?>">
                                         <td><?php echo $tm->nome_turma; ?></td>
-                                        <td>as</td>
-
+                                        <td class="text-center"><span id="btnEditarTurma_<?php echo $tm->id_turma ?>"><a href="<?php echo base_url('cpainel/turma/alterar/' . $tm->id_turma) ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a></span></td>
+                                        <td class="text-center"><span id="btnExcluirTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirTurma" data-turma="<?php echo $tm->id_turma ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span></td>
+                                        <td class="text-center"><span id="btnAddTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span></td>
+                                        <td class="text-center"><span id="btnAtivarTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php echo $tm->id_turma ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>
                                     </tr>
                                 <?php } else { ?>
-                                    <tr>
+                                    <tr id="linha_<?php echo $tm->id_turma ?>">
                                         <td> <?php echo $tm->nome_turma; ?> </td>
-                                        <td class="text-center"><span id="btnEditarTurma_<?php echo $tm->id_turma ?>"><a href="<?php echo base_url('cpainel/turma/alterar/' . $tm->id_turma) ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a></span></td>
-                                        <td class="text-center"><span id="btnExcluirTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirDisciplina" data-disciplina="<?php echo $tm->id_turma ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span></td>
-                                        <td class="text-center"><span id="btnAddTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span></td>
-                                        <td class="text-center"><span id="btnAtivarTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina('<?php echo $tm->id_turma ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>
+                                        <td class="text-center"><span id="btnEditarTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></span></td>
+                                        <td class="text-center"><span id="btnExcluirTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span></td>
+                                        <td class="text-center"><span id="btnAddTurma_<?php echo $tm->id_turma ?>"><a href="<?php echo base_url('cpainel/turma/alunos/'.$tm->id_turma) ?>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span></td>
+                                        <td class="text-center"><span id="btnAtivarTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php echo $tm->id_turma ?>')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a></span></td>
                                     </tr>
                                     <?php
                                 }
                             }
                             ?>
                         </tbody>
-
                     </table>
-
-                    <script type="text/javascript">
-                        function confirmacao(id) {
-                            var resposta = confirm("Você esta excluindo uma Secretaria!");
-                            if (resposta == true) {
-                                window.location.href = "<?php echo base_url('cpainel/secretaria/excluir_secretaria/'); ?>/" + id;
-                            }
-                        }
-
-                    </script>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
+<!--Comfimação de exclusão-->
+<div class="modal fade" id="modelExcluirTurma" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">        
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Excluir turma</h4>
+            </div>
+            <div class="modal-body">
+                <p>Você realmente deseja excluir está turma? </p>
+                <input type="hidden" id="turma_excluir" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+                <button type="button" class="btn btn-primary" onclick="Turma.excluir_turma()">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Final de confirmação-->
