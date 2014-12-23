@@ -43,6 +43,13 @@ mini_perfil
     background-color: #2B2B2B;
 }
 
+
+@media (max-width:600px) {
+    .abc {
+        display: none;
+    }
+}
+
 .flutuante_menu
 {
 

@@ -93,7 +93,7 @@ $(function () {
                     q: request.term
                 },
                 success: function (data) {
-                    //alert('ola');
+                    alert(data);
                     response(data);
                 }
             });
