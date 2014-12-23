@@ -74,5 +74,40 @@ $(function () {
         modal.find('#turma_excluir').val(recipient)
     });
 
+
+    //    Autocomplete pesquisa aluno para cadastra novo aluno
+    // aqui
+
+    function log(message) {
+        $("<div>").text(message).prependTo("#log");
+        $("#log").scrollTop(0);
+    }
+
+    $("#ipt_aluno").autocomplete({
+        minLength: 2,
+        source: function (request, response) {
+            $.ajax({
+                url: Config.base_url("cpainel/aluno/obter_alunos_cadastrados"),
+//                dataType: "ajax",
+                data: {
+                    q: request.term
+                },
+                success: function (data) {
+                    //alert('ola');
+                    response(data);
+                }
+            });
+        },
+        select: function (event, ui) {
+            log(ui.item ?
+                    "Selected: " + ui.item.value + " aka " + ui.item.id :
+                    "Nothing selected, input was " + this.value);
+        }
+    });
+
+
+
+
+    // aqui
 });
 

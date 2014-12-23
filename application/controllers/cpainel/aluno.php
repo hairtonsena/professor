@@ -112,26 +112,47 @@ class Aluno extends CI_Controller {
                     "matricula_aluno" => $matricula_aluno,
                     "cpf_aluno" => $cpf_aluno
                 );
-                
+
                 $this->aluno_model->salvar_novo_aluno($dados);
-                
+
                 $aluno_salvo = $this->aluno_model->obter_aluno_salvo($cpf_aluno)->result();
-                
+
                 $id_aluno_salvo;
-                foreach ($aluno_salvo as $as){
+                foreach ($aluno_salvo as $as) {
                     $id_aluno_salvo = $as->id_aluno;
                 }
-                
+
                 $dados_aluno_turma = array(
                     "aluno_id_aluno" => $id_aluno_salvo,
                     "turma_id_turma" => $id_turma
                 );
-                
+
                 $this->aluno_model->salvar_aluno_turma($dados_aluno_turma);
-                
-                
+
+
                 redirect(base_url("cpainel/turma/alunos/" . $id_turma));
             }
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    public function obter_alunos_cadastrados() {
+        // veirificando usuario logado
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $texto_pesquisa = $this->input->get('q');
+            
+            $todos_alunos = $this->aluno_model->obter_alunos_pesquisa_nome($texto_pesquisa)->result();
+            $nomes_alunos = array();
+            foreach ($todos_alunos as$ta){
+                $nomes_alunos[] = $ta->nome_aluno;
+            }
+            
+            
+            echo json_encode($nomes_alunos);
+            
+            
         } else {
             redirect(base_url("cpainel/seguranca"));
         }

@@ -12,9 +12,10 @@
         <link rel="stylesheet" href="<?php echo base_url("css/estiloGeralCpainel.css"); ?>">
         <script src="<?php echo base_url("js/jquery.js"); ?>"></script>
         <script src="<?php echo base_url("bt/js/bootstrap.min.js"); ?>"></script>
-        <!--<script src="<?php // echo base_url("js/cpainel.js");  ?>"></script>-->
+        <!--<script src="<?php // echo base_url("js/cpainel.js");   ?>"></script>-->
         <script src="<?php echo base_url("js/processamento_cpainel.js"); ?>"></script>
-        <script src="<?php echo base_url("js/layout_cpainel.js");?>"></script>
+        <script src="<?php echo base_url("js/layout_cpainel.js"); ?>"></script>
+        <script src="<?php echo base_url("js/jquery-ui-1.10.4/ui/jquery-ui.js") ?>"></script>
 
     </head>
     <body>

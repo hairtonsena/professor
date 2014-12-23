@@ -262,10 +262,12 @@ class turma extends CI_Controller {
             $id_turma = $this->uri->segment(4);
 
             $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
             
 
             $dados = array(
-                "turma_disciplina" => $query
+                "turma_disciplina" => $query,
+                "alunos_turma" => $alunos_por_turma
             );
 
             $this->load->view('cpainel/tela/titulo');

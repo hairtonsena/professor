@@ -16,9 +16,14 @@ class aluno_model extends CI_Model {
         $this->db->insert('aluno_has_turma', $dados);
     }
 
-    // Utilizando
-    function obter_um_cidade($id_cidade) {
-        return $this->db->get_where('cidade', array('id_cidade' => $id_cidade));
+    // Pegando alunos ativos
+    function obter_todos_alunos_ativo() {
+        return $this->db->get_where('aluno', array('status_aluno' => 0));
+    }
+
+    function obter_alunos_pesquisa_nome($q) {
+        $this->db->like('nome_aluno', $q);
+        return $this->db->get_where('aluno', array('status_aluno' => 0));
     }
 
     // Utilizando
