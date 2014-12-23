@@ -7,26 +7,48 @@ and open the template in the editor.
     Created on : 03/12/2014, 10:22:35
     Author     : MOABBSOM QUALIDADE
 */
+mini_perfil
+{
+   margin-top: 10px;
+}
+
+.nome
+{
+    text-align: left; 
+    margin-top: 10px; 
+    margin-bottom: 20px;
+    color:  #F7F7F7;
+    font-size:20px;
+}
+
 .barra_principal
 {
     height: 80px;
     padding-top: 10px;
 }
 
-.flutuante_barra
+/*.flutuante_barra
 {
     position: fixed;
     z-index:100;
     width: 100%;
     margin: 0px;
+}*/
+
+.caixa_menu
+{
+    width: 230px;
+    height: 100%;
+    padding: 10px;
+    background-color: #2B2B2B;
 }
 
 .flutuante_menu
 {
-    height: auto;
+
     position: fixed;
     z-index:100;
-    margin-top: 60px;
+    margin-top: 0px;
 }
 
 .barra_rolar
@@ -37,8 +59,10 @@ and open the template in the editor.
 
 .posicao_conteiner
 {
-    margin-top: 60px;
+    margin-top: 0px;
     margin-left: 220px;
+    padding: 50px;
+    background-color: #F3F3F3;
 }
 
 .link_ativo a
@@ -49,7 +73,13 @@ and open the template in the editor.
 
 .link a
 {
- color: #000000;
+    color: #F7F7F7;
+    /*    border: 1px solid #000000;*/
+}
+
+.link a:hover
+{
+    color: #2B2B2B;
 }
 
 
@@ -79,6 +109,8 @@ and open the template in the editor.
     width: 100%;
     height: 67px;
     margin-top: 20px;
+    padding-left: 220px;
+/*    margin-left: 220px;*/
     background-color: #dcdcdc;
     text-align: center;
 }

@@ -1,5 +1,5 @@
             <div class="col-md-10 posicao_conteiner" style="height: auto; background-repeat: no-repeat; ">
-                <h3 style="text-align: left;  margin-top: 50px; margin-bottom: 20px;">Destaques abc</h3>
+                <h3 style="text-align: left; margin-bottom: 20px;">Destaques abc</h3>
                 <div class="row">
 
                     <div class="col-sm-7 col-md-3 margen_baixo">
