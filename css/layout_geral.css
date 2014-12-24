@@ -44,7 +44,7 @@ mini_perfil
 }
 
 
-@media (max-width:600px) {
+@media only screen and (max-width:990px) {
     .conteiner_smartphone
     {
         margin-top: 0px;
@@ -97,7 +97,7 @@ mini_perfil
     overflow: auto;
 }
 
-@media (min-width:600px) {
+@media only screen and (min-width:990px) {
     .posicao_conteiner
     {
         margin-top: 0px;

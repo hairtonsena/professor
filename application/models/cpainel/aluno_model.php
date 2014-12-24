@@ -21,9 +21,14 @@ class aluno_model extends CI_Model {
         return $this->db->get_where('aluno', array('status_aluno' => 0));
     }
 
-    function obter_alunos_pesquisa_nome($q) {
+    function obter_alunos_pesquisa_nome($q, $id_turma) {
+        $this->db->select('*');
+        $this->db->from('aluno');
+        $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
+
+//        $this->db->where(array('aluno.status_aluno' => 0, 'aluno_has_turma.turma_id_turma <>' => $id_turma));
         $this->db->like('nome_aluno', $q);
-        return $this->db->get_where('aluno', array('status_aluno' => 0));
+        return $this->db->get();
     }
 
     // Utilizando

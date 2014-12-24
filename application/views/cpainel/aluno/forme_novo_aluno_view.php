@@ -34,10 +34,10 @@ foreach ($turma_disciplina as $td) {
                 <div class="col-lg-12 semMargem" style="/*border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; */">
 
 
-                    <div class="col-lg-6"  style="padding-top: 5px;">
+                    <div class="col-lg-6"  style="padding-top: 5px; border-right: 1px solid #ddd;">
 
                         <form class="form-horizontal" action="<?php echo base_url("cpainel/aluno/salvar_novo_aluno"); ?>" method="post" role="form">
-                            <input type="hidden" name="turma" value="<?php echo $id_turma ?>" />
+                            <input type="hidden" name="turma" id="turma" value="<?php echo $id_turma ?>" />
                             <fieldset>
                                 <legend>Novo aluno</legend>
                                 <div class="form-group">
@@ -100,26 +100,17 @@ foreach ($turma_disciplina as $td) {
                         </form>
                         <div id="resultado_pesquisa_aluno">
 
-                            <table id="tbl_resultado">
+                            <table class="table" id="tbl_resultado">
                                 <thead>
                                     <tr>
-                                        <th>Produto</th>
-                                        <th>Código</th>
-                                        <th>Quantidade</th>
-                                        <th>Preço</th>
-                                        <th class="actions">Ações</th>
+                                        <th>Nome</th>
+                                        <th>Matricula</th>
+                                        <th>CPF</th>
+                                        <th>adicionar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>&nbsp;asdf</td>
-                                        <td>&nbsp;asf</td>
-                                        <td>&nbsp;asd</td>
-                                        <td>&nbsp;asf</td>
-                                        <td class="actions">
-                                            <button class="btn btn-large btn-danger" onclick="RemoveTableRow(this)" type="button">Remover</button>
-                                        </td>
-                                    </tr>
+                
                                 </tbody>
                             </table>
 

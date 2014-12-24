@@ -142,8 +142,10 @@ class Aluno extends CI_Controller {
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
             $texto_pesquisa = $this->input->get('q');
+            $id_turma = $this->input->get('turma');
             
-            $todos_alunos = $this->aluno_model->obter_alunos_pesquisa_nome($texto_pesquisa)->result();
+            
+            $todos_alunos = $this->aluno_model->obter_alunos_pesquisa_nome($texto_pesquisa,$id_turma)->result();
             $nomes_alunos = array();
             foreach ($todos_alunos as$ta){
                 $nomes_alunos[] = $ta->nome_aluno;

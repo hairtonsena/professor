@@ -90,42 +90,29 @@ $(function () {
                 url: Config.base_url("cpainel/aluno/obter_alunos_cadastrados"),
                 dataType: "json",
                 data: {
-                    q: request.term
+                    q: request.term,
+                    turma: $("#turma").val()
                 },
                 success: function (data) {
-                    alert(data.length);
-
 
                     var linhasTabela;
-                    var div = $('#tbl_resultado');
 
+                    $('tbody tr').remove();
 
                     for (var n = 0; n <= data.length; n++) {
 
                         var objeto = data[n];
 
-                        linhasTabela = '<td>' + objeto.nome_aluno + '</td>';
+                        linhasTabela =
+                                '<tr>' +
+                                '<td>' + objeto.nome_aluno + '</td>' +
+                                '<td>' + objeto.matricula_aluno + '</td>' +
+                                '<td>' + objeto.cpf_aluno + '</td>' +
+                                '<td><a href="' + Config.base_url("cpainel/aluno/adiciona_aluno_existente_turma/" + objeto.id_aluno) + '" class="btn btn-large btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td>' +
+                                '</tr>';
 
-                        alert(linhasTabela);
-
-                        var tr = $('tr');
-
-                        tr.append(linhasTabela);
-                        alert('oi');
-
-
-//                        var contDiv = conteudoDireito;
-//                        divd.innerHTML = contDiv;
-                        $("#tbl_resultado").append(tr);
-                        alert('ola');
+                        $("#tbl_resultado").append(linhasTabela);
                     }
-
-
-//                    var tabela = '<table>' + linhasTabela + '</table>'
-//
-//                            .html(tabela);
-                    //response(data);
-
                 }
             });
         }
