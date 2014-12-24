@@ -150,7 +150,7 @@ class Aluno extends CI_Controller {
             }
             
             
-            echo json_encode($nomes_alunos);
+            echo json_encode($todos_alunos);
             
             
         } else {

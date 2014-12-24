@@ -88,20 +88,46 @@ $(function () {
         source: function (request, response) {
             $.ajax({
                 url: Config.base_url("cpainel/aluno/obter_alunos_cadastrados"),
-//                dataType: "ajax",
+                dataType: "json",
                 data: {
                     q: request.term
                 },
                 success: function (data) {
-                    alert(data);
-                    response(data);
+                    alert(data.length);
+
+
+                    var linhasTabela;
+                    var div = $('#tbl_resultado');
+
+
+                    for (var n = 0; n <= data.length; n++) {
+
+                        var objeto = data[n];
+
+                        linhasTabela = '<td>' + objeto.nome_aluno + '</td>';
+
+                        alert(linhasTabela);
+
+                        var tr = $('tr');
+
+                        tr.append(linhasTabela);
+                        alert('oi');
+
+
+//                        var contDiv = conteudoDireito;
+//                        divd.innerHTML = contDiv;
+                        $("#tbl_resultado").append(tr);
+                        alert('ola');
+                    }
+
+
+//                    var tabela = '<table>' + linhasTabela + '</table>'
+//
+//                            .html(tabela);
+                    //response(data);
+
                 }
             });
-        },
-        select: function (event, ui) {
-            log(ui.item ?
-                    "Selected: " + ui.item.value + " aka " + ui.item.id :
-                    "Nothing selected, input was " + this.value);
         }
     });
 

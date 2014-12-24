@@ -91,16 +91,39 @@ foreach ($turma_disciplina as $td) {
                                 <div class="col-lg-12 semMargem">
                                     <div class="input-group">
                                         <input class="form-control" name="aluno" id="ipt_aluno" />
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">Pesquisar</button>
-                                    </span>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button">Pesquisar</button>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </form>
                         <div id="resultado_pesquisa_aluno">
-                            
-                            <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+
+                            <table id="tbl_resultado">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Código</th>
+                                        <th>Quantidade</th>
+                                        <th>Preço</th>
+                                        <th class="actions">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>&nbsp;asdf</td>
+                                        <td>&nbsp;asf</td>
+                                        <td>&nbsp;asd</td>
+                                        <td>&nbsp;asf</td>
+                                        <td class="actions">
+                                            <button class="btn btn-large btn-danger" onclick="RemoveTableRow(this)" type="button">Remover</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!--<div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>-->
                         </div>
                     </div>
                 </div>
