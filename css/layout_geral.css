@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 mini_perfil
 {
-   margin-top: 10px;
+    margin-top: 10px;
 }
 
 .nome
@@ -45,9 +45,42 @@ mini_perfil
 
 
 @media (max-width:600px) {
-    .abc {
+    .conteiner_smartphone
+    {
+        margin-top: 0px;
+        margin-left: 10px;
+        padding: 50px;
+        background-color: #F3F3F3;
+        -webkit-transition: 0.3s ease-in;
+        -moz-transition: 0.3s ease-in;
+        -o-transition: 0.3s ease-in;
+    }
+
+    .menu_smartphone {
+        width: 10px;
+        -webkit-transition: 0.3s ease-in;
+        -moz-transition: 0.3s ease-in;
+        -o-transition: 0.3s ease-in;
+    }
+
+    .menu_smartphone:hover
+    {
+        width: 230px;
+        -webkit-transition: 0.3s ease-in;
+        -moz-transition: 0.3s ease-in; 
+        -o-transition: 0.3s ease-in;
+    }
+
+    .menu_smartphone_esconde_menu
+    {
         display: none;
     }
+
+/*    .menu_smartphone_esconde_menu:hover
+    {
+        position:absolute;
+        left:0px;
+    }*/
 }
 
 .flutuante_menu
@@ -64,14 +97,18 @@ mini_perfil
     overflow: auto;
 }
 
-.posicao_conteiner
-{
-    margin-top: 0px;
-    margin-left: 220px;
-    padding: 50px;
-    background-color: #F3F3F3;
+@media (min-width:600px) {
+    .posicao_conteiner
+    {
+        margin-top: 0px;
+        margin-left: 220px;
+        padding: 50px;
+        background-color: #F3F3F3;
+        -webkit-transition: 0.3s ease-in;
+        -moz-transition: 0.3s ease-in;
+        -o-transition: 0.3s ease-in;
+    }
 }
-
 .link_ativo a
 {
     background-color: #dcdcdc;
@@ -117,7 +154,7 @@ mini_perfil
     height: 67px;
     margin-top: 20px;
     padding-left: 220px;
-/*    margin-left: 220px;*/
+    /*    margin-left: 220px;*/
     background-color: #dcdcdc;
     text-align: center;
 }
