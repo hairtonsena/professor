@@ -20,7 +20,7 @@ class Aluno extends CI_Controller {
     }
 
     public function index() {
-       // verificando se o usuário está logado.
+        // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
 
@@ -112,13 +112,23 @@ class Aluno extends CI_Controller {
             $texto_pesquisa = $this->input->get('q');
             $id_turma = $this->input->get('turma');
 
-            $todos_alunos = $this->aluno_model->obter_alunos_pesquisa_nome($texto_pesquisa)->result();
+            $alunos_da_turma = $this->aluno_model->alunos_na_turma($id_turma)->result();
+            $alunos_pesquisado = $this->aluno_model->obter_alunos_pesquisa_nome($texto_pesquisa, $id_turma)->result();
             $alunos_nao_adicionado = array();
-            foreach ($todos_alunos as $ta) {
-                if ($ta->turma_id_turma != $id_turma) {
-                    $alunos_nao_adicionado[] = $ta;
+
+            foreach ($alunos_pesquisado as $ap) {
+                $teste = TRUE;
+                foreach ($alunos_da_turma as $adt) {
+                    if ($ap->id_aluno == $adt->aluno_id_aluno) {
+                        $teste = FALSE;
+                        break;
+                    }
+                }
+                if ($teste == TRUE) {
+                    $alunos_nao_adicionado[] = $ap;
                 }
             }
+
             echo json_encode($alunos_nao_adicionado);
         } else {
             redirect(base_url("cpainel/seguranca"));
@@ -157,7 +167,7 @@ class Aluno extends CI_Controller {
 
             $query = $this->aluno_model->aluno_em_turma($id_aluno, $id_turma)->result();
             if (count($query) != 0) {
-                $this->aluno_model->excluir_aluno_em_tuma($id_aluno,$id_turma);
+                $this->aluno_model->excluir_aluno_em_tuma($id_aluno, $id_turma);
                 $retorno = '1';
             } else {
                 $retorno = 'Aluno não foi encontrada nesta turma!';

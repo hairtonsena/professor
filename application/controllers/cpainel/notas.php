@@ -15,6 +15,7 @@ class Notas extends CI_Controller {
         $this->load->model('cpainel/turma_model');
         $this->load->model('cpainel/aluno_model');
         $this->load->model('cpainel/avaliacao_model');
+        $this->load->model('cpainel/trabalho_model');
         date_default_timezone_set('UTC');
     }
 
@@ -35,17 +36,25 @@ class Notas extends CI_Controller {
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
 
 
+            
+            
             $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
             $todas_avaliacoes = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
-
+            
+            $todos_trabalhos_turma = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
+            
+            
 
             $notas_aluno_avaliacao = $this->avaliacao_model->obter_notas_avaliacao($id_turma)->result();
+            $notas_aluno_trabalho = $this->trabalho_model->obter_notas_trabalho($id_turma)->result();
 
             $dados = array(
                 "turma_disciplina" => $turma_disciplina,
                 "alunos_turma" => $alunos_por_turma,
                 "avaliacoes_turma" => $todas_avaliacoes,
-                "notas_aluno_avaliacao" => $notas_aluno_avaliacao
+                "notas_aluno_avaliacao" => $notas_aluno_avaliacao,
+                "todos_trabalhos_turma" => $todos_trabalhos_turma,
+                "notas_aluno_trabalho" => $notas_aluno_trabalho
             );
 
             $this->load->view('cpainel/tela/titulo');
@@ -138,20 +147,17 @@ class Notas extends CI_Controller {
 
 
 
-            //           $this->form_validation->set_rules('nome_aluno', 'Nome', 'required|trim|min_length[4]|max_length[45]');
+//           $this->form_validation->set_rules('nome_aluno', 'Nome', 'required|trim|min_length[4]|max_length[45]');
 //            $this->form_validation->set_rules('matricula_aluno', 'Matricula', 'required|trim|min_length[2]|max_length[45]');
 //            $this->form_validation->set_rules('cpf_aluno', 'CPF', 'required|trim|min_length[2]|max_length[45]');
 
             $id_turma = $this->input->post('turma');
             $id_avaliacao = $this->input->post('avaliacao');
 
-
-
-//            if ($this->form_validation->run() == FALSE) {
-//                 echo 'Ola';
-//                $this->novo($id_turma);
-//            } else {
-
+            
+            
+            
+            
             $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
             foreach ($alunos_por_turma as $apt) {
                 $input_name = 'aluno_' . $apt->id_aluno;

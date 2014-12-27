@@ -12,9 +12,13 @@ foreach ($turma_disciplina as $td) {
 
 
 $notas_avaliacoes = array();
-
 foreach ($notas_aluno_avaliacao as $naa) {
     $notas_avaliacoes[$naa->id_aluno][$naa->id_avaliacao] = $naa->valor_nota;
+}
+
+$notas_trabalhos = array();
+foreach ($notas_aluno_trabalho as $nat) {
+    $notas_trabalhos[$nat->id_aluno][$nat->id_trabalho] = $nat->valor_nota_trabalho;
 }
 ?>
 <div class="row col-lg-12">
@@ -33,9 +37,9 @@ foreach ($notas_aluno_avaliacao as $naa) {
         <div class="panel-body">
             <div class="col-lg-12 semMargem">
                 <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="#">Alunos</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
-                    <li role="presentation"><a href="#">Trabalhos</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
                     <li role="presentation"  class="active"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
                 </ul>
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
@@ -49,6 +53,9 @@ foreach ($notas_aluno_avaliacao as $naa) {
                                         foreach ($avaliacoes_turma as $atr) {
                                             echo '<th>' . $atr->descricao_avaliacao . '</th>';
                                         }
+                                        foreach ($todos_trabalhos_turma as $ttt) {
+                                            echo '<th>' . $ttt->titulo_trabalho . '</th>';
+                                        }
                                         ?>
                                         <th rowspan="2">Total</th>
                                     </tr>
@@ -59,6 +66,9 @@ foreach ($notas_aluno_avaliacao as $naa) {
                                         <?php
                                         foreach ($avaliacoes_turma as $atr) {
                                             echo '<td><a title="Alterar notas" href="' . base_url("cpainel/notas/alterar_notas?turma=" . $id_turma) . '&avaliacao=' . $atr->id_avaliacao . ' "><span class="glyphicon glyphicon-pencil"></span></a></td>';
+                                        }
+                                        foreach ($todos_trabalhos_turma as $ttt) {
+                                            echo '<td><a title="Alterar notas" href="' . base_url("cpainel/notas/alterar_notas?turma=" . $id_turma) . '&avaliacao=' . $ttt->titulo_trabalho . ' "><span class="glyphicon glyphicon-pencil"></span></a></td>';
                                         }
                                         ?>
                                         <td></td>
@@ -84,6 +94,15 @@ foreach ($notas_aluno_avaliacao as $naa) {
                                                     echo '<td>0</td>';
                                                 }
                                             }
+
+                                            foreach ($todos_trabalhos_turma as $ttt) {
+                                                if (!empty($notas_trabalhos[$alunoTurma->id_aluno][$ttt->id_trabalho])) {
+                                                    echo '<td>' . $notas_trabalhos[$alunoTurma->id_aluno][$ttt->id_trabalho] . '</td>';
+                                                    $total_ponto_aluno += $notas_avaliacoes[$alunoTurma->id_aluno][$avt->id_avaliacao];
+                                                } else {
+                                                    echo '<td>0</td>';
+                                                }
+                                            }
                                             ?>
                                             <td><strong><?php echo $total_ponto_aluno ?></strong></td>
                                         </tr>
@@ -98,6 +117,11 @@ foreach ($notas_aluno_avaliacao as $naa) {
                                             $total_nota_avaliacoes += $atr->valor_avaliacao;
                                             echo '<td>' . $atr->valor_avaliacao . '</td>';
                                         }
+                                        foreach ($todos_trabalhos_turma as $ttt) {
+                                             $total_nota_avaliacoes += $ttt->valor_nota_trabalho;
+                                            echo '<th>' . $ttt->valor_nota_trabalho . '</th>';
+                                        }
+                                        
                                         ?>
                                         <td><strong><?php echo $total_nota_avaliacoes ?></strong></td>
                                     </tr>

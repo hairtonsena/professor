@@ -3,25 +3,14 @@
 class avaliacao_model extends CI_Model {
 
     function obter_notas_avaliacao($id_turma) {
-        // $this->db->select('aluno.id_aluno, aluno.nome_aluno, avaliacao.id_avaliacao, avaliacao.descricao_avaliacao, IFNULL(nota_avaliacao.valor_nota,0) as valor_nota');
-
-
         $this->db->select('aluno.id_aluno, avaliacao.id_avaliacao, nota_avaliacao.valor_nota');
         $this->db->from('aluno');
         $this->db->join('nota_avaliacao', 'nota_avaliacao.aluno_id_aluno = aluno.id_aluno');
-       // $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
-       // $this->db->join('turma', 'turma.id_turma=aluno_has_turma.turma_id_turma');
-       // $this->db->join('avaliacao', 'avaliacao.turma_id_turma=turma.id_turma');
-        
-        
         $this->db->join('avaliacao', 'avaliacao.id_avaliacao=nota_avaliacao.avaliacao_id_avaliacao','right');
         $this->db->where('avaliacao.turma_id_turma', $id_turma);
-        
-        
-       // $this->db->where('turma.id_turma', $id_turma);
         return $this->db->get();
     }
-
+    // função para pegar todas as avaliações que estão cadatradas para uma determinada turma.
     function obter_todas_avaliacoes_turma($id_turma) {
         return $this->db->get_where('avaliacao', array('turma_id_turma' => $id_turma));
     }
