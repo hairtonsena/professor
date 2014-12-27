@@ -20,47 +20,15 @@ class Aluno extends CI_Controller {
     }
 
     public function index() {
-        // utilizando
-        if (($this->session->userdata('id_admin')) && ($this->session->userdata('nome_admin')) && ($this->session->userdata('email_admin')) && ($this->session->userdata('senha_admin'))) {
+       // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
 
-            // Ativando e desativando os estados para ser cadastrados 
-            $id_uf = null;
-            // verificando se a requisição get existe
-            if ($this->input->get('ativar_uf', TRUE)) {
-                // recebendo a id atravez do get 
-                $id_uf = $this->input->get('ativar_uf');
-                // criando um arrey com os dados a serem alterados
-                $dados = array(
-                    'status_uf' => 1,
-                );
-                // enviando a os dadodas para o model alterar os dados
-                $this->localizacao_model->ativar_desativar_uf($dados, $id_uf);
-                // atualizanda a pagina.
-                redirect("/cpainel/localizacao");
-                // mesmos passo a cima alterando ampenas o status_uf para 0.                
-            } else if ($this->input->get('desativar_uf', TRUE)) {
-                $id_uf = $this->input->get('desativar_uf');
-                $dados = array(
-                    'status_uf' => 0,
-                );
-                $this->localizacao_model->ativar_desativar_uf($dados, $id_uf);
-                redirect("/cpainel/localizacao");
-            }
-
-
-
-
-            $dados = array(
-                'uf' => $this->localizacao_model->ver_todos_uf()->result(),
-            );
-
-
-            $this->load->view('cpainel/tela/titulo');
-            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/localizacao/localizacao_view', $dados);
-
-            $this->load->view('cpainel/tela/rodape');
+//            $this->load->view('cpainel/tela/titulo');
+//            $this->load->view('cpainel/tela/menu');
+//            $this->load->view('cpainel/localizacao/localizacao_view', $dados);
+//
+//            $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
@@ -143,18 +111,59 @@ class Aluno extends CI_Controller {
 
             $texto_pesquisa = $this->input->get('q');
             $id_turma = $this->input->get('turma');
-            
-            
-            $todos_alunos = $this->aluno_model->obter_alunos_pesquisa_nome($texto_pesquisa,$id_turma)->result();
-            $nomes_alunos = array();
-            foreach ($todos_alunos as$ta){
-                $nomes_alunos[] = $ta->nome_aluno;
+
+            $todos_alunos = $this->aluno_model->obter_alunos_pesquisa_nome($texto_pesquisa)->result();
+            $alunos_nao_adicionado = array();
+            foreach ($todos_alunos as $ta) {
+                if ($ta->turma_id_turma != $id_turma) {
+                    $alunos_nao_adicionado[] = $ta;
+                }
             }
-            
-            
-            echo json_encode($todos_alunos);
-            
-            
+            echo json_encode($alunos_nao_adicionado);
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Incluindo aluno existente em uma turma.
+    public function add_aluno_turma() {
+        $id_aluno = $this->input->post('aluno');
+        $id_turma = $this->input->post('turma');
+
+        $retorno = '0';
+
+        $aluno_turma = $this->aluno_model->aluno_em_turma($id_aluno, $id_turma)->result();
+        if (count($aluno_turma) != 0) {
+            $retorno = "Aluno já está cadastrado!";
+        } else {
+            $dados = array(
+                "aluno_id_aluno" => $id_aluno,
+                "turma_id_turma" => $id_turma
+            );
+            $this->aluno_model->salvar_aluno_turma($dados);
+            $retorno = '1';
+        }
+        echo $retorno;
+    }
+
+    // Função para excluir aluno da turma;
+    public function excluir_aluno_turma() {
+        // verificando usuario logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            $id_aluno = $this->input->post('aluno');
+            $id_turma = $this->input->post('turma');
+
+            $retorno = '';
+
+            $query = $this->aluno_model->aluno_em_turma($id_aluno, $id_turma)->result();
+            if (count($query) != 0) {
+                $this->aluno_model->excluir_aluno_em_tuma($id_aluno,$id_turma);
+                $retorno = '1';
+            } else {
+                $retorno = 'Aluno não foi encontrada nesta turma!';
+            }
+
+            echo $retorno;
         } else {
             redirect(base_url("cpainel/seguranca"));
         }

@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class noticia extends CI_Controller {
+class avaliacao extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -12,261 +12,87 @@ class noticia extends CI_Controller {
         $this->load->library('form_validation');
         $this->load->database();
         $this->load->library('session');
-        $this->load->model('cpainel/noticia_model');
-        $this->load->library('upload');
+        $this->load->model('cpainel/turma_model');
+        $this->load->model('cpainel/avaliacao_model');
     }
 
     public function index() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-            $this->session->unset_userdata('paginacao_noticia');
-            $this->ver_todas();
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            $id_turma = $this->input->get('turma');
 
-    public function gera_paginacao($paginacao) {
 
-        $numero_paginas = ceil($paginacao['total_de_registros'] / $paginacao['qtde_Registros_por_pagina']);
+            $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            $avaliacao_por_turma = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
 
-        if ($paginacao['paramentro_paginacao'] > 0) {
-            if ($paginacao['paramentro_paginacao'] > $numero_paginas) {
-                $paginacao['paramentro_paginacao'] = $numero_paginas;
-            }
-        } else {
-            $paginacao['paramentro_paginacao'] = 1;
-        }
-
-        $paginacao['numero_da_pagina'] = $paginacao['paramentro_paginacao'] - 1;
-
-        $links_paginacao = '<ul class="pagination">';
-
-        for ($i = 0; $i < $numero_paginas; $i++) {
-
-            $numPagina = $i + 1;
-
-            if ($i == $paginacao['numero_da_pagina']) {
-                $links_paginacao = $links_paginacao . '<li class="active"><a href="#">' . $numPagina . '<span class="sr-only">(current)</span></a></li>';
-            } else {
-                $links_paginacao = $links_paginacao . '<li><a href="' . base_url("cpainel/noticia/ver_todas/$numPagina") . '" >' . $numPagina . '</a></li>';
-            }
-        }
-
-        $links_paginacao = $links_paginacao . '</ul>';
-
-        return $links_paginacao;
-    }
-
-    public function ver_todas() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $paginacao['total_de_registros'] = $this->noticia_model->ver_todas_noticias()->num_rows();
-            $paginacao['qtde_Registros_por_pagina'] = 8;
-
-            $paginacao['paramentro_paginacao'] = (int) $this->uri->segment(4);
-
-            if (!$paginacao['paramentro_paginacao'] > 0) {
-                if (!$this->session->userdata('paginacao_noticia')) {
-                    $paginacao['paramentro_paginacao'] = 1;
-                } else {
-                    $paginacao['paramentro_paginacao'] = $this->session->userdata('paginacao_noticia');
-                }
-            }
-
-            $this->session->set_userdata('paginacao_noticia', $paginacao['paramentro_paginacao']);
-
-            $paginacao['numero_da_pagina'] = $paginacao['paramentro_paginacao'] - 1;
-            $inicio = $paginacao['numero_da_pagina'] * $paginacao['qtde_Registros_por_pagina'];
-
-            $links_paginacao = $this->gera_paginacao($paginacao);
 
             $dados = array(
-                'noticia' => $this->noticia_model->ver_todas_noticias($paginacao['qtde_Registros_por_pagina'], $inicio)->result(),
-                'paginacao' => $links_paginacao,
+                "turma_disciplina" => $query,
+                "avaliacoes_turma" => $avaliacao_por_turma
             );
 
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/noticia/tabela_alterar_noticia_view', $dados);
+            $this->load->view('cpainel/avaliacao/avaliacao_view', $dados);
             $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
 
-    public function ver_todas_backup() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $paginacao['total_de_registros'] = $this->noticia_model->ver_todas_noticias()->num_rows();
-
-            $paginacao['qtde_Registros_por_pagina'] = 2;
-
-            $paginacao['qtde_Registros_por_pagina'];
-
-            $numero_paginas = ceil($paginacao['total_de_registros'] / $paginacao['qtde_Registros_por_pagina']);
-
-            $paramentro_paginacao = 1;
-
-            if ((int) $this->uri->segment(4) > 0) {
-
-                $paramentro_paginacao = $this->uri->segment(4);
-                if ($paramentro_paginacao > $numero_paginas) {
-                    $paramentro_paginacao = $numero_paginas;
-                }
+    public function nova($id_turma = NULL) {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            if ($id_turma == null) {
+                $id_turma = $this->uri->segment(4);
             }
-
-            $paginacao['numero_da_pagina'] = $paramentro_paginacao - 1;
-
-            $inicio = $paginacao['numero_da_pagina'] * $paginacao['qtde_Registros_por_pagina'];
-
-
-            $links_paginacao = '<ul class="pagination">';
-
-            for ($i = 0; $i < $numero_paginas; $i++) {
-
-                $numPagina = $i + 1;
-
-                if ($i == $paginacao['numero_da_pagina']) {
-                    $links_paginacao = $links_paginacao . '<li class="active"><a href="#">' . $numPagina . '<span class="sr-only">(current)</span></a></li>';
-                } else {
-                    $links_paginacao = $links_paginacao . '<li><a href="' . base_url("cpainel/noticia/ver_todas/$numPagina") . '" >' . $numPagina . '</a></li>';
-                }
-            }
-
-            $links_paginacao = $links_paginacao . '</ul>';
-
-
+            $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
 
             $dados = array(
-                'noticia' => $this->noticia_model->ver_todas_noticias($paginacao['qtde_Registros_por_pagina'], $inicio)->result(),
-                'paginacao' => $links_paginacao,
+                "turma_disciplina" => $query
             );
 
-
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/noticia/tabela_alterar_noticia_view', $dados);
+            $this->load->view('cpainel/avaliacao/forme_nova_avaliacao_view', $dados);
             $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
 
-    public function nova() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
+    public function salvar_nova_avaliacao() {
+        // veirificando usuario logado
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
-            $this->load->view('cpainel/tela/titulo');
-            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/noticia/forme_criar_noticia_view');
-            $this->load->view('cpainel/tela/rodape');
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
+            $this->form_validation->set_rules('descricao_avaliacao', 'Descrição', 'required|trim|min_length[4]|max_length[45]');
+            $this->form_validation->set_rules('data_avaliacao', 'Data', 'required|trim|min_length[2]|max_length[45]');
+            $this->form_validation->set_rules('valor_avaliacao', 'CPF', 'required|trim|min_length[0]|max_length[45]');
 
-    public function criar_nova_noticia() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-            $this->form_validation->set_rules('titulo_noticia', 'Titulo', 'required|trim|min_length[5]');
+            $id_turma = $this->input->post('turma');
 
             if ($this->form_validation->run() == FALSE) {
-                $this->nova();
+                $this->nova($id_turma);
             } else {
 
-                $titulo_noticia = $this->input->post('titulo_noticia');
-                $id_noticia = url_title($titulo_noticia);
+                $descricao_avaliacao = $this->input->post('descricao_avaliacao');
+                $data_avaliacao = $this->input->post('data_avaliacao');
+                $valor_avaliacao = $this->input->post('valor_avaliacao');
+
                 $dados = array(
-                    'id_noticia' => $id_noticia,
-                    'titulo_noticia' => ucfirst(strip_tags($titulo_noticia)),
-                    'data_noticia' => date("Y-m-d"),
-                    'ordem_noticia' => date('Y-m-d H:i:s')  // 2013-11-19 04:20:08
+                    "descricao_avaliacao" => $descricao_avaliacao,
+                    "data_avaliacao" => $data_avaliacao,
+                    "valor_avaliacao" => $valor_avaliacao,
+                    "turma_id_turma" => $id_turma
                 );
 
-                $this->noticia_model->salvarNovoNoticia($dados);
+                $this->avaliacao_model->salvar_nova_avaliacao($dados);
 
-                redirect(base_url("cpainel/noticia/alterar_texto_noticia/" . $id_noticia));
+                redirect(base_url("cpainel/avaliacao?turma=" . $id_turma));
             }
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
-    }
-
-    public function forme_editar_titulo_noticia() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-
-            $id_noticia = $this->uri->segment(4);
-            $titulo_noticia = $this->noticia_model->obter_noticia($id_noticia)->result();
-            if (count($titulo_noticia) == 0) {
-                redirect(base_url("cpainel/noticia"));
-            } else {
-
-                $dados = array(
-                    'id_noticia' => $id_noticia,
-                    'titulo_noticia' => $titulo_noticia
-                );
-
-
-                $this->load->view('cpainel/tela/titulo');
-                $this->load->view('cpainel/tela/menu');
-                $this->load->view('cpainel/noticia/forme_editar_titulo_noticia_view', $dados);
-                $this->load->view('cpainel/tela/rodape');
-            }
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function alterar_titulo_noticia() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $this->form_validation->set_rules('titulo_noticia', 'Titulo', 'required|trim|min_length[5]');
-            $id_noticia = $this->input->post('id_noticia');
-
-            if ($this->form_validation->run() == FALSE) {
-
-                $titulo_noticia = $this->noticia_model->obter_noticia($id_noticia)->result();
-                if (count($titulo_noticia) == 0) {
-                    redirect(base_url("cpainel/noticia"));
-                } else {
-
-                    $dados = array(
-                        'id_noticia' => $id_noticia,
-                        'titulo_noticia' => $titulo_noticia
-                    );
-
-
-                    $this->load->view('tela/titulo');
-                    $this->load->view('tela/menu');
-                    $this->load->view('noticia/forme_editar_titulo_noticia_view', $dados);
-                    $this->load->view('tela/rodape');
-                }
-            } else {
-
-
-
-                $titulo_noticia = $this->input->post('titulo_noticia');
-
-                $dados = array(
-                    'titulo_noticia' => $titulo_noticia,
-                );
-
-
-                $this->noticia_model->alterarDadosNoticia($dados, $id_noticia);
-
-                redirect(base_url("cpainel/noticia"));
-            }
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function verTextoNoticia() {
-        $id_noticia = $_POST['idNoticia'];
-        $dados = array(
-            'noticia' => $this->noticia_model->obter_noticia($id_noticia)->result()
-        );
-
-        $this->load->view('cpainel/noticia/verTextoNoticia_view', $dados);
     }
 
     public function alterar_texto_noticia() {
@@ -290,33 +116,6 @@ class noticia extends CI_Controller {
             }
         } else {
             redirect(base_url('cpainel/seguranca'));
-        }
-    }
-
-    public function alterar_imagem_noticia($id_noticia = NULL, $erro_up = NULL) {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            if ($id_noticia == NULL) {
-                $id_noticia = $this->uri->segment(4);
-            }
-
-            $query = $this->noticia_model->obter_noticia($id_noticia)->result();
-            if (count($query) == 0) {
-                redirect(base_url("cpainel/noticia/ver_todas"));
-            } else {
-
-                $dados = array(
-                    'id_noticia' => $id_noticia,
-                    'erro_upload' => $erro_up
-                );
-
-                $this->load->view('cpainel/tela/titulo');
-                $this->load->view('cpainel/tela/menu');
-                $this->load->view('cpainel/noticia/forme_editar_imagem_noticia_view', $dados);
-                $this->load->view('cpainel/tela/rodape');
-            }
-        } else {
-            redirect(base_url("cpainel/seguranca"));
         }
     }
 
@@ -345,67 +144,6 @@ class noticia extends CI_Controller {
             redirect(base_url("cpainel/noticia/ver_todas/"));
         } else {
             redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function salvar_imagem_noticia() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-
-            $id_noticia = $this->input->post('id_noticia');
-
-            $diretorio_imagem_noticia = 'imagem_noticia';
-
-            if (!file_exists($diretorio_imagem_noticia)) {
-                mkdir($diretorio_imagem_noticia);
-            }
-            $field_name = "imagem_noticia";
-
-            $imagem = $_FILES['imagem_noticia'];
-
-            $imagemExtecao = strtolower(end(explode('.', $imagem['name'])));
-
-            $nome_imagem = md5(uniqid(time())) . "." . $imagemExtecao;
-
-
-            $config['file_name'] = $nome_imagem;
-            $config['upload_path'] = $diretorio_imagem_noticia; // server directory
-            $config['allowed_types'] = 'jpg|jpeg|png'; // by extension, will check for whether it is an image
-            $config['max_size'] = 1024 * 1024 * 2; // in kb
-            $config['max_width'] = '2024';
-            $config['max_height'] = '1468';
-
-
-            $this->upload->initialize($config);
-
-            $files = $this->upload->do_upload($field_name);
-
-            if (!$files) {
-
-                $erro_up = $this->upload->display_errors();
-
-                $this->alterar_imagem_noticia($id_noticia, $erro_up);
-            } else {
-
-                $query = $this->noticia_model->obter_noticia($id_noticia)->result();
-
-                foreach ($query as $q) {
-                    if (file_exists("imagem_noticia/" . $q->imagem_noticia)) {
-                        unlink("imagem_noticia/" . $q->imagem_noticia);
-                    }
-                }
-
-                $dados = array(
-                    'imagem_noticia' => $nome_imagem,
-                );
-
-
-                $this->noticia_model->alterarDadosNoticia($dados, $id_noticia);
-
-                redirect(base_url("cpainel/noticia/ver_todas"));
-            }
-        } else {
-            redirect(base_url('cpainel/seguranca'));
         }
     }
 

@@ -33,7 +33,7 @@ $(function () {
     });
 
 
-
+    // Confirmação da exclusão da disciplina
     $('#modelExcluirDisciplina').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('disciplina') // Extract info from data-* attributes
@@ -43,7 +43,7 @@ $(function () {
         //modal.find('.modal-title').text('New message to ' + recipient)
         modal.find('#disciplina_excluir').val(recipient)
     });
-
+    // Visualização da descrição da diciplina.
     $('#modelVerDescricaDisciplina').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('disciplina') // Extract info from data-* attributes
@@ -63,7 +63,7 @@ $(function () {
             }
         });
     });
-
+    // Confirmação de exclusão de turma
     $('#modelExcluirTurma').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('turma') // Extract info from data-* attributes
@@ -75,52 +75,62 @@ $(function () {
     });
 
 
-    //    Autocomplete pesquisa aluno para cadastra novo aluno
-    // aqui
-
-    function log(message) {
-        $("<div>").text(message).prependTo("#log");
-        $("#log").scrollTop(0);
-    }
-
+    //    Autocomplete pesquisa aluno para cadastra novo aluno 
     $("#ipt_aluno").autocomplete({
         minLength: 2,
         source: function (request, response) {
+            var turma = $("#turma").val();
+            $('#imag_carrgando').html('Carregando...');
             $.ajax({
                 url: Config.base_url("cpainel/aluno/obter_alunos_cadastrados"),
                 dataType: "json",
                 data: {
                     q: request.term,
-                    turma: $("#turma").val()
+                    turma: turma
                 },
                 success: function (data) {
-
-                    var linhasTabela;
-
                     $('tbody tr').remove();
+                    $('#imag_carrgando').html('');
+                    if (data.length == 0) {
+                        $('#imag_carrgando').html('<div class="alert alert-danger" role="alert">Aluno não encontrado!</div>');
+                    } else {
+                        var linhasTabela;
 
-                    for (var n = 0; n <= data.length; n++) {
 
-                        var objeto = data[n];
+                        for (var n = 0; n <= data.length; n++) {
 
-                        linhasTabela =
-                                '<tr>' +
-                                '<td>' + objeto.nome_aluno + '</td>' +
-                                '<td>' + objeto.matricula_aluno + '</td>' +
-                                '<td>' + objeto.cpf_aluno + '</td>' +
-                                '<td><a href="' + Config.base_url("cpainel/aluno/adiciona_aluno_existente_turma/" + objeto.id_aluno) + '" class="btn btn-large btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td>' +
-                                '</tr>';
+                            var objeto = data[n];
 
-                        $("#tbl_resultado").append(linhasTabela);
+                            linhasTabela =
+                                    '<tr id="linha_aluno_' + objeto.id_aluno + '">' +
+                                    '<td>' + objeto.nome_aluno + '</td>' +
+                                    '<td>' + objeto.matricula_aluno + '</td>' +
+                                    '<td>' + objeto.cpf_aluno + '</td>' +
+                                    '<td><button type="button" onclick="Aluno.incluir_aluno_existente_turma(' + objeto.id_aluno + ',' + turma + ') " class="btn btn-large btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></td>' +
+                                    '</tr>';
+
+                            $("#tbl_resultado").append(linhasTabela);
+                        }
                     }
                 }
             });
         }
     });
+    //    Fim do autocomplenta
+
+    // Confirmação de exclusão de aluno na turma
+    $('#modelExcluirAlunoTurma').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var aluno = button.data('aluno') // Extract info from data-* attributes
+        var turma = button.data('turma') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        //modal.find('.modal-title').text('New message to ' + recipient)
+        modal.find('#aluno_excluir').val(aluno)
+        modal.find('#turma_excluir').val(turma)
+    });
 
 
-
-
-    // aqui
 });
 

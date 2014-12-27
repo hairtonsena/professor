@@ -1,82 +1,108 @@
+<?php
+$nome_disciplina;
+$id_disciplina;
+$nome_turma;
+$id_turma;
+foreach ($turma_disciplina as $td) {
+    $nome_disciplina = $td->nome_disciplina;
+    $id_disciplina = $td->id_disciplina;
+    $nome_turma = $td->nome_turma;
+    $id_turma = $td->id_turma;
+}
+?>
 <div class="row col-lg-12">
     <ol class="breadcrumb">
         <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
-        <li class="active">Notícia </li>       
+        <li><a href="<?php echo base_url("cpainel/disciplina") ?>">Disciplina</a></li>
+        <li><a href="<?php echo base_url("cpainel/turma?disciplina=" . $id_disciplina) ?>">Turma</a></li>
+        <li class="active">Avaliaçao </li>       
     </ol>
-    <a class="btn btn-primary" href="<?php echo base_url("cpainel/noticia/nova"); ?>">Nova Notícia</a>
-    <a class="btn btn-default" href="<?php echo base_url("cpainel/noticia/slides"); ?>"> Slide</a>
-    <table class="table table-striped">
-        <thead>
-            <tr>
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Disciplina: <?php echo $nome_disciplina ?></div>
+        <ul class="list-group">
+            <li class="list-group-item text-danger">Turma: <?php echo $nome_turma ?></li>
+        </ul>
+        <div class="panel-body">
+            <div class="col-lg-12 semMargem">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
+                    <li role="presentation" class="active"><a href="#">Avaliações</a></li>
+                    <li role="presentation"><a href="#">Trabalhos</a></li>
+                </ul>
+                <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
+                    <div class="col-lg-12" style="padding-top: 5px;">
+                        <a class="btn btn-primary" href="<?php echo base_url("cpainel/avaliacao/nova/" . $id_turma); ?>">Nova Avaliacão</a>
+                        <div style="margin-top: 5px">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th> Descricao </th>
+                                        <th class="col-lg-1 center"> Data </th>
+                                        <th class="col-lg-1 center"> valor </th>
+                                        <th class="col-lg-1 center"> Excluir </th>
+                                        <th class="col-lg-1 center"> status </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $total_pontos = 0;
 
-                <td> Titulo </td>
-                <td> Imagem </td>
-                <td> Ver Texto </td>    
-                <td> Excluir </td>
-                <td> Status </td>
-                <td> Destaque </td>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($noticia as $nt) {
-                if ($nt->status_noticia == 0) {
-                    ?>
-                    <tr>
-                        <!--<td> <?php // echo $nt->id_noticia;           ?> </td>-->
-                        <td> <a href="<?php echo base_url("cpainel/noticia/forme_editar_titulo_noticia/" . $nt->id_noticia); ?>"> <?php echo $nt->titulo_noticia; ?> </a></td>
-                        <td> <a href="<?php echo base_url("cpainel/noticia/alterar_imagem_noticia/" . $nt->id_noticia); ?>">alterar <br/> <img src="<?php echo base_url("imagem_noticia/" . $nt->imagem_noticia); ?>" width="100px" height="100px" /> </a></td>
+                                    foreach ($avaliacoes_turma as $at) {
+                                        if (0 == 0) {
+                                            $total_pontos+=$at->valor_avaliacao;
+                                            ?>
+                                            <tr id="linha_aluno_turma_<?php echo $at->id_avaliacao ?>">
+                                                <td><?php echo $at->descricao_avaliacao; ?></td>   
+                                                <td class="text-center"><?php echo date('d/m/Y', strtotime($at->data_avaliacao)); ?></td> 
+                                                <td  class="text-center"><?php echo $at->valor_avaliacao; ?></td> 
 
-                        <td> <a href="<?php echo base_url("cpainel/noticia/alterar_texto_noticia/" . $nt->id_noticia); ?>"> alterar texto </a></td>
-                        <td> <a href = "javascript:func()" onclick="confirmacao('<?php echo $nt->id_noticia ?>')"> Excluir </a></td>
-                        <td><a  href="<?php echo base_url("cpainel/noticia/ativar_noticia/" . $nt->id_noticia); ?>"> Ativar </a> </td>
 
-                        <td>
-                            <?php if ($nt->destaque_noticia == 0) { ?>
-                                <a  href="<?php echo base_url("cpainel/noticia/ativar_destaque/" . $nt->id_noticia); ?>"> <i class="glyphicon glyphicon-remove"></i> </a> 
-                            <?php } else { ?>
-                                <a  href="<?php echo base_url("cpainel/noticia/desativar_destaque/" . $nt->id_noticia); ?>"> <i class="glyphicon glyphicon-ok"></i> </a> 
-                            <?php } ?>
-                        </td>
-                    </tr>
-                <?php } else { ?>
-                    <tr>
-                        <!--<td> <?php // echo $nt->id_noticia;           ?> </td>-->
-                        <td> <?php echo $nt->titulo_noticia; ?> </td>
-                        <td> <img src="<?php echo base_url("imagem_noticia/" . $nt->imagem_noticia); ?>" width="100px" height="100px" /> </td>
-
-                        <td> <a class="btn" href="javascript:void(0)" onclick="Noticia.verTextoNoticia('<?php echo $nt->id_noticia; ?>')"> Ver texto </a></td>
-                        <td>  -- </td>
-                        <td> <a href="<?php echo base_url("cpainel/noticia/desativar_noticia/" . $nt->id_noticia); ?>"> Desativar </a></td>
-                        <td>
-                            <?php if ($nt->destaque_noticia == 0) { ?>
-                                <i class="glyphicon glyphicon-remove"></i> 
-                            <?php } else { ?>
-                                <i class="glyphicon glyphicon-ok"></i> 
-                            <?php } ?>
-                        </td>
-                    </tr>
-                    <?php
-                }
-            }
-            ?>
-        </tbody>
-
-    </table>
-    <div class="col-lg-12 text-center">
-        <?php
-        if ($paginacao) {
-            echo $paginacao;
-        }
-        ?>
+                                                <td class="text-center"><span id="btnExcluirTurma_<?php echo $at->id_avaliacao ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirAlunoTurma" data-aluno="<?php echo $at->id_avaliacao ?>" data-turma="<?php echo $id_turma ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span></td>                                                
+                                                <td class="text-center"><span id="btnAtivarTurma_<?php echo $at->id_avaliacao ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php echo $at->id_avaliacao ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>
+                                            </tr>
+                                        <?php } else { ?>
+                                            <tr id="linha_aluno_turma_<?php echo $tm->id_turma ?>">
+                                                <td> <?php echo $tm->nome_turma; ?> </td>
+                                                <td class="text-center"><span id="btnExcluirTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span></td>                                               
+                                                <td class="text-center"><span id="btnAtivarTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php echo $tm->id_turma ?>')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a></span></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                            <tr style="background-color: #eee">
+                                        <td colspan="2"><strong> Total de Pontes </strong></td>
+                                        <td  class="text-center"><strong><?php echo $total_pontos; ?></strong></td>
+                                        <td  class="text-center" colspan="2"> -- </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <script type="text/javascript">
-        function confirmacao(id) {
-            var resposta = confirm("Você está removendo uma notícia!");
-            if (resposta == true) {
-                window.location.href = "<?php echo base_url('cpainel/noticia/excluir_noticia/'); ?>/" + id;
-            }
-        }
-
-    </script>
 </div>
+<!--Comfimação de exclusão-->
+<div class="modal fade" id="modelExcluirAlunoTurma" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">        
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Excluir aluno da turma</h4>
+            </div>
+            <div class="modal-body">
+                <p>Você realmente deseja excluir este aluno? </p>
+                <input type="hidden" id="aluno_excluir" value="" />
+                <input type="hidden" id="turma_excluir" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+                <button type="button" class="btn btn-primary" onclick="Aluno.excluir_aluno_turma()">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Final de confirmação-->

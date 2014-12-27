@@ -16,7 +16,7 @@ foreach ($turma_disciplina as $td) {
         <li><a href="<?php echo base_url("cpainel/disciplina") ?>">Disciplina</a></li>
         <li><a href="<?php echo base_url("cpainel/turma?disciplina=" . $id_disciplina) ?>">Turma</a></li>
         <li><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
-        <li class="active">Novo alunos </li>       
+        <li class="active">Novo aluno </li>       
     </ol>
     <div class="panel panel-default">
         <!-- Default panel contents -->
@@ -36,7 +36,7 @@ foreach ($turma_disciplina as $td) {
 
                     <div class="col-lg-6"  style="padding-top: 5px; border-right: 1px solid #ddd;">
 
-                        <form class="form-horizontal" action="<?php echo base_url("cpainel/aluno/salvar_novo_aluno"); ?>" method="post" role="form">
+                        <form class="form-horizontal" action="<?php echo base_url("cpainel/avaliacao/salvar_nova_avaliacao"); ?>" method="post" role="form">
                             <input type="hidden" name="turma" id="turma" value="<?php echo $id_turma ?>" />
                             <fieldset>
                                 <legend>Novo aluno</legend>
@@ -64,7 +64,7 @@ foreach ($turma_disciplina as $td) {
 
                                 <div class="form-group">
                                     <div class="col-md-offset-8 col-sm-4">
-                                        <a href="<?php echo base_url("cpainel/turma?disciplina=" . $id_disciplina); ?>" class="btn btn-default" >Cancelar</a>
+                                        <a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma); ?>" class="btn btn-default" >Cancelar</a>
                                         <button type="submit" class="btn btn-primary"> Salvar </button>
                                     </div>
                                 </div>
@@ -98,8 +98,7 @@ foreach ($turma_disciplina as $td) {
                                 </div>
                             </div>
                         </form>
-                        <div id="resultado_pesquisa_aluno">
-
+                        <div id="">
                             <table class="table" id="tbl_resultado">
                                 <thead>
                                     <tr>
@@ -113,8 +112,7 @@ foreach ($turma_disciplina as $td) {
                 
                                 </tbody>
                             </table>
-
-                            <!--<div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>-->
+                            <div id="imag_carrgando"></div>
                         </div>
                     </div>
                 </div>

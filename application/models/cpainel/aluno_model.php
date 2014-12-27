@@ -21,35 +21,23 @@ class aluno_model extends CI_Model {
         return $this->db->get_where('aluno', array('status_aluno' => 0));
     }
 
-    function obter_alunos_pesquisa_nome($q, $id_turma) {
+    // Buscando as aluno pesquisado inicialmente por nome.
+    function obter_alunos_pesquisa_nome($q) {
         $this->db->select('*');
         $this->db->from('aluno');
-        $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
-
-//        $this->db->where(array('aluno.status_aluno' => 0, 'aluno_has_turma.turma_id_turma <>' => $id_turma));
-        $this->db->like('nome_aluno', $q);
+        $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno', 'left');
+        $this->db->like('aluno.nome_aluno', $q);
+        $this->db->where(array('aluno.status_aluno' => 0));
         return $this->db->get();
     }
 
-    // Utilizando
-    function alterar_dados_uf($dados, $idUf) {
-        $this->db->where('id_uf', $idUf);
-        $this->db->update('uf', $dados);
+    // verificar se alunos esta cadastrado na turma.
+    function aluno_em_turma($id_aluno, $id_turma) {
+        return $this->db->get_where('aluno_has_turma', array('aluno_id_aluno' => $id_aluno, 'turma_id_turma' => $id_turma));
     }
 
-    // Utilizando
-    function alterar_dados_cidade($dados, $idCidade) {
-        $this->db->where('id_cidade', $idCidade);
-        $this->db->update('cidade', $dados);
-    }
-
-    function ativar_desativar_uf($dados, $idUf) {
-        $this->db->where('id_uf', $idUf);
-        $this->db->update('uf', $dados);
-    }
-
-    function excluirSecretaria($idSecretaria) {
-        $this->db->delete('secretaria', array('id_secretaria' => $idSecretaria));
+    function excluir_aluno_em_tuma($id_aluno, $id_turma) {
+        $this->db->delete('aluno_has_turma', array('aluno_id_aluno' => $id_aluno, 'turma_id_turma' => $id_turma));
     }
 
     //put your code here

@@ -140,6 +140,53 @@ Disciplina = {
     }
 
 };
+
+Aluno = {
+    incluir_aluno_existente_turma: function (aluno, turma) {
+
+        var parametro = "aluno=" + aluno + "&turma=" + turma;
+        var pg = Config.base_url('cpainel/aluno/add_aluno_turma');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === '1') {
+                    alert('Salvo com sucesso!');
+                    $('#linha_aluno_' + aluno).hide("slow");
+                } else {
+                    alert(retorno);
+
+                }
+            }
+        });
+    },
+    // Excluir aluno da turma
+    excluir_aluno_turma: function () {
+        var aluno = $('#aluno_excluir').val();
+        var turma = $('#turma_excluir').val();
+        var parametro = "aluno=" + aluno + "&turma=" + turma;
+        var pg = Config.base_url('cpainel/aluno/excluir_aluno_turma');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === '1') {
+                    alert("Aluno excluido com sucesso!")
+                    $("#modelExcluirAlunoTurma").modal("hide");
+                    $('#linha_aluno_turma_' + aluno).hide("slow");
+                } else {
+                    alert(retorno);
+                    $("#modelExcluirAlunoTurma").modal("hide");
+                }
+            }
+        });
+    }
+}
+
 CarregarPagina = {
     carregarConteudo: function (pg, parametro, local) {
         local = "#" + local;
