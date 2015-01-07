@@ -14,6 +14,7 @@ class avaliacao extends CI_Controller {
         $this->load->library('session');
         $this->load->model('cpainel/turma_model');
         $this->load->model('cpainel/avaliacao_model');
+        $this->load->model('cpainel/trabalho_model');
     }
 
     public function index() {
@@ -40,6 +41,7 @@ class avaliacao extends CI_Controller {
         }
     }
 
+    // Função para casdastrar um nava avaliação.
     public function nova($id_turma = NULL) {
         // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -67,7 +69,7 @@ class avaliacao extends CI_Controller {
 
             $this->form_validation->set_rules('descricao_avaliacao', 'Descrição', 'required|trim|min_length[4]|max_length[45]');
             $this->form_validation->set_rules('data_avaliacao', 'Data', 'required|trim|min_length[2]|max_length[45]');
-            $this->form_validation->set_rules('valor_avaliacao', 'CPF', 'required|trim|min_length[0]|max_length[45]');
+            $this->form_validation->set_rules('valor_avaliacao', 'Valor', 'required|trim|min_length[0]|max_length[45]|callback_varificar_total_notas_distribuidas_check');
 
             $id_turma = $this->input->post('turma');
 
@@ -95,270 +97,194 @@ class avaliacao extends CI_Controller {
         }
     }
 
-    public function alterar_texto_noticia() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
+    public function varificar_total_notas_distribuidas_check($valor_nota_campo = NULL) {
+        if ($valor_nota_campo == NULL)
+            exit();
+        $total_pontos_ja_distribuidos = 0;
 
-            $noticia = $this->noticia_model->obter_noticia($this->uri->segment(4))->result();
+        if ($this->input->post('turma', TRUE)) {
+            $id_turma = $this->input->post('turma');
 
-            if (count($noticia) == 0) {
-                redirect(base_url("cpainel/noticia/ver_todas"));
+            $trabalho_por_turma = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
+            $avaliacao_por_turma = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
+            foreach ($trabalho_por_turma as $tpt) {
+                $total_pontos_ja_distribuidos += $tpt->valor_nota_trabalho;
+            }
+            foreach ($avaliacao_por_turma as $apt) {
+                $total_pontos_ja_distribuidos += $apt->valor_avaliacao;
+            }
+        } else {
+            $id_avaliacao = $this->input->post('avaliacao');
+            $avaliacao = $this->avaliacao_model->obter_uma_avaliacao($id_avaliacao)->result();
+            $id_turma;
+            foreach ($avaliacao as $av) {
+                $id_turma = $av->turma_id_turma;
+            }
+
+            $trabalho_por_turma = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
+            $avaliacao_por_turma = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
+            foreach ($trabalho_por_turma as $tpt) {
+                $total_pontos_ja_distribuidos += $tpt->valor_nota_trabalho;
+            }
+            foreach ($avaliacao_por_turma as $apt) {
+                if ($apt->id_avaliacao != $id_avaliacao)
+                    $total_pontos_ja_distribuidos += $apt->valor_avaliacao;
+            }
+        }
+
+        $valor_maximo = 100 - $total_pontos_ja_distribuidos;
+
+        if ($valor_maximo < $valor_nota_campo) {
+            $this->form_validation->set_message('varificar_total_notas_distribuidas_check', 'O valor do campo %s ultrapassou o limite máximo. Valor máximo: ' . $valor_maximo);
+            return FALSE;
+        } else if ($valor_nota_campo < 0) {
+            $this->form_validation->set_message('varificar_total_notas_distribuidas_check', 'O valor do campo %s não pode ser menor que 0 (zero).');
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    // Finção para mostra o formulário de alterar avaliação
+    public function alterar_avaliacao($id_avaliacao = NULL) {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            if ($id_avaliacao == null) {
+                $id_avaliacao = $this->uri->segment(4);
+            }
+
+            $avaliacao = $this->avaliacao_model->obter_uma_avaliacao($id_avaliacao)->result();
+            $id_turma;
+            foreach ($avaliacao as $av) {
+                $id_turma = $av->turma_id_turma;
+            }
+
+
+            $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+
+            $dados = array(
+                "turma_disciplina" => $turma_disciplina,
+                "avaliacao" => $avaliacao
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/avaliacao/forme_alterar_avaliacao_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para salvar os dados alterados da avaliação.
+    public function salvar_avaliacao_alterada() {
+        // verificando usuário logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $this->form_validation->set_rules('descricao_avaliacao', 'Descrição', 'required|trim|min_length[4]|max_length[45]');
+            $this->form_validation->set_rules('data_avaliacao', 'Data', 'required|data|trim|min_length[2]|max_length[45]');
+            $this->form_validation->set_rules('valor_avaliacao', 'Valor', 'required|trim|min_length[0]|max_length[45]|callback_varificar_total_notas_distribuidas_check');
+
+            $id_avaliacao = $this->input->post('avaliacao');
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->alterar_avaliacao($id_avaliacao);
             } else {
 
-                $dados = array(
-                    'id_noticia' => $this->uri->segment(4),
-                    'texto_noticia' => $noticia,
-                );
 
-                $this->load->view('cpainel/tela/titulo');
-                $this->load->view('cpainel/tela/menu');
-                $this->load->view('cpainel/noticia/forme_editar_texto_noticia_view', $dados);
-                $this->load->view('cpainel/tela/rodape');
-            }
-        } else {
-            redirect(base_url('cpainel/seguranca'));
-        }
-    }
 
-    public function salvar_texto_noticia() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
 
-            $id_noticia = $this->input->post('id_noticia');
-            $texto_noticia = $this->input->post('texto_noticia');
+                $descricao_avaliacao = $this->input->post('descricao_avaliacao');
+                $data_avaliacao = $this->input->post('data_avaliacao');
+                $valor_avaliacao = $this->input->post('valor_avaliacao');
 
-            $dados = array(
-                'texto_noticia' => $texto_noticia,
-            );
 
-            $this->noticia_model->alterarDadosNoticia($dados, $id_noticia);
-
-            $query = $this->noticia_model->obter_noticia($id_noticia)->result();
-            if (count($query) > 0) {
-                foreach ($query as $qr) {
-                    if ($qr->imagem_noticia == NULL) {
-                        redirect(base_url("cpainel/noticia/alterar_imagem_noticia/" . $id_noticia));
-                    } else {
-                        redirect(base_url("cpainel/noticia/ver_todas/"));
-                    }
+                $avaliacao_atual = $this->avaliacao_model->obter_uma_avaliacao($id_avaliacao)->result();
+                $valor_atual;
+                $id_turma;
+                foreach ($avaliacao_atual as $aa) {
+                    $valor_atual = $aa->valor_avaliacao;
+                    $id_turma = $aa->turma_id_turma;
                 }
-            }
-            redirect(base_url("cpainel/noticia/ver_todas/"));
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
 
-    public function ativar_noticia() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $id_noticia = $this->uri->segment(4);
-
-            $dados = array(
-                'status_noticia' => '1',
-            );
-
-            $this->noticia_model->alterarDadosNoticia($dados, $id_noticia);
-
-            redirect(base_url("cpainel/noticia/ver_todas"));
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function desativar_noticia() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $id_noticia = $this->uri->segment(4);
-
-            $dados = array(
-                'status_noticia' => '0',
-            );
-
-            $this->noticia_model->alterarDadosNoticia($dados, $id_noticia);
-
-            redirect(base_url("cpainel/noticia/ver_todas"));
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function ativar_destaque() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $id_noticia = $this->uri->segment(4);
-
-            $dados = array(
-                'destaque_noticia' => '1',
-            );
-
-            $this->noticia_model->alterarDadosNoticia($dados, $id_noticia);
-
-            redirect(base_url("cpainel/noticia/ver_todas"));
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function desativar_destaque() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $id_noticia = $this->uri->segment(4);
-
-            $dados = array(
-                'destaque_noticia' => '0',
-            );
-
-            $this->noticia_model->alterarDadosNoticia($dados, $id_noticia);
-
-            redirect(base_url("cpainel/noticia/ver_todas"));
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function excluir_noticia() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $id_noticia = $this->uri->segment(4);
-
-            $query = $this->noticia_model->obter_noticia($id_noticia)->result();
-
-            foreach ($query as $qr) {
-                if (file_exists("imagem_noticia/" . $qr->imagem_noticia)) {
-                    unlink("imagem_noticia/" . $qr->imagem_noticia);
-                }
-            }
-
-            $this->noticia_model->excluirNoticia($id_noticia);
-            redirect(base_url("cpainel/noticia/ver_todas"));
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function criar_slide() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-            $dados = array();
-            $this->load->view('cpainel/tela/titulo');
-            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/noticia/forme_criar_slide_noticia_view', $dados);
-            $this->load->view('cpainel/tela/rodape');
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function slides() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $path = "slides_noticia/";
-            $diretorio = dir($path);
-
-            $dados = array(
-                'path' => $path,
-                'diretorio' => $diretorio
-            );
-
-            $this->load->view('cpainel/tela/titulo');
-            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/noticia/tabela_slides_view', $dados);
-            $this->load->view('cpainel/tela/rodape');
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function gerar_novo_slide() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $tituloSlide = url_title(filter_input(INPUT_POST, 'titulo_slide'));
-            $urlImagem = $_POST['url_imagem'];
-
-            if (($tituloSlide == '') || (strlen($tituloSlide) < 4)) {
-                redirect(base_url("cpainel/noticia/criar_slide"));
-                exit();
-            }
-
-            if (count($urlImagem) < 1) {
-                redirect(base_url("cpainel/noticia/criar_slide"));
-                exit();
-            }
-
-            $diretorio = "slides_noticia/";
-
-            if (!file_exists($diretorio)) {
-                mkdir($diretorio, 0777);
-            }
-
-            $arquivo = 'slide_' . $tituloSlide . "_" . rand(10, 99999) . ".html";
-
-            $fp = fopen($diretorio . $arquivo, "a");
-
-            $conteudo = '<!DOCTYPE html>
-<html>
-    <head>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-        <script src="../lib/dist/slippry.min.js"></script>
-        <link rel="stylesheet" href="../lib/dist/slippry.css">
-    </head>
-    <body>		
-        <section class="demo_wrapper">
-            <article class="demo_block">
-                <ul id="demo1">';
-
-            foreach ($urlImagem as $ui) {
-                $conteudo = $conteudo . '<li><a href = "#"><img src = "' . $ui . '" /></a></li>';
-            }
-
-            $conteudo = $conteudo . '                     
-                </ul>
-            </article>
-        </section>		
-        <script>
-            $(function() {
-                var demo1 = $("#demo1").slippry({
-                    transition: \'fade\',
-                    useCSS: true,
-                    speed: 1000,
-                    pause: 4000,
-                    auto: true,
-                    preload: \'visible\'
-                });
-            });
-        </script>
-    </body>
-</html>';
-
-            $escreve = fwrite($fp, $conteudo);
-            fclose($fp);
-
-            $dados = array(
-                'diretorio' => $diretorio,
-                'arquivo' => $arquivo
-            );
-
-            $this->load->view('cpainel/tela/titulo');
-            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/noticia/visualizar_url_slides_view', $dados);
-            $this->load->view('cpainel/tela/rodape');
-        } else {
-            redirect(base_url("cpainel/seguranca"));
-        }
-    }
-
-    public function excluir_slide() {
-        if (($this->session->userdata('id_usuario')) && ($this->session->userdata('nome_usuario')) && ($this->session->userdata('email_usuario')) && ($this->session->userdata('senha_usuario'))) {
-
-            $nome_arquivo = $this->uri->segment(4);
-            if (strlen($nome_arquivo) > 5) {
-                $path = 'slides_noticia/';
-                if (unlink($path . $nome_arquivo)) {
-                    redirect(base_url("cpainel/noticia/slides"));
+                if ($valor_atual == $valor_avaliacao) {
+                    $dados = array(
+                        "descricao_avaliacao" => $descricao_avaliacao,
+                        "data_avaliacao" => implode("-", array_reverse(explode("/", $data_avaliacao))),
+                    );
+                    $this->avaliacao_model->alterar_avaliacao($dados, $id_avaliacao);
                 } else {
-                    echo "Erro ao tentar excluir arquivo";
-                };
-            } else {
-                redirect(base_url("cpainel/noticia/slides"));
+                    $porcentagem = ($valor_avaliacao / $valor_atual) * 100;
+                    $nota_aluno_avaliacao = $this->avaliacao_model->obter_nota_avaliacao_aluno($id_avaliacao)->result();
+                    if (count($nota_aluno_avaliacao) != 0) {
+                        foreach ($nota_aluno_avaliacao as $naa) {
+                            $dados_nota = array(
+                                "valor_nota" => ($porcentagem / 100) * $naa->valor_nota,
+                            );
+                            $this->avaliacao_model->alterar_nota_avaliacao_aluno($dados_nota, $naa->id_nota);
+                        }
+                    }
+
+                    $dados = array(
+                        "descricao_avaliacao" => $descricao_avaliacao,
+                        "data_avaliacao" => implode("-", array_reverse(explode("/", $data_avaliacao))),
+                        "valor_avaliacao" => $valor_avaliacao
+                    );
+
+                    $this->avaliacao_model->alterar_avaliacao($dados, $id_avaliacao);
+                }
+
+                redirect(base_url("cpainel/avaliacao/?turma=" . $id_turma));
             }
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para excluir avaliação e as nota se já estive dada;
+    public function excluir_avaliacao() {
+        // verificando usuario logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $id_avaliacao = $this->input->post('avaliacao');
+
+            $retorno = '';
+            $query = $this->avaliacao_model->obter_uma_avaliacao($id_avaliacao)->result();
+
+            if (count($query) != 0) {
+
+                $this->avaliacao_model->excluir_avaliacao($id_avaliacao);
+                $retorno = '1';
+            } else {
+                $retorno = 'Avaliação não foi encontrada!';
+            }
+            echo $retorno;
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    //------------------------------------------//
+    //  Trabalhado com avaliação de recuperação //
+    //------------------------------------------//
+    public function avaliacao_recuperacao($id_turma = NULL) {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            if ($id_turma == null) {
+                $id_turma = $this->uri->segment(4);
+            }
+            $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            $avaliacao_recuperacao = $this->avaliacao_model->obter_avaliacao_recuperacao($id_turma)->result();
+
+            $dados = array(
+                "turma_disciplina" => $turma_disciplina,
+                "avaliacao_recuperacao" => $avaliacao_recuperacao
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/avaliacao/avaliacao_recuperacao_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
         }

@@ -35,19 +35,14 @@ foreach ($turma_disciplina as $td) {
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
                         <div style="margin-top: 5px">
-                            <form method="post" action="<?php echo base_url("cpainel/notas/salvar_nota_alunos") ?>" >
+                            <form method="post" action="<?php echo base_url("cpainel/notas/salvar_nota_avaliacao_recuperacao_alunos") ?>" >
                                 <input type="hidden" name="turma" value="<?php echo $id_turma ?>" />
-                                <input type="hidden" name="avaliacao" value="<?php echo $id_avaliacao ?>" />
+                                <input type="hidden" name="avaliacao_recuperacao" value="<?php echo $id_avaliacao_recuperacao ?>" />
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th> Nome </th>
-                                            <th> <?php
-                                                foreach ($avaliacao as $av) {
-                                                    echo $av->descricao_avaliacao . " (valor: " . $av->valor_avaliacao . ")";
-                                                }
-                                                ?>   
-                                            </th>
+                                            <th> Avaliação recuperação </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -58,18 +53,15 @@ foreach ($turma_disciplina as $td) {
                                             ?>
                                             <tr id="linha_aluno_turma_<?php echo $at->id_aluno ?>">
                                                 <td><?php echo $at->nome_aluno; ?></td>                                                
-                                                <td>
-                                                    <?php echo form_input($campo_nota[$at->id_aluno]) ?>
-                                                    <span class="text-danger"> <?php echo form_error($campo_nota[$at->id_aluno]['name']); ?></span>
-                                                </td>
+                                                <td><?php echo form_input($campo_nota[$at->id_aluno]) ?></td>
                                             </tr>
                                             <?php
                                         }
                                         ?>
-                                        <tr>
-                                            <td></td>
-                                            <td><button type="submit" class="btn btn-primary">Salvar</button></td>
-                                        </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td><button type="submit" class="btn btn-primary">Salvar</button></td>
+                                            </tr>
                                     </tbody>
                                 </table>
                             </form>

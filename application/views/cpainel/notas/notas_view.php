@@ -8,17 +8,7 @@ foreach ($turma_disciplina as $td) {
     $id_disciplina = $td->id_disciplina;
     $nome_turma = $td->nome_turma;
     $id_turma = $td->id_turma;
-}
-
-
-$notas_avaliacoes = array();
-foreach ($notas_aluno_avaliacao as $naa) {
-    $notas_avaliacoes[$naa->id_aluno][$naa->id_avaliacao] = $naa->valor_nota;
-}
-
-$notas_trabalhos = array();
-foreach ($notas_aluno_trabalho as $nat) {
-    $notas_trabalhos[$nat->id_aluno][$nat->id_trabalho] = $nat->valor_nota_trabalho;
+    break;
 }
 ?>
 <div class="row col-lg-12">
@@ -50,14 +40,24 @@ foreach ($notas_aluno_trabalho as $nat) {
                                     <tr>
                                         <th> Nome </th>
                                         <?php
+                                        $total_pontos_distribuido = 0;
                                         foreach ($avaliacoes_turma as $atr) {
-                                            echo '<th>' . $atr->descricao_avaliacao . '</th>';
+                                            ?>
+                                            <th><span title="<?php echo $atr->descricao_avaliacao ?>">A</span> </th>
+                                            <?php
+                                            $total_pontos_distribuido += $atr->valor_avaliacao;
                                         }
                                         foreach ($todos_trabalhos_turma as $ttt) {
-                                            echo '<th>' . $ttt->titulo_trabalho . '</th>';
+                                            ?>
+                                            <th><span title="<?php echo $ttt->titulo_trabalho ?>">T</span></th>
+                                            <?php
+                                            $total_pontos_distribuido += $ttt->valor_nota_trabalho;
                                         }
                                         ?>
-                                        <th rowspan="2">Total</th>
+                                        <th>Total</th>
+                                        <th>Prova final</th>
+                                        <th>Resultado final</th>
+                                        <th>Situação</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,15 +68,26 @@ foreach ($notas_aluno_trabalho as $nat) {
                                             echo '<td><a title="Alterar notas" href="' . base_url("cpainel/notas/alterar_notas?turma=" . $id_turma) . '&avaliacao=' . $atr->id_avaliacao . ' "><span class="glyphicon glyphicon-pencil"></span></a></td>';
                                         }
                                         foreach ($todos_trabalhos_turma as $ttt) {
-                                            echo '<td><a title="Alterar notas" href="' . base_url("cpainel/notas/alterar_notas?turma=" . $id_turma) . '&avaliacao=' . $ttt->titulo_trabalho . ' "><span class="glyphicon glyphicon-pencil"></span></a></td>';
+                                            echo '<td><a title="Alterar notas" href="' . base_url("cpainel/notas/alterar_notas_trabalho?turma=" . $id_turma) . '&trabalho=' . $ttt->id_trabalho . ' "><span class="glyphicon glyphicon-pencil"></span></a></td>';
                                         }
                                         ?>
                                         <td></td>
+                                        <td>
+                                            <?php if ($total_pontos_distribuido >= 100) { ?>
+                                                <a title="Alterar notas" href="<?php echo base_url("cpainel/notas/alterar_notas_avaliacao_recuperacao?turma=" . $id_turma) ?>">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                </a>
+                                            <?php } else { ?>
+                                                <span class="glyphicon glyphicon-pencil"></span>
+                                            <?php } ?>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
 
-
-
                                     <?php
+                                    $alunos_recuperacao = array();
+
                                     foreach ($alunos_turma as $alunoTurma) {
                                         ?>
                                         <tr>
@@ -85,8 +96,6 @@ foreach ($notas_aluno_trabalho as $nat) {
                                             <?php
                                             $total_ponto_aluno = 0;
                                             foreach ($avaliacoes_turma as $avt) {
-
-
                                                 if (!empty($notas_avaliacoes[$alunoTurma->id_aluno][$avt->id_avaliacao])) {
                                                     echo '<td>' . $notas_avaliacoes[$alunoTurma->id_aluno][$avt->id_avaliacao] . '</td>';
                                                     $total_ponto_aluno += $notas_avaliacoes[$alunoTurma->id_aluno][$avt->id_avaliacao];
@@ -98,13 +107,72 @@ foreach ($notas_aluno_trabalho as $nat) {
                                             foreach ($todos_trabalhos_turma as $ttt) {
                                                 if (!empty($notas_trabalhos[$alunoTurma->id_aluno][$ttt->id_trabalho])) {
                                                     echo '<td>' . $notas_trabalhos[$alunoTurma->id_aluno][$ttt->id_trabalho] . '</td>';
-                                                    $total_ponto_aluno += $notas_avaliacoes[$alunoTurma->id_aluno][$avt->id_avaliacao];
+                                                    $total_ponto_aluno += $notas_trabalhos[$alunoTurma->id_aluno][$ttt->id_trabalho];
                                                 } else {
                                                     echo '<td>0</td>';
                                                 }
                                             }
                                             ?>
-                                            <td><strong><?php echo $total_ponto_aluno ?></strong></td>
+                                            <td>
+                                                <strong>
+                                                    <?php
+                                                    echo $total_ponto_aluno;
+                                                    ?>
+                                                </strong>
+                                            </td>
+                                            <?php
+                                            $verificar_recuperacao = 0;
+                                            $valor_nota_recuperacao = 0;
+                                            if ($total_ponto_aluno >= 20 && $total_ponto_aluno < 60 && $total_pontos_distribuido >= 100) {
+                                                $alunos_recuperacao[] = $alunoTurma->id_aluno;
+
+                                                foreach ($avaliacao_recuperacao as $ar) {
+                                                    if (isset($nota_recuperacao[$alunoTurma->id_aluno][$ar->id_avaliacao_recuperacao])) {
+                                                        echo '<td>' . $nota_recuperacao[$alunoTurma->id_aluno][$ar->id_avaliacao_recuperacao] . '</td>';
+                                                        $verificar_recuperacao = 1;
+                                                        $valor_nota_recuperacao = $nota_recuperacao[$alunoTurma->id_aluno][$ar->id_avaliacao_recuperacao];
+                                                    } else {
+                                                        echo '<td>-</td>';
+                                                    }
+                                                }
+                                            } else {
+                                                echo '<td>-</td>';
+                                            }
+                                            ?>
+                                            <td>
+                                                <strong>
+                                                    <?php
+                                                    $total_ponto_final_aluno = 0;
+                                                    if ($verificar_recuperacao == 1) {
+                                                        if ($total_ponto_aluno < (($total_ponto_aluno + $valor_nota_recuperacao) / 2)) {
+                                                            $total_ponto_final_aluno = ($total_ponto_aluno + $valor_nota_recuperacao) / 2;
+                                                        } else {
+                                                            $total_ponto_final_aluno = $total_ponto_aluno;
+                                                        }
+                                                        echo $total_ponto_final_aluno;
+                                                    } else {
+                                                        $total_ponto_final_aluno = $total_ponto_aluno;
+                                                        echo $total_ponto_final_aluno;
+                                                    }
+                                                    ?>
+                                                </strong>
+                                            </td>
+                                            <td>
+
+                                                <?php
+                                                if ($total_ponto_final_aluno >= 60) {
+                                                    ?>
+                                                    <span class="text-success">Aprovado</span>
+                                                    <?php
+                                                } else if ($total_ponto_aluno >= 20 && $verificar_recuperacao == 0) {
+                                                    ?>
+                                                    <span class="text-warning">Recuperação</span>
+                                                <?php } else { ?>
+                                                    <span class="text-danger">Reprovado</span>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </td>
                                         </tr>
                                         <?php
                                     }
@@ -118,12 +186,17 @@ foreach ($notas_aluno_trabalho as $nat) {
                                             echo '<td>' . $atr->valor_avaliacao . '</td>';
                                         }
                                         foreach ($todos_trabalhos_turma as $ttt) {
-                                             $total_nota_avaliacoes += $ttt->valor_nota_trabalho;
+                                            $total_nota_avaliacoes += $ttt->valor_nota_trabalho;
                                             echo '<th>' . $ttt->valor_nota_trabalho . '</th>';
                                         }
-                                        
                                         ?>
                                         <td><strong><?php echo $total_nota_avaliacoes ?></strong></td>
+                                        <td>100</td>
+                                        <td class="text-center" colspan="2">--</td>
+
+                                        <?php
+                                        $this->session->set_userdata(array("alunos_recuperacao" => $alunos_recuperacao));
+                                        ?>
                                     </tr>
                                 </tbody>
                             </table>
@@ -134,24 +207,3 @@ foreach ($notas_aluno_trabalho as $nat) {
         </div>
     </div>
 </div>
-<!--Comfimação de exclusão-->
-<div class="modal fade" id="modelExcluirAlunoTurma" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">        
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Excluir aluno da turma</h4>
-            </div>
-            <div class="modal-body">
-                <p>Você realmente deseja excluir este aluno? </p>
-                <input type="hidden" id="aluno_excluir" value="" />
-                <input type="hidden" id="turma_excluir" value="" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                <button type="button" class="btn btn-primary" onclick="Aluno.excluir_aluno_turma()">Sim</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Final de confirmação-->

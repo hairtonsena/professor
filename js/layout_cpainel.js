@@ -131,6 +131,133 @@ $(function () {
         modal.find('#turma_excluir').val(turma)
     });
 
+    // Confirmação da exclusão da avaliação
+    $('#modelExcluirAvaliacao').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var recipient = button.data('avaliacao');
+        //var valor_nota = button.data('valor_nota')// Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        //modal.find('.modal-title').text('New message to ' + recipient)
+        modal.find('#avaliacao_excluir').val(recipient);
+        //  model.find().val(valor_nota);
+    });
+    // Confirmação da exclusão da trabalho
+    $('#modelExcluirTrabalho').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var recipient = button.data('trabalho');
+        //var valor_nota = button.data('valor_nota')// Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        //modal.find('.modal-title').text('New message to ' + recipient)
+        modal.find('#trabalho_excluir').val(recipient);
+        //  model.find().val(valor_nota);
+    });
 
+    // Confirmação da exclusão do anexo de trabalho
+    $('#modelExcluirAnexoTrabalho').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var recipient = button.data('anexo_trabalho');
+        //var valor_nota = button.data('valor_nota')// Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        //modal.find('.modal-title').text('New message to ' + recipient)
+        modal.find('#anexo_trabalho_excluir').val(recipient);
+        //  model.find().val(valor_nota);
+    });
+
+// Trabalho com upload de anexo
+
+    var mensagem = $("#mensagem");
+    var div_porcentagem = $("#porcentagem");
+    var barra = $("#barra");
+    var campoImgame = $("#arquivo");
+    var textoCampoUp = $("#textoCampoUp");
+
+
+    $("#btn_enviar").on('click', function (event) {
+        barra.width('0%');
+        barra.html('0%');
+
+        event.preventDefault();
+
+        if (campoImgame.val() == "") {
+            mensagem.html("<div class='alert alert-danger'>Por favor, selecione uma imagem!<div>");
+        } else {
+            $("#form_upload").ajaxForm({
+                url: Config.base_url('cpainel/trabalho/salvar_anexo_trabalho'),
+                uploadProgress: function (event, position, total, percentComplete) {
+                    div_porcentagem.css('display', 'block');
+                    barra.width(percentComplete + '%');
+                    barra.html(percentComplete + '%');
+                },
+                success: function (data) {
+
+                    if (data == "sucesso") {
+                        barra.width('100%');
+                        console.log(data);
+                        mensagem.html("<div class='alert alert-success'>Imagem enviada com sucesso!");
+                        campoImgame.val("");
+                        $('#anexo_trabalho').html("Carregando...");
+
+
+                        // iniciando ajax para recaregar os anexos
+                        $.ajax({
+                            url: Config.base_url("cpainel/trabalho/obter_anexos_trabalho_json"),
+                            dataType: "json",
+                            data: {
+                                trabalho: $('#iptTrabalho').val(),
+                            },
+                            success: function (data) {
+                                $('#anexo_trabalho').html("");
+                                //$('tbody tr').remove();
+                                // $('#imag_carrgando').html('');
+                                if (data.length == 0) {
+                                    $('#imag_carrgando').html('<div class="alert alert-danger" role="alert">Aluno não encontrado!</div>');
+                                } else {
+                                    var linhasanexo;
+                                    for (var n = 0; n <= data.length; n++) {
+                                        var objeto = data[n];
+
+                                        linhasanexo = '<li class="list-group-item" id="linha_anexo_' + objeto.id_anexo_trabalho + '">' +
+                                                '<a target="blank" href = "' + Config.base_url("trabalho/" + objeto.pasta_upload_trabalho + "/" + objeto.arquivo_anexo_trabalho) + '" > ' + objeto.nome_anexo_trabalho + '</a>' +
+                                                '<a href="javascript:void(0)" title = "Remover anexo" class="link pull-right" data-toggle="modal" data-target="#modelExcluirAnexoTrabalho" data-anexo_trabalho="' + objeto.id_anexo_trabalho + '">' +
+                                                '<span class="glyphicon glyphicon-remove" > </span>' +
+                                                '</a>' +
+                                                '</li>';
+
+                                        $("#anexo_trabalho").append(linhasanexo);
+                                    }
+                                }
+                            }
+                        });
+
+                    } else {
+
+                        barra.width('100%');
+                        console.log(data);
+                        mensagem.html(data);
+                        campoImgame.val("");
+                        textoCampoUp.html('<i class="glyphicon glyphicon-camera"></i> Selecione uma imagem </span>');
+                    }
+                },
+                error: function () {
+                    mensagem.html('Erro ao tentar acessar o arquivo!');
+                },
+                //  datatype: 'post',
+                //  data: 'id_mural=agora',
+                resetFrom: true
+            }).submit();
+        }
+    });
+
+
+    $("#arquivo").change(function () {
+        $(this).prev().html($(this).val());
+    });
+    // fim upload de anexo.
 });
 

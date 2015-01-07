@@ -97,7 +97,7 @@ mini_perfil
         -o-transition: 0.3s ease-in;
     }
 
-    .menu_smartphone:hover
+    .menu_smartphone_abrir
     {
         width:100%;
         height: 100%;
@@ -117,8 +117,17 @@ mini_perfil
         height: 100%;
     }
 
+    .menu_smartphone_esconde_menu_ver{
+        visibility: visible;
+    }
+    
+    .esconder {
+        visibility: hidden;
+    }
+    
     .menu_smartphone_esconde_menu
     {
+        
         float: left;
         margin-left: 0px;
         width: 0px;

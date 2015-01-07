@@ -69,18 +69,25 @@ foreach ($turma_disciplina as $td) {
                                         <span class="text-danger"> <?php echo form_error('valor_trabalho'); ?></span>
                                     </div>
                                 </div>
-
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-sm-10">
+                                        <div class="checkbox">
+                                            <label for="abilitar_uplaod_trabalho">
+                                                <input type="checkbox" id="abilitar_uplaod_trabalho" name="abilitar_upload_trabalho" value="1"  <?php echo set_checkbox('abilitar_upload_trabalho','1'); ?> >
+                                                Abilitar upload de alunos.
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div> 
                                 <div class="form-group">
                                     <div class="col-md-offset-8 col-sm-4">
-                                        <a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma); ?>" class="btn btn-default" >Cancelar</a>
+                                        <a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma); ?>" class="btn btn-default" >Cancelar</a>
                                         <button type="submit" class="btn btn-primary"> Salvar </button>
                                     </div>
                                 </div>
                             </fieldset>
                         </form>
-
                     </div>
-
                 </div>
             </div>
         </div>

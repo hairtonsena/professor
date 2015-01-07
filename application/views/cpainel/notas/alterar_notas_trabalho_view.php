@@ -35,24 +35,23 @@ foreach ($turma_disciplina as $td) {
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
                         <div style="margin-top: 5px">
-                            <form method="post" action="<?php echo base_url("cpainel/notas/salvar_nota_alunos") ?>" >
+                            <form method="post" action="<?php echo base_url("cpainel/notas/salvar_nota_trabalho_alunos") ?>" >
                                 <input type="hidden" name="turma" value="<?php echo $id_turma ?>" />
-                                <input type="hidden" name="avaliacao" value="<?php echo $id_avaliacao ?>" />
+                                <input type="hidden" name="trabalho" value="<?php echo $id_trabalho ?>" />
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th> Nome </th>
-                                            <th> <?php
-                                                foreach ($avaliacao as $av) {
-                                                    echo $av->descricao_avaliacao . " (valor: " . $av->valor_avaliacao . ")";
+                                            <th> 
+                                                <?php
+                                                foreach ($trabalho as $tr) {
+                                                    echo $tr->titulo_trabalho.' (valor: '.$tr->valor_nota_trabalho.')';
                                                 }
-                                                ?>   
+                                                ?> 
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
-
                                         <?php
                                         foreach ($alunos_turma as $at) {
                                             ?>
@@ -60,7 +59,7 @@ foreach ($turma_disciplina as $td) {
                                                 <td><?php echo $at->nome_aluno; ?></td>                                                
                                                 <td>
                                                     <?php echo form_input($campo_nota[$at->id_aluno]) ?>
-                                                    <span class="text-danger"> <?php echo form_error($campo_nota[$at->id_aluno]['name']); ?></span>
+                                                    <span class="text-danger"><?php echo form_error($campo_nota[$at->id_aluno]['name']); ?></span>
                                                 </td>
                                             </tr>
                                             <?php

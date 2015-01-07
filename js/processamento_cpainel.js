@@ -6,6 +6,7 @@ Config = {
 };
 
 Turma = {
+    // Função para excluir uma turma
     excluir_turma: function () {
         var turma = $('#turma_excluir').val();
         var parametro = "turma=" + turma;
@@ -181,6 +182,88 @@ Aluno = {
                 } else {
                     alert(retorno);
                     $("#modelExcluirAlunoTurma").modal("hide");
+                }
+            }
+        });
+    }
+}
+
+Avaliacao = {
+    excluir_avaliacao: function () {
+        var avaliacao = $('#avaliacao_excluir').val();
+        var parametro = "avaliacao=" + avaliacao;
+        var pg = Config.base_url('cpainel/avaliacao/excluir_avaliacao');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === '1') {
+
+                    // Codigo para diminuir o total de pontos depois que uma avaliação é excluida.
+                    var nota_avaliacao = $("#valor_nota_" + avaliacao).html();
+                    var total_pontos_avaliacao = $("#total_pontos_avaliacoes").html();
+                    total_pontos_avaliacao -= nota_avaliacao;
+                    $("#total_pontos_avaliacoes").html(total_pontos_avaliacao);
+                    // Escondendo o medel aberto e excluinda a linha de dados da avaliação que foi excluida.
+                    $("#modelExcluirAvaliacao").modal("hide");
+                    $("#linha_avaliacao_" + avaliacao).hide("slow");
+                } else {
+                    alert(retorno);
+                    $("#modelExcluirDisciplina").modal("hide");
+                }
+            }
+        });
+    }
+}
+
+Trabalho = {
+    excluir_trabalho: function () {
+
+        var trabalho = $('#trabalho_excluir').val();
+        var parametro = "trabalho=" + trabalho;
+        var pg = Config.base_url('cpainel/trabalho/excluir_trabalho');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === '1') {
+                    // Codigo para diminuir o total de pontos depois que uma avaliação é excluida.
+                    var nota_trabalho = $("#valor_nota_" + trabalho).html();
+                    var total_pontos_trabalhos = $("#total_pontos_trabalhos").html();
+                    total_pontos_trabalhos -= nota_trabalho;
+                    $("#total_pontos_trabalhos").html(total_pontos_trabalhos);
+                    // Escondendo o medel aberto e excluinda a linha de dados da avaliação que foi excluida.
+                    $("#modelExcluirTrabalho").modal("hide");
+                    $("#linha_trabalho_" + trabalho).hide("slow");
+                } else {
+                    alert(retorno);
+                    $("#modelExcluirTrabalho").modal("hide");
+                }
+            }
+        });
+    },
+    excluir_anexo_trabalho: function () {
+
+        var anexo = $('#anexo_trabalho_excluir').val();
+        var parametro = "anexo=" + anexo;
+        var pg = Config.base_url('cpainel/trabalho/excluir_anexo_trabalho');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === '1') {
+                    // Escondendo o medel aberto e excluinda a linha de dados da avaliação que foi excluida.
+                    $("#modelExcluirAnexoTrabalho").modal("hide");
+                    $("#linha_anexo_" + anexo).hide("slow");
+                } else {
+                    alert(retorno);
+                    $("#modelExcluirAnexoTrabalho").modal("hide");
                 }
             }
         });

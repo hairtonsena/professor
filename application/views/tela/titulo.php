@@ -14,7 +14,7 @@
         <script type="text/javascript" src="<?php echo base_url('js/jquery.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url('bt/js/bootstrap.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url('js/jquery.scrollTo.js'); ?>"></script>
-
+        <script type="text/javascript" src="<?php echo base_url('js/layout_geral.js'); ?>"></script>
 
     </head>
     <body>
