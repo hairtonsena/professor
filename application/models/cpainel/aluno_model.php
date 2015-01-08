@@ -2,9 +2,30 @@
 
 class aluno_model extends CI_Model {
 
+    // Obter um aluno por ID;
+    function obter_aluno_id($id_aluno) {
+        return $this->db->get_where('aluno', array('id_aluno' => $id_aluno));
+    }
+
+    // Obter um aluno por cpf;
+    function obter_aluno_cpf($cpf) {
+        return $this->db->get_where('aluno', array('cpf_aluno' => $cpf));
+    }
+
+    // Obter um aluno por matricula 
+    function obter_aluno_matricula($matricula) {
+        return $this->db->get_where('aluno', array('matricula_aluno' => $matricula));
+    }
+
     // Salvando aluno
     function salvar_novo_aluno($data) {
         $this->db->insert('aluno', $data);
+    }
+
+    // alterando os dados do aluno pelo id;
+    function alterar_dados_aluno($dados, $id_aluno) {
+        $this->db->where('id_aluno', $id_aluno);
+        $this->db->update('aluno', $dados);
     }
 
     function obter_aluno_salvo($cpf) {
@@ -14,6 +35,11 @@ class aluno_model extends CI_Model {
     // Salvando um aluno em uma turma.
     function salvar_aluno_turma($dados) {
         $this->db->insert('aluno_has_turma', $dados);
+    }
+
+    // Pegando todos os alunos
+    function obter_todos_alunos() {
+        return $this->db->get('aluno');
     }
 
     // Pegando alunos ativos

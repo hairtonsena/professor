@@ -23,28 +23,33 @@ class Aluno extends CI_Controller {
         // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
+            $alunos = $this->aluno_model->obter_todos_alunos()->result();
 
-//            $this->load->view('cpainel/tela/titulo');
-//            $this->load->view('cpainel/tela/menu');
-//            $this->load->view('cpainel/localizacao/localizacao_view', $dados);
-//
-//            $this->load->view('cpainel/tela/rodape');
+            $dados = array(
+                "alunos" => $alunos
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/aluno/aluno_view', $dados);
+
+            $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
 
-    //Função para cadastrar um novo aluno
+    //Função para exibir o formulário cadastrar um novo aluno.
     public function novo($id_turma = null) {
         // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
             if ($id_turma == null) {
                 $id_turma = $this->uri->segment(4);
             }
-            $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
 
             $dados = array(
-                "turma_disciplina" => $query
+                "turma_disciplina" => $turma_disciplina
             );
 
             $this->load->view('cpainel/tela/titulo');
@@ -56,14 +61,14 @@ class Aluno extends CI_Controller {
         }
     }
 
-    // Função para salvar aluno
+    // Função para salvar aluno e adicionar em uma turma.
     public function salvar_novo_aluno() {
         // veirificando usuario logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
             $this->form_validation->set_rules('nome_aluno', 'Nome', 'required|trim|min_length[4]|max_length[45]');
-            $this->form_validation->set_rules('matricula_aluno', 'Matricula', 'required|trim|min_length[2]|max_length[45]');
-            $this->form_validation->set_rules('cpf_aluno', 'CPF', 'required|trim|min_length[2]|max_length[45]');
+            $this->form_validation->set_rules('matricula_aluno', 'Matricula', 'required|trim|min_length[5]|max_length[10]|callback_aluno_existe_check');
+            $this->form_validation->set_rules('cpf_aluno', 'CPF', 'required|trim|min_length[11]|max_length[14]|callback_cpf_check|callback_aluno_existe_check');
 
             $id_turma = $this->input->post('turma');
 
@@ -75,10 +80,159 @@ class Aluno extends CI_Controller {
                 $matricula_aluno = $this->input->post('matricula_aluno');
                 $cpf_aluno = $this->input->post('cpf_aluno');
 
+                $cpf_aluno = $this->add_mascara_cpf($cpf_aluno);
+
+                $dados = array(
+                    "nome_aluno" => $nome_aluno,
+                    "matricula_aluno" => $matricula_aluno,
+                    "cpf_aluno" => $cpf_aluno,
+                    "senha_aluno" => md5($cpf_aluno),
+                    "status_aluno" => 0
+                );
+
+                $this->aluno_model->salvar_novo_aluno($dados);
+
+                redirect(base_url("cpainel/aluno"));
+            }
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para o professor alterar a senha do aluno.
+    public function alterar_senha_aluno() {
+        // veirificando usuario logado
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $this->form_validation->set_rules('senha', 'Senha', 'required|trim|min_length[6]|max_length[45]');
+
+            $id_aluno = $this->input->post('aluno');
+
+            if ($this->form_validation->run() == FALSE) {
+                echo "Senha muito curta";
+            } else {
+
+                $senha = $this->input->post('senha');
+                $dados = array(
+                    "senha_aluno" => md5($senha),
+                );
+
+                $this->aluno_model->alterar_dados_aluno($dados, $id_aluno);
+
+                echo "1";
+            }
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    //Função para exibir o formulário de alterar aluno.
+    public function alterar($id_aluno = null) {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            if ($id_aluno == null) {
+                $id_aluno = $this->uri->segment(4);
+            }
+            $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
+
+            $dados = array(
+                "aluno" => $aluno
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/aluno/forme_alterar_aluno_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para salvar aluno e adicionar em uma turma.
+    public function salvar_aluno_alterado() {
+        // veirificando usuario logado
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $this->form_validation->set_rules('nome_aluno', 'Nome', 'required|trim|min_length[4]|max_length[45]');
+            $this->form_validation->set_rules('matricula_aluno', 'Matricula', 'required|trim|min_length[5]|max_length[10]|callback_aluno_existe_alterar_check');
+            $this->form_validation->set_rules('cpf_aluno', 'CPF', 'required|trim|min_length[11]|max_length[14]|callback_cpf_check|callback_aluno_existe_alterar_check');
+
+            $id_aluno = $this->input->post('aluno');
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->alterar($id_aluno);
+            } else {
+
+                $nome_aluno = $this->input->post('nome_aluno');
+                $matricula_aluno = $this->input->post('matricula_aluno');
+                $cpf_aluno = $this->input->post('cpf_aluno');
+
+                $cpf_aluno = $this->add_mascara_cpf($cpf_aluno);
+
                 $dados = array(
                     "nome_aluno" => $nome_aluno,
                     "matricula_aluno" => $matricula_aluno,
                     "cpf_aluno" => $cpf_aluno
+                );
+
+                $this->aluno_model->alterar_dados_aluno($dados, $id_aluno);
+
+                redirect(base_url("cpainel/aluno"));
+            }
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    //Função para cadastrar um novo aluno e adicionar na turma
+    public function novo_turma($id_turma = null) {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            if ($id_turma == null) {
+                $id_turma = $this->uri->segment(4);
+            }
+            $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+
+            $dados = array(
+                "turma_disciplina" => $turma_disciplina
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/aluno/forme_novo_aluno_turma_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para salvar aluno e adicionar em uma turma.
+    public function salvar_novo_aluno_turma() {
+        // veirificando usuario logado
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $this->form_validation->set_rules('nome_aluno', 'Nome', 'required|trim|min_length[4]|max_length[45]');
+            $this->form_validation->set_rules('matricula_aluno', 'Matricula', 'required|trim|min_length[5]|max_length[10]|callback_aluno_existe_check');
+            $this->form_validation->set_rules('cpf_aluno', 'CPF', 'required|trim|min_length[11]|max_length[14]|callback_cpf_check|callback_aluno_existe_check');
+
+            $id_turma = $this->input->post('turma');
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->novo_turma($id_turma);
+            } else {
+
+                $nome_aluno = $this->input->post('nome_aluno');
+                $matricula_aluno = $this->input->post('matricula_aluno');
+                $cpf_aluno = $this->input->post('cpf_aluno');
+
+                $cpf_aluno = $this->add_mascara_cpf($cpf_aluno);
+
+                $dados = array(
+                    "nome_aluno" => $nome_aluno,
+                    "matricula_aluno" => $matricula_aluno,
+                    "cpf_aluno" => $cpf_aluno,
+                    "senha_aluno" => md5($cpf_aluno),
+                    "status_aluno" => 0
                 );
 
                 $this->aluno_model->salvar_novo_aluno($dados);
@@ -102,6 +256,160 @@ class Aluno extends CI_Controller {
             }
         } else {
             redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    private function add_mascara_cpf($cpf) {
+        $cpf_retorno = '';
+        if (strlen($cpf) == 11) {
+            $conte = 0;
+
+            //echo strlen($cpf);
+
+            for ($i = 0; $i < strlen($cpf); $i++) {
+                if ($i == 2) {
+                    $cpf_retorno = $cpf_retorno . $cpf[$i] . '.';
+                } else if ($i == 5) {
+                    $cpf_retorno = $cpf_retorno . $cpf[$i] . '.';
+                } else if ($i == 8) {
+                    $cpf_retorno = $cpf_retorno . $cpf[$i] . '-';
+                } else {
+                    $cpf_retorno = $cpf_retorno . $cpf[$i];
+                }
+            }
+        } else {
+            $cpf_retorno = $cpf;
+        }
+        return $cpf_retorno;
+    }
+
+    // Função para verificar se o aluno já está cadastrado pelo cpf.
+    public function aluno_existe_check($campo) {
+        $aluno_existe = 0;
+        if (strlen($campo) >= 11 && strlen($campo) <= 14) {
+            $cpf = $this->add_mascara_cpf($campo);
+            $aluno = $this->aluno_model->obter_aluno_cpf($cpf)->result();
+            if (count($aluno) > 0) {
+                $aluno_existe = 1;
+            }
+        } else {
+            $aluno = $this->aluno_model->obter_aluno_matricula($campo)->result();
+            if (count($aluno) > 0) {
+                $aluno_existe = 1;
+            }
+        }
+
+        if ($aluno_existe === 1) {
+            $this->form_validation->set_message('aluno_existe_check', 'Aluno já cadastra para %s : ' . $campo . '.');
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    // Função para valiar  validar o CPF do aluno que está sendo cadastrado
+    public function cpf_check($cpf) {
+
+//Etapa 1: Cria um array com apenas os digitos numéricos, isso permite receber o cpf em diferentes formatos como "000.000.000-00", "00000000000", "000 000 000 00" etc...
+        $j = 0;
+        for ($i = 0; $i < (strlen($cpf)); $i++) {
+            if (is_numeric($cpf[$i])) {
+                $num[$j] = $cpf[$i];
+                $j++;
+            }
+        }
+//Etapa 2: Conta os dígitos, um cpf válido possui 11 dígitos numéricos.
+        if (count($num) != 11) {
+            $isCpfValid = false;
+        }
+//Etapa 3: Combinações como 00000000000 e 22222222222 embora não sejam cpfs reais resultariam em cpfs válidos após o calculo dos dígitos ve rificares e por isso precisam ser filtradas nesta parte.
+        else {
+            for ($i = 0; $i < 10; $i++) {
+                if ($num[0] == $i && $num[1] == $i && $num[2] == $i && $num[3] == $i && $num[4] == $i && $num[5] == $i && $num[6] == $i && $num[7] == $i && $num[8] == $i) {
+                    $isCpfValid = false;
+                    break;
+                }
+            }
+        }
+//Etapa 4: Calcula e compara o primeiro dígito verificador.
+        if (!isset($isCpfValid)) {
+            $j = 10;
+            for ($i = 0; $i < 9; $i++) {
+                $multiplica[$i] = $num[$i] * $j;
+                $j--;
+            }
+            $soma = array_sum($multiplica);
+            $resto = $soma % 11;
+            if ($resto < 2) {
+                $dg = 0;
+            } else {
+                $dg = 11 - $resto;
+            }
+            if ($dg != $num[9]) {
+                $isCpfValid = false;
+            }
+        }
+//Etapa 5: Calcula e compara o segundo dígito verificador.
+        if (!isset($isCpfValid)) {
+            $j = 11;
+            for ($i = 0; $i < 10; $i++) {
+                $multiplica[$i] = $num[$i] * $j;
+                $j--;
+            }
+            $soma = array_sum($multiplica);
+            $resto = $soma % 11;
+            if ($resto < 2) {
+                $dg = 0;
+            } else {
+                $dg = 11 - $resto;
+            }
+            if ($dg != $num[10]) {
+                $isCpfValid = false;
+            } else {
+                $isCpfValid = true;
+            }
+        }
+
+//$isCpfValid;
+
+
+        if ($isCpfValid == FALSE) {
+            $this->form_validation->set_message('cpf_check', 'O %s é invalido, Verirfique se digitou corretamente!');
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    // Função para verificar se o aluno já está cadastrado e se ele e diferente do que vai ser alterardo
+    // Função presente nas regras de validação do alterar aluno.
+    public function aluno_existe_alterar_check($campo) {
+        $aluno_existe = 0;
+        $id_aluno = $this->input->post('aluno');
+        if (strlen($campo) >= 11 && strlen($campo) <= 14) {
+            $cpf = $this->add_mascara_cpf($campo);
+            $aluno = $this->aluno_model->obter_aluno_cpf($cpf)->result();
+            if (count($aluno) > 0) {
+                foreach ($aluno as $al) {
+                    if ($al->id_aluno != $id_aluno)
+                        $aluno_existe = 1;
+                }
+            }
+        } else {
+            $aluno = $this->aluno_model->obter_aluno_matricula($campo)->result();
+            if (count($aluno) > 0) {
+                foreach ($aluno as $al) {
+                    if ($al->id_aluno != $id_aluno)
+                        $aluno_existe = 1;
+                }
+            }
+        }
+
+        if ($aluno_existe === 1) {
+            $this->form_validation->set_message('aluno_existe_alterar_check', 'Aluno já cadastra para %s : ' . $campo . '.');
+            return FALSE;
+        } else {
+            return TRUE;
         }
     }
 
@@ -169,6 +477,44 @@ class Aluno extends CI_Controller {
             if (count($query) != 0) {
                 $this->aluno_model->excluir_aluno_em_tuma($id_aluno, $id_turma);
                 $retorno = '1';
+            } else {
+                $retorno = 'Aluno não foi encontrada nesta turma!';
+            }
+
+            echo $retorno;
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para ativar e desativar aluno
+    public function ativar_desativar_aluno() {
+        // verificando usuario logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            $id_aluno = $this->input->post('aluno');
+
+            $retorno = '';
+
+            $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
+            if (count($aluno) != 0) {
+                foreach ($aluno as $al){
+                    if($al->status_aluno==0){
+                        $dados = array(
+                            "status_aluno"=>1,
+                        );
+                        
+                        $this->aluno_model->alterar_dados_aluno($dados,$id_aluno);
+                        
+                        $retorno = '1';
+                    }else{
+                        $dados = array(
+                            "status_aluno"=>0,
+                        );
+                         $this->aluno_model->alterar_dados_aluno($dados,$id_aluno);
+                        $retorno = '0';
+                    }
+                }
+                
             } else {
                 $retorno = 'Aluno não foi encontrada nesta turma!';
             }

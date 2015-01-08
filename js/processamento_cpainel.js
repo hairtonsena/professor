@@ -185,6 +185,74 @@ Aluno = {
                 }
             }
         });
+    },
+    alterar_senha_aluno: function () {
+        var aluno = $('#aluno').val();
+        var senha = $('#nova_senha').val();
+        var parametro = "aluno=" + aluno + "&senha=" + senha;
+        var pg = Config.base_url('cpainel/aluno/alterar_senha_aluno');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === '1') {
+                    $("#modelSenhaAluno").modal("hide");
+                    alert("Senha alterada com sucesso!")
+                } else {
+                    $("#erro_senha").html(retorno);
+                }
+            }
+        });
+    },
+    // Função para ativar ou desativar o aluno por ajax.
+    ativar_destivar_aluno: function (id) {
+        var btnAtivarAluno = '#btnAtivarAluno_' + id;
+        var btnEditarAluno = '#btnEditarAluno_' + id;
+        var btnSenhaAluno = '#btnSenhaAluno_' + id;
+        var btnExcluirAluno = '#btnExcluirAluno_' + id;
+        var btnVerAluno = '#btnVerAluno_' + id;
+
+
+        var parametro = "aluno=" + id;
+        var pg = Config.base_url('cpainel/aluno/ativar_desativar_aluno');
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                var linkAtivarAluno;
+                var linkEditarAluno;
+                var linkSenhaAluno;
+                var linkExcluirAluno;
+                var linkverAluno;
+                if (retorno === '1') {
+                    linkAtivarAluno = '<a href="javascript:void(0)" onclick="Aluno.ativar_destivar_aluno(\'' + id + '\')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a>';
+                    linkEditarAluno = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
+                    linkSenhaAluno = '<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>'
+                    linkExcluirAluno = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span>';
+                    linkverAluno = '<a href="' + Config.base_url("cpainel/aluno/") + '"> <span class="glyphicon glyphicon-eye-open"></span> </a>';
+
+
+                } else if (retorno === '0') {
+                    linkAtivarAluno = '<a href="javascript:void(0)" onclick="Aluno.ativar_destivar_aluno(\'' + id + '\')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a>';
+                    linkEditarAluno = '<a href="' + Config.base_url('cpainel/aluno/alterar/' + id) + '"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
+                    linkSenhaAluno = '<a href="javascript:void(0)" data-toggle="modal" data-target="#modelSenhaAluno" data-aluno="' + id + '"> <span class="glyphicon glyphicon-lock" aria-hidden="true"></span> </a>';
+                    linkExcluirAluno = '<a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirAluno" data-aluno="' + id + '"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a>';
+                    linkverAluno = '<span class="glyphicon glyphicon-eye-open"></span>';
+
+                } else {
+                    //linkAtivarEstado = 'Falha';
+                }
+
+                $(btnAtivarAluno).html(linkAtivarAluno);
+                $(btnEditarAluno).html(linkEditarAluno);
+                $(btnSenhaAluno).html(linkSenhaAluno);
+                $(btnExcluirAluno).html(linkExcluirAluno);
+                $(btnVerAluno).html(linkverAluno);
+            }
+        });
     }
 }
 

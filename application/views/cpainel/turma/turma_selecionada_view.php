@@ -33,7 +33,7 @@ foreach ($turma_disciplina as $td) {
                 </ul>
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
-                        <a class="btn btn-primary" href="<?php echo base_url("cpainel/aluno/novo/" . $id_turma); ?>">Novo Aluno</a>
+                        <a class="btn btn-primary" href="<?php echo base_url("cpainel/aluno/novo_turma/" . $id_turma); ?>">Novo Aluno</a>
                         <div style="margin-top: 5px">
                             <table class="table table-bordered">
                                 <thead>
