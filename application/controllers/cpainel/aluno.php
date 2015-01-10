@@ -12,10 +12,11 @@ class Aluno extends CI_Controller {
         $this->load->database();
         $this->load->library('form_validation');
         $this->load->library('session');
-        //$this->load->model('cpainel/disciplina_model');
+        $this->load->model('cpainel/trabalho_model');
         $this->load->model('cpainel/turma_model');
         $this->load->model('cpainel/aluno_model');
-        $this->load->library('upload');
+        $this->load->model('cpainel/avaliacao_model');
+//        $this->load->library('upload');
         date_default_timezone_set('UTC');
     }
 
@@ -40,21 +41,299 @@ class Aluno extends CI_Controller {
     }
 
     //Função para exibir o formulário cadastrar um novo aluno.
-    public function novo($id_turma = null) {
+    public function novo() {
         // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
-            if ($id_turma == null) {
-                $id_turma = $this->uri->segment(4);
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/aluno/forme_novo_aluno_view');
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para visualizar o aluno, as disciplinas e suas turmas
+    public function ver() {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $id_aluno = $this->uri->segment(4);
+
+            $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
+            if (count($aluno) == 0) {
+                redirect(base_url("cpainel/aluno"));
             }
-            $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            foreach ($aluno as $an) {
+                if ($an->status_aluno == 0) {
+                    redirect(base_url("cpainel/aluno"));
+                }
+            }
+
+            $disciplina_turma_aluno = $this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+
 
             $dados = array(
-                "turma_disciplina" => $turma_disciplina
+                "aluno" => $aluno,
+                "disciplina_turma_aluno" => $disciplina_turma_aluno
             );
 
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/aluno/forme_novo_aluno_view', $dados);
+            $this->load->view('cpainel/aluno/ver_aluno_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para visualizar o aluno e seu dados
+    public function disciplina_turma() {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            if (!$this->input->get("aluno", TRUE) && !$this->input->get("turma", TRUE)) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            $id_aluno = $this->input->get("aluno");
+            $id_turma = $this->input->get("turma");
+
+            $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
+            if (count($aluno) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            foreach ($aluno as $an) {
+                if ($an->status_aluno == 0) {
+                    redirect(base_url("cpainel/aluno"));
+                }
+            }
+
+            $disciplina_turma_aluno = $this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+            $disciplina_turma = array();
+            foreach ($disciplina_turma_aluno as $dta) {
+                if ($dta->id_turma == $id_turma)
+                    $disciplina_turma[] = $dta;
+            }
+
+            $dados = array(
+                "aluno" => $aluno,
+                "disciplina_turma" => $disciplina_turma
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/aluno/disciplina_turma_aluno_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para visualizar as avaliações do aluno selecionado
+    public function disciplina_turma_avaliacao() {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            // Validações 
+            if (!$this->input->get("aluno", TRUE) && !$this->input->get("turma", TRUE)) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            $id_aluno = $this->input->get("aluno");
+            $id_turma = $this->input->get("turma");
+
+            $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
+            if (count($aluno) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            foreach ($aluno as $an) {
+                if ($an->status_aluno == 0) {
+                    redirect(base_url("cpainel/aluno"));
+                }
+            }
+            // Fim de validações 
+            // Pegando apenas a disciplina e turma escolhida
+            $disciplina_turma_aluno = $this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+            $disciplina_turma = array();
+            foreach ($disciplina_turma_aluno as $dta) {
+                if ($dta->id_turma == $id_turma)
+                    $disciplina_turma[] = $dta;
+            }
+
+            // Adicionando a nota do aluno para cada avaliação.
+            $avaliacao_turma = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
+            foreach ($avaliacao_turma as $at) {
+
+                $nota_aluno_avaliacao = $this->avaliacao_model->obter_nota_avaliacao_um_aluno($at->id_avaliacao, $id_aluno)->result();
+                if (count($nota_aluno_avaliacao) == 0) {
+                    $at->nota_aluno = 0;
+                } else {
+                    foreach ($nota_aluno_avaliacao as $naa) {
+                        $at->nota_aluno = $naa->valor_nota;
+                    }
+                }
+            }
+
+            $dados = array(
+                "aluno" => $aluno,
+                "disciplina_turma" => $disciplina_turma,
+                "avaliacoes_turma" => $avaliacao_turma,
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/aluno/disciplina_turma_avaliacao_aluno_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para visualizar os trabalhos do aluno selecionado.
+    public function disciplina_turma_trabalho() {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            // Validações 
+            if (!$this->input->get("aluno", TRUE) && !$this->input->get("turma", TRUE)) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            $id_aluno = $this->input->get("aluno");
+            $id_turma = $this->input->get("turma");
+
+            $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
+            if (count($aluno) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            foreach ($aluno as $an) {
+                if ($an->status_aluno == 0) {
+                    redirect(base_url("cpainel/aluno"));
+                }
+            }
+            // Fim de validações 
+            // Pegando apenas a disciplina e turma escolhida
+            $disciplina_turma_aluno = $this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+            $disciplina_turma = array();
+            foreach ($disciplina_turma_aluno as $dta) {
+                if ($dta->id_turma == $id_turma)
+                    $disciplina_turma[] = $dta;
+            }
+
+
+            // Adicionando a nota do aluno para cada trabalho.
+            $trabalhos_turma = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
+            foreach ($trabalhos_turma as $tt) {
+
+                $nota_aluno_trabalho = $this->trabalho_model->obter_nota_trabalho_um_aluno($tt->id_trabalho, $id_aluno)->result();
+                if (count($nota_aluno_trabalho) == 0) {
+                    $tt->nota_aluno = 0;
+                } else {
+                    foreach ($nota_aluno_trabalho as $nat) {
+                        $tt->nota_aluno = $nat->valor_nota_trabalho;
+                    }
+                }
+            }
+
+            $dados = array(
+                "aluno" => $aluno,
+                "disciplina_turma" => $disciplina_turma,
+                "trabalhos_turma" => $trabalhos_turma,
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/aluno/disciplina_turma_trabalho_aluno_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para visualizar as notas do aluno selecionado.
+    public function disciplina_turma_nota() {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            // Validações 
+            if (!$this->input->get("aluno", TRUE) && !$this->input->get("turma", TRUE)) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            $id_aluno = $this->input->get("aluno");
+            $id_turma = $this->input->get("turma");
+
+            $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
+            if (count($aluno) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            foreach ($aluno as $an) {
+                if ($an->status_aluno == 0) {
+                    redirect(base_url("cpainel/aluno"));
+                }
+            }
+            // Fim de validações 
+            // Pegando apenas a disciplina e turma escolhida
+            $disciplina_turma_aluno = $this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+            $disciplina_turma = array();
+            foreach ($disciplina_turma_aluno as $dta) {
+                if ($dta->id_turma == $id_turma)
+                    $disciplina_turma[] = $dta;
+            }
+
+
+
+
+
+
+            // Adicionando a nota do aluno para cada avaliação.
+            $avaliacao_turma = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
+            foreach ($avaliacao_turma as $at) {
+
+                $nota_aluno_avaliacao = $this->avaliacao_model->obter_nota_avaliacao_um_aluno($at->id_avaliacao, $id_aluno)->result();
+                if (count($nota_aluno_avaliacao) == 0) {
+                    $at->nota_aluno = 0;
+                } else {
+                    foreach ($nota_aluno_avaliacao as $naa) {
+                        $at->nota_aluno = $naa->valor_nota;
+                    }
+                }
+            }
+
+
+            // Adicionando a nota do aluno para cada trabalho.
+            $trabalho_turma = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
+            foreach ($trabalho_turma as $tt) {
+
+                $nota_aluno_trabalho = $this->trabalho_model->obter_nota_trabalho_um_aluno($tt->id_trabalho, $id_aluno)->result();
+                if (count($nota_aluno_trabalho) == 0) {
+                    $tt->nota_aluno = 0;
+                } else {
+                    foreach ($nota_aluno_trabalho as $nat) {
+                        $tt->nota_aluno = $nat->valor_nota_trabalho;
+                    }
+                }
+            }
+
+            // Adicionando a nota de recuperação do aluno.
+            $avaliacao_recuperacao_turma = $this->avaliacao_model->obter_avaliacao_recuperacao($id_turma)->result();
+            foreach ($avaliacao_recuperacao_turma as $art) {
+                $nota_aluno_recuperacao = $this->avaliacao_model->obter_nota_avaliacao_recuperacao_um_aluno($art->id_avaliacao_recuperacao, $id_aluno)->result();
+                if (count($nota_aluno_recuperacao) == 0) {
+                    $art->nota_aluno = null;
+                } else {
+                    foreach ($nota_aluno_recuperacao as $nar) {
+                        $art->nota_aluno = $nar->valor_nota_avaliacao_recuperacao;
+                    }
+                }
+            }
+
+
+            $dados = array(
+                "aluno" => $aluno,
+                "disciplina_turma" => $disciplina_turma,
+                "avaliacoes_turma" => $avaliacao_turma,
+                "trabalhos_turma" => $trabalho_turma,
+                "recuperacao_turma" => $avaliacao_recuperacao_turma,
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/aluno/disciplina_turma_nota_aluno_view', $dados);
             $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
@@ -497,24 +776,23 @@ class Aluno extends CI_Controller {
 
             $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
             if (count($aluno) != 0) {
-                foreach ($aluno as $al){
-                    if($al->status_aluno==0){
+                foreach ($aluno as $al) {
+                    if ($al->status_aluno == 0) {
                         $dados = array(
-                            "status_aluno"=>1,
+                            "status_aluno" => 1,
                         );
-                        
-                        $this->aluno_model->alterar_dados_aluno($dados,$id_aluno);
-                        
+
+                        $this->aluno_model->alterar_dados_aluno($dados, $id_aluno);
+
                         $retorno = '1';
-                    }else{
+                    } else {
                         $dados = array(
-                            "status_aluno"=>0,
+                            "status_aluno" => 0,
                         );
-                         $this->aluno_model->alterar_dados_aluno($dados,$id_aluno);
+                        $this->aluno_model->alterar_dados_aluno($dados, $id_aluno);
                         $retorno = '0';
                     }
                 }
-                
             } else {
                 $retorno = 'Aluno não foi encontrada nesta turma!';
             }

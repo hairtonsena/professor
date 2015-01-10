@@ -16,6 +16,11 @@ class trabalho_model extends CI_Model {
         return $this->db->get_where('nota_trabalho', array('trabalho_id_trabalho' => $id_trabalho));
     }
 
+    // Função para pegar a nota de um aluno de um determinado trabalho.
+    function obter_nota_trabalho_um_aluno($id_trabalho, $id_aluno) {
+        return $this->db->get_where('nota_trabalho', array('trabalho_id_trabalho' => $id_trabalho, 'aluno_id_aluno' => $id_aluno));
+    }
+
     // Função para salvar as notas dos alunos de um determinado trabalho
     function alterar_nota_trabalho_aluno($dados, $id_nota_trabalho) {
         $this->db->where(array('id_nota_trabalho' => $id_nota_trabalho));
@@ -93,6 +98,7 @@ class trabalho_model extends CI_Model {
     function excluir_anexo_trabalho($id_anexo) {
         $this->db->delete('anexo_trabalho', array('id_anexo_trabalho' => $id_anexo));
     }
+
     //put your code here
 }
 

@@ -1,3 +1,4 @@
+
 <div class="row col-lg-12">
     <ol class="breadcrumb">
         <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
@@ -45,7 +46,7 @@
                                         <td><?php echo $an->nome_aluno; ?></td>
                                         <td class="text-center"><?php echo $an->matricula_aluno ?></td>
                                         <td class="text-center"><?php echo $an->cpf_aluno ?></td>
-                                        <td class="text-center"><span id="btnVerAluno_<?php echo $an->id_aluno ?>"><a href="<?php echo base_url("cpainel/aluno/") ?>"> <span class="glyphicon glyphicon-eye-open"></span> </a></span></td>
+                                        <td class="text-center"><span id="btnVerAluno_<?php echo $an->id_aluno ?>"><a href="<?php echo base_url("cpainel/aluno/ver/".$an->id_aluno) ?>"> <span class="glyphicon glyphicon-eye-open"></span> </a></span></td>
                                         <td class="text-center"><span id="btnEditarAluno_<?php echo $an->id_aluno ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </span></td>
                                         <td class="text-center"><span id="btnSenhaAluno_<?php echo $an->id_aluno ?>"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></span></td>
                                         <td class="text-center"><span id="btnExcluirAluno_<?php echo $an->id_aluno ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span></td>
