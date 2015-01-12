@@ -7,25 +7,9 @@ and open the template in the editor.
     Created on : 03/12/2014, 10:22:35
     Author     : MOABBSOM QUALIDADE
 */
-
-.flutuante_menu
+mini_perfil
 {
-
-    position: fixed;
-    z-index:100;
-    padding: 10px;
-    background-color: #0066cc;
-    top: 0px;
-    bottom: 0px;
-
-}
-
-#item_menu
-{
-
-    top: 0px;
-    bottom: 0px;
-    overflow: auto;
+    margin-top: 10px;
 }
 
 .nome
@@ -34,10 +18,32 @@ and open the template in the editor.
     width: 210px;
     height: 50px;
     text-align: left; 
-    margin-top: 5px; 
-    margin-bottom: 30px;
+    margin-top: 10px; 
+    margin-bottom: 20px;
     color:  #F7F7F7;
     font-size:20px;
+}
+
+.barra_principal
+{
+    height: 80px;
+    padding-top: 10px;
+}
+
+/*.flutuante_barra
+{
+    position: fixed;
+    z-index:100;
+    width: 100%;
+    margin: 0px;
+}*/
+
+.caixa_menu
+{
+    width: 230px;
+    height: 100%;
+    padding: 10px;
+    background-color: #0066cc;
 }
 
 .icone_menu_oculto
@@ -48,14 +54,6 @@ and open the template in the editor.
     height: 0px;
 }
 
-.barra_rolar
-{
-    width: auto;
-    height: 450px;
-    overflow: auto;
-}
-
-/*----------------------------------------------------------*/
 
 @media (max-width:990px) {
 
@@ -81,9 +79,7 @@ and open the template in the editor.
 
     .conteiner_smartphone
     {
-        width: 100%;
-        height: auto;
-        margin-top: 100px;
+        margin-top: 0px;
         margin-left: 0px;
         padding: 50px;
         background-color: #F3F3F3;
@@ -118,20 +114,20 @@ and open the template in the editor.
 
     .menu_smartphone_esconde:hover
     {
-        height: auto;;
+        height: 100%;
     }
 
     .menu_smartphone_esconde_menu_ver{
         visibility: visible;
     }
-
+    
     .esconder {
         visibility: hidden;
     }
-
+    
     .menu_smartphone_esconde_menu
     {
-
+        
         float: left;
         margin-left: 0px;
         width: 0px;
@@ -141,7 +137,7 @@ and open the template in the editor.
     .menu_smartphone_esconde_menu:hover
     {
         width: 100%;
-        height: auto;
+        height: 100%;
     }
 
     .nome
@@ -154,132 +150,86 @@ and open the template in the editor.
         display: none;
 
     }
-
-    .link_smart a
-    {
-        width: 100%;
-        color: #F7F7F7;
-        font-size: 35px;
-        border: 1px solid #000000;
-    }
-
-    .link_smart a:hover
-    {
-        color: #2B2B2B;
-    }
 }
 
-.fim_roda_pe_smart
+.flutuante_menu
 {
-    float: left;
-    width: 100%;
-    height: 67px;
+
+    position: fixed;
+    z-index:100;
     margin-top: 0px;
-    padding-top: 20px;
-    padding-left: 10px;
-    background-color: #dcdcdc;
-    text-align: center;
 }
 
+.barra_rolar
+{
+    height: 430px;
+    overflow: auto;
+}
 
-/*---------------------------------------------------*/
-
-@media (min-width:991px) {
+@media (min-width:990px) {
     .posicao_conteiner
     {
-        width: auto;
-        height: auto;
         margin-top: 0px;
-        margin-left: 230px;
-        padding-top: 50px;
-        padding-left: 50px;
-        /*background-image: url("../imagens/fundo.jpg");*/
+        margin-left: 220px;
+        padding: 50px;
         background-color: #F3F3F3;
         -webkit-transition: 0.3s ease-in;
         -moz-transition: 0.3s ease-in;
         -o-transition: 0.3s ease-in;
     }
-
-    .link_ativo a
-    {
-        background-color: #dcdcdc;
-        color: #000000;
-    }
-
-    .link a
-    {
-        color: #F7F7F7;
-        font-size: 18px;
-    }
-
-    .link a:hover
-    {
-        color: #2B2B2B;
-    }
-
-    .fim_roda_pe
-    {
-        float: left;
-        width: 100%;
-        height: 67px;
-        margin-top: 0px;
-        padding-top: 20px;
-        padding-left: 220px;
-        background-color: #dcdcdc;
-        text-align: center;
-    }
-
+}
+.link_ativo a
+{
+    background-color: #dcdcdc;
+    color: #000000;
 }
 
-/*-----------------------------------------------------*/
-
-.titulos
+.link a
 {
-    font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-    font-size: 28px;
-    line-height: 1;
+    color: #F7F7F7;
+    /*    border: 1px solid #000000;*/
+}
+
+.link a:hover
+{
     color: #2B2B2B;
-    border-bottom: 1px solid #dcdcdc;
-    margin-bottom: 20px;
-
 }
 
-.conteudo
+
+
+.imagen_lista
 {
-
+    width: 100%;
+    height: auto;
+    margin-bottom: -10px;
 }
 
-.linha
+.imagen_lista img
+{
+    width: 220px;
+    height: 150px;
+    margin-top: 10px;
+}
+
+.margen_baixo
+{
+    margin-bottom:15px;
+}
+
+.fim_roda_pe
 {
     float: left;
     width: 100%;
-    height: auto;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #dcdcdc;
+    height: 67px;
+    margin-top: 20px;
+    padding-left: 220px;
+    /*    margin-left: 220px;*/
+    background-color: #dcdcdc;
+    text-align: center;
 }
 
-.img_conteudo img
+.carrocel_empreendimento
 {
-    width: 200px;
-    height: 150px;
+    height: 430px;
 }
-
-.img_conteudo
-{
-    float: left;
-    width: 210px;
-    height: 170px;
-}
-
-.sem_margen_pading
-{
-    padding: 0px;
-    margin: 5px;
-}
-
-
-/*-------------------------------------------------------*/
-
-
 
