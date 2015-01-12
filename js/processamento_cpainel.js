@@ -29,11 +29,13 @@ Turma = {
             }
         });
     },
+    // Função para ativar ou desativar a turma.
     ativar_desativar_turma: function (id) {
         var btnAtivarTurma = '#btnAtivarTurma_' + id;
         var btnEditarTurma = '#btnEditarTurma_' + id;
         var btnExcluirTurma = '#btnExcluirTurma_' + id;
-//        var btnAddTurma = '#btnAddTurma_' + id;
+        var btnAbrirTurma = '#btnAbrirTurma_' + id;
+        var btnArquivaTurma = '#btnArquivaTurma_' + id;
 
         var parametro = "turma=" + id;
         var pg = Config.base_url('cpainel/turma/ativar_desativar_turma');
@@ -45,32 +47,80 @@ Turma = {
                 var linkAtivarTurma;
                 var linkEditarTurma;
                 var linkExcluirTurma;
-//                var linkAddTurma;
+                var linkAbrirTurma;
+                var linkArquivaTurma;
                 if (retorno === '1') {
-                    linkAtivarTurma = '<a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma(\'' + id + '\')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a>';
+                    linkAtivarTurma = '<a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma(\'' + id + '\')"> <span class="glyphicon glyphicon-check" aria-hidden="true"></span> </a>';
                     linkEditarTurma = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
                     linkExcluirTurma = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span>';
-//                    linkAddTurma = '<a href="http://localhost/siteservico/cpainel/categoria/subcategoria/' + id + '" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a>';
-//
+                    linkAbrirTurma = '<a href="' + Config.base_url("cpainel/turma/alunos/" + id) + '" ><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </a>';
+                    linkArquivaTurma = '<a href="javascript:void(0)" onclick="Turma.arquivar_turma(\'' + id + '\')"><span class="glyphicon glyphicon-folder-open"></span></a>';
 
                 } else if (retorno === '0') {
                     linkAtivarTurma = '<a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma(\'' + id + '\')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a>';
                     linkEditarTurma = '<a href="' + Config.base_url('cpainel/turma/alterar/' + id) + '"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
                     linkExcluirTurma = '<a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirTurma" data-turma="' + id + '"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a>';
-//                    linkAddTurma = '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span>';
-
+                    linkAbrirTurma = '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </span>';
+                    linkArquivaTurma = '<span class="glyphicon glyphicon-folder-open"></span>';
 
                 }
 
                 $(btnAtivarTurma).html(linkAtivarTurma);
                 $(btnEditarTurma).html(linkEditarTurma);
                 $(btnExcluirTurma).html(linkExcluirTurma);
-//                $(btnAddTurma).html(linkAddTurma);
+                $(btnAbrirTurma).html(linkAbrirTurma);
+                $(btnArquivaTurma).html(linkArquivaTurma);
 
             }
         });
 
     },
+    // Função para arquivar uma turma
+    arquivar_turma: function (id) {
+        var turma = id;
+        var parametro = "turma=" + turma;
+        var pg = Config.base_url('cpainel/turma/arquivar');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === '1') {
+
+//                    $("#modelExcluirTurma").modal("hide");
+                    $('#linha_' + turma).hide("slow");
+
+                } else {
+                    alert(retorno);
+                    // $("#modelExcluirDisciplina").modal("hide");
+                }
+            }
+        });
+    },
+    // Função para desarquivar uma turma
+    desarquivar_turma: function (id) {
+        var turma = id;
+        var parametro = "turma=" + turma;
+        var pg = Config.base_url('cpainel/turma/desarquivar');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === '1') {
+
+//                    $("#modelExcluirTurma").modal("hide");
+                    $('#linha_' + turma).hide("slow");
+
+                } else {
+                    alert(retorno);
+                    // $("#modelExcluirDisciplina").modal("hide");
+                }
+            }
+        });
+    }
 };
 
 
@@ -96,14 +146,14 @@ Disciplina = {
                     linkAtivarDisciplina = '<a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina(\'' + id + '\')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a>';
                     linkEditarDisciplina = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
                     linkExcluirDisciplina = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span>';
-                    linkAddTurma = '<a href="http://localhost/siteservico/cpainel/categoria/subcategoria/' + id + '" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a>';
+                    linkAddTurma = '<a href="' + Config.base_url("cpainel/turma?disciplina=" + id) + '"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </a>';
 
 
                 } else if (retorno === '0') {
                     linkAtivarDisciplina = '<a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina(\'' + id + '\')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a>';
                     linkEditarDisciplina = '<a href="' + Config.base_url('cpainel/disciplina/alterar_disciplina/' + id) + '"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
                     linkExcluirDisciplina = '<a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirDisciplina" data-disciplina="' + id + '"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a>';
-                    linkAddTurma = '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span>';
+                    linkAddTurma = '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </span>';
 
 
                 } else {

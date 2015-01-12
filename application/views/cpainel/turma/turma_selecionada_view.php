@@ -3,11 +3,13 @@ $nome_disciplina;
 $id_disciplina;
 $nome_turma;
 $id_turma;
+$status_turma;
 foreach ($turma_disciplina as $td) {
     $nome_disciplina = $td->nome_disciplina;
     $id_disciplina = $td->id_disciplina;
     $nome_turma = $td->nome_turma;
     $id_turma = $td->id_turma;
+    $status_turma = $td->status_turma;
 }
 ?>
 <div class="row col-lg-12">
@@ -27,38 +29,41 @@ foreach ($turma_disciplina as $td) {
             <div class="col-lg-12 semMargem">
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active"><a href="#">Alunos</a></li>
-                    <li role="presentation"><a href="<?php echo base_url("cpainel/avaliacao?turma=".$id_turma) ?>">Avaliações</a></li>
-                    <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=".$id_turma) ?>">Trabalhos</a></li>
-                    <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=".$id_turma) ?>">Notas</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
                 </ul>
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
-                        <a class="btn btn-primary" href="<?php echo base_url("cpainel/aluno/novo_turma/" . $id_turma); ?>">Novo Aluno</a>
+                        <?php if ($status_turma != 2) { ?>
+                            <a class="btn btn-primary" href="<?php echo base_url("cpainel/aluno/novo_turma/" . $id_turma); ?>">Novo Aluno</a>
+                        <?php } ?> 
                         <div style="margin-top: 5px">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th> Nome </th>
                                         <th class="col-lg-1 center"> Excluir </th>
-                                        <th class="col-lg-1 center"> status </th>
+                                        <!--<th class="col-lg-1 center"> status </th>-->
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     foreach ($alunos_turma as $at) {
-                                        if ($at->status_aluno == 0) {
+                                        if ($at->status_aluno == 1) {
                                             ?>
                                             <tr id="linha_aluno_turma_<?php echo $at->id_aluno ?>">
                                                 <td><?php echo $at->nome_aluno; ?></td>                                                
-                                                <td class="text-center"><span id="btnExcluirTurma_<?php echo $at->id_aluno ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirAlunoTurma" data-aluno="<?php echo $at->id_aluno ?>" data-turma="<?php echo $id_turma ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span></td>                                                
-                                                <td class="text-center"><span id="btnAtivarTurma_<?php echo $at->id_aluno ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php echo $at->id_aluno ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>
-                                            </tr>
-                                        <?php } else { ?>
-                                            <tr id="linha_aluno_turma_<?php echo $tm->id_turma ?>">
-                                                <td> <?php echo $tm->nome_turma; ?> </td>
-                                                <td class="text-center"><span id="btnExcluirTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span></td>                                               
-                                                <td class="text-center"><span id="btnAtivarTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php echo $tm->id_turma ?>')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a></span></td>
+                                                <td class="text-center">
+                                                    <?php if ($status_turma != 2) { ?>
+                                                        <span id="btnExcluirTurma_<?php echo $at->id_aluno ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirAlunoTurma" data-aluno="<?php echo $at->id_aluno ?>" data-turma="<?php echo $id_turma ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span>
+                                                    <?php } else { ?>
+                                                        <span id="btnExcluirTurma_<?php echo $at->id_aluno ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>                      
+
+                                                    <?php } ?>
+                                                </td>                                                
+                                                <!--<td class="text-center"><span id="btnAtivarTurma_<?php// echo $at->id_aluno ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php// echo $at->id_aluno ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>-->
                                             </tr>
                                             <?php
                                         }

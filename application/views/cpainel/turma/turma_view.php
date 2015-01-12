@@ -18,16 +18,17 @@ foreach ($disciplina as $dc) {
         <div class="panel-body">
             <div class="col-lg-6 semMargem">
                 <a class="btn btn-primary" href="<?php echo base_url("cpainel/turma/nova/" . $id_disciplina); ?>">Nova Turma</a>
+                <a class="btn btn-default pull-right" href="<?php echo base_url("cpainel/turma/arquivada?disciplina=" . $id_disciplina); ?>">Turmas arquivadas</a>
                 <div style="margin-top: 5px">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th> Nome </th>
+                                <th class="col-lg-1 center"> Selecionar </th>
+                                <th class="col-lg-1 center"> Arquivar </th>
                                 <th class="col-lg-1 center"> Alterar </th>
                                 <th class="col-lg-1 center"> Excluir </th>
-                                <th class="col-lg-1 center"> Selecionar </th>
                                 <th class="col-lg-1 center"> status </th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -37,18 +38,24 @@ foreach ($disciplina as $dc) {
                                     ?>
                                     <tr id="linha_<?php echo $tm->id_turma ?>">
                                         <td><?php echo $tm->nome_turma; ?></td>
+                                        <td class="text-center"><span id="btnAbrirTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </span></td>
+                                        <td class="text-center"><span id="btnArquivaTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-folder-open"></span></span></td>
                                         <td class="text-center"><span id="btnEditarTurma_<?php echo $tm->id_turma ?>"><a href="<?php echo base_url('cpainel/turma/alterar/' . $tm->id_turma) ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a></span></td>
+
                                         <td class="text-center"><span id="btnExcluirTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirTurma" data-turma="<?php echo $tm->id_turma ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span></td>
-                                        <td class="text-center"><span id="btnAddTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span></td>
                                         <td class="text-center"><span id="btnAtivarTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php echo $tm->id_turma ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>
+
                                     </tr>
                                 <?php } else { ?>
                                     <tr id="linha_<?php echo $tm->id_turma ?>">
                                         <td> <?php echo $tm->nome_turma; ?> </td>
+                                        <td class="text-center"><span id="btnAbrirTurma_<?php echo $tm->id_turma ?>"><a href="<?php echo base_url('cpainel/turma/alunos/' . $tm->id_turma) ?>"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </span></td>
+                                        <td class="text-center"><span id="btnArquivaTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" onclick="Turma.arquivar_turma('<?php echo $tm->id_turma ?>')"><span class="glyphicon glyphicon-folder-open"></span></a></span></td>
                                         <td class="text-center"><span id="btnEditarTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></span></td>
+
                                         <td class="text-center"><span id="btnExcluirTurma_<?php echo $tm->id_turma ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span></td>
-                                        <td class="text-center"><span id="btnAddTurma_<?php echo $tm->id_turma ?>"><a href="<?php echo base_url('cpainel/turma/alunos/'.$tm->id_turma) ?>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span></td>
-                                        <td class="text-center"><span id="btnAtivarTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php echo $tm->id_turma ?>')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a></span></td>
+                                        <td class="text-center"><span id="btnAtivarTurma_<?php echo $tm->id_turma ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php echo $tm->id_turma ?>')"> <span class="glyphicon glyphicon-check" aria-hidden="true"></span> </a></span></td>
+
                                     </tr>
                                     <?php
                                 }

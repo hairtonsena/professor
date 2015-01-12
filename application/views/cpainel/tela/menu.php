@@ -14,17 +14,18 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
+                <li><a href="<?php echo base_url("cpainel/disciplina"); ?>"> Disciplina </a></li>
                 <!--<li class="active"><a href="#">Link</a></li>
                 <li><a href="#"></a></li>-->
-                <li class="dropdown">
+<!--                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Cadastra <b class="caret"></b></a>
                     <ul class="dropdown-menu">
 
                         <li><a href="<?php echo base_url("cpainel/disciplina"); ?>"> Disciplina </a></li>
-                        <li><a href="<?php echo base_url("cpainel/turma"); ?>">Turma</a></li>
+                        
 
                     </ul>
-                </li>
+                </li>-->
                 <li>
                     <a href="<?php echo base_url("cpainel/aluno");?>" >Alunos</a>
 

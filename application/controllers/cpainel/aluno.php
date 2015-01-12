@@ -71,7 +71,7 @@ class Aluno extends CI_Controller {
                 }
             }
 
-            $disciplina_turma_aluno = $this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+            $disciplina_turma_aluno = $this->aluno_model->obter_disciplina_turma_ativa_arquivada_aluno($id_aluno)->result();
 
 
             $dados = array(

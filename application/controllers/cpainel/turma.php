@@ -54,6 +54,37 @@ class turma extends CI_Controller {
         }
     }
 
+    // Função para mestrar apenas as turma arquivadas.
+    public function arquivada() {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            // verificando se o request disciplina foi criando
+            if (!$this->input->get('disciplina', TRUE)) {
+                redirect(base_url('cpainel/disciplina'));
+            }
+            $id_disciplina = $this->input->get('disciplina');
+            $discipliana = $this->disciplina_model->obter_uma_disciplina($id_disciplina)->result();
+            if (count($discipliana) == 0) {
+                redirect(base_url('cpainel/disciplina'));
+            }
+            // buscando as turmas ativas por categorias
+            $turma = $this->turma_model->obter_turmas_arquivadas_por_disciplina($id_disciplina)->result();
+
+
+            $dados = array(
+                'disciplina' => $discipliana,
+                'turma' => $turma
+            );
+            // mestrando a tela.
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/turma/turma_arquivada_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
     // Função para abrir o formulário de nova turma
     public function nova($id_disciplina = null) {
         // verificando usuario logado
@@ -108,9 +139,9 @@ class turma extends CI_Controller {
                 );
                 // enviando os dados para ser salvos 
                 $this->turma_model->salvar_nova_turma($dados);
-                
-                
-                
+
+
+
                 // redirecionando para turma
                 redirect(base_url("cpainel/turma?disciplina=" . $id_disciplina));
             }
@@ -256,17 +287,71 @@ class turma extends CI_Controller {
         }
     }
 
+    // Função para arquivar um turma;
+    public function arquivar() {
+        // verificando usuario logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $id_turma = $this->input->post('turma');
+
+            $retorno = '';
+            $query = $this->turma_model->obter_uma_turma($id_turma)->result();
+
+            if (count($query) != 0) {
+
+                $dados = array(
+                    "status_turma" => 2
+                );
+
+                $this->turma_model->alterar_dados_turma($dados, $id_turma);
+                $retorno = '1';
+            } else {
+                $retorno = 'Turma não foi encontrada!';
+            }
+            echo $retorno;
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para desarquiva um turma;
+    public function desarquivar() {
+        // verificando usuario logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $id_turma = $this->input->post('turma');
+
+            $retorno = '';
+            $query = $this->turma_model->obter_uma_turma($id_turma)->result();
+
+            if (count($query) != 0) {
+
+                $dados = array(
+                    "status_turma" => 1
+                );
+
+                $this->turma_model->alterar_dados_turma($dados, $id_turma);
+                $retorno = '1';
+            } else {
+                $retorno = 'Turma não foi encontrada!';
+            }
+            echo $retorno;
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
     // função para mostra a turma e disciplina juntas
     public function alunos() {
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
             $id_turma = $this->uri->segment(4);
 
-            $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
             $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
-            
+
 
             $dados = array(
-                "turma_disciplina" => $query,
+                "turma_disciplina" => $turma_disciplina,
                 "alunos_turma" => $alunos_por_turma
             );
 

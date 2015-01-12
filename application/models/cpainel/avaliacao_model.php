@@ -68,8 +68,8 @@ class avaliacao_model extends CI_Model {
         $this->db->delete('avaliacao', array('id_avaliacao' => $id_avaliacao));
     }
 
-    // Função para excluir avaliacao
-    function excluir_avaliacao($id_avaliacao) {
+    // Função para excluir avaliacao e as notas dos alunos que fizerão a avaliaçõa.
+    function excluir_uma_avaliacao($id_avaliacao) {
         $this->db->delete('nota_avaliacao', array('avaliacao_id_avaliacao' => $id_avaliacao));
         $this->db->delete('avaliacao', array('id_avaliacao' => $id_avaliacao));
     }

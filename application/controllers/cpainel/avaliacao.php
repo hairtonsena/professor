@@ -253,7 +253,7 @@ class avaliacao extends CI_Controller {
 
             if (count($query) != 0) {
 
-                $this->avaliacao_model->excluir_avaliacao($id_avaliacao);
+                $this->avaliacao_model->excluir_uma_avaliacao($id_avaliacao);
                 $retorno = '1';
             } else {
                 $retorno = 'Avaliação não foi encontrada!';

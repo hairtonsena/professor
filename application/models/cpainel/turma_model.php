@@ -8,6 +8,12 @@ class turma_model extends CI_Model {
         return $this->db->get('turma');
     }
 
+    // Obter turma ativa por disciplina.
+    function obter_turmas_arquivadas_por_disciplina($id_disciplina) {
+        $this->db->where(['disciplina_id_disciplina' => $id_disciplina, 'status_turma ' => 2]);
+        return $this->db->get('turma');
+    }
+
     // Obter turma e disciplina pelo inner join
     function obter_turma_disciplina($id_turma) {
         $this->db->select('*');
@@ -22,7 +28,7 @@ class turma_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('aluno');
         $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
-        $this->db->where('aluno_has_turma.turma_id_turma', $id_turma);
+        $this->db->where(array('aluno_has_turma.turma_id_turma' => $id_turma, 'aluno.status_aluno <>' => 0));
         return $this->db->get();
     }
 

@@ -3,11 +3,13 @@ $nome_disciplina;
 $id_disciplina;
 $nome_turma;
 $id_turma;
+$status_turma;
 foreach ($turma_disciplina as $td) {
     $nome_disciplina = $td->nome_disciplina;
     $id_disciplina = $td->id_disciplina;
     $nome_turma = $td->nome_turma;
     $id_turma = $td->id_turma;
+    $status_turma = $td->status_turma;
 }
 ?>
 <div class="row col-lg-12">
@@ -33,8 +35,10 @@ foreach ($turma_disciplina as $td) {
                 </ul>
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
-                        <a class="btn btn-primary" href="<?php echo base_url("cpainel/avaliacao/nova/" . $id_turma); ?>">Nova Avaliacão</a>
-                        <a class="btn btn-danger" href="<?php echo base_url("cpainel/avaliacao/avaliacao_recuperacao/" . $id_turma); ?>">Avaliacão de recuperação</a>
+                        <?php if ($status_turma != 2) { ?>
+                            <a class="btn btn-primary" href="<?php echo base_url("cpainel/avaliacao/nova/" . $id_turma); ?>">Nova Avaliacão</a>
+                            <a class="btn btn-danger" href="<?php echo base_url("cpainel/avaliacao/avaliacao_recuperacao/" . $id_turma); ?>">Avaliacão de recuperação</a>
+                        <?php } ?>
                         <div style="margin-top: 5px">
                             <table class="table table-bordered">
                                 <thead>
@@ -58,9 +62,21 @@ foreach ($turma_disciplina as $td) {
                                             <td><?php echo $at->descricao_avaliacao; ?></td>   
                                             <td class="text-center"><?php echo date('d/m/Y', strtotime($at->data_avaliacao)); ?></td> 
                                             <td class="text-center"><span id="valor_nota_<?php echo $at->id_avaliacao ?>"><?php echo $at->valor_avaliacao; ?></span></td> 
-                                            <td class="text-center"><span id="btnAtivarTurma_<?php echo $at->id_avaliacao ?>"><a href="<?php echo base_url("cpainel/avaliacao/alterar_avaliacao/".$at->id_avaliacao) ?>" > <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a></span></td>
 
-                                            <td class="text-center"><span id="btnExcluirAvaliacao_<?php echo $at->id_avaliacao ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirAvaliacao" data-avaliacao="<?php echo $at->id_avaliacao ?>" > <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span></td>                                                
+                                            <td class="text-center">
+                                                <?php if ($status_turma != 2) { ?>
+                                                    <span id="btnAtivarTurma_<?php echo $at->id_avaliacao ?>"><a href="<?php echo base_url("cpainel/avaliacao/alterar_avaliacao/" . $at->id_avaliacao) ?>" > <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a></span>
+                                                <?php } else { ?>
+                                                    <span id="btnAtivarTurma_<?php echo $at->id_avaliacao ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></span>
+                                                <?php } ?>
+                                            </td>
+                                            <td class="text-center">
+                                                <?php if ($status_turma != 2) { ?>
+                                                    <span id="btnExcluirAvaliacao_<?php echo $at->id_avaliacao ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirAvaliacao" data-avaliacao="<?php echo $at->id_avaliacao ?>" > <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></span>
+                                                <?php } else { ?>
+                                                    <span id="btnExcluirAvaliacao_<?php echo $at->id_avaliacao ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+                                                <?php } ?>
+                                            </td>
 
                                         </tr>
                                         <?php

@@ -68,16 +68,16 @@ class aluno_model extends CI_Model {
         return $this->db->get();
     }
 
-//    // Obter as disciplinas e turmas do aluno.
-//    function obter_disciplina_turma_aluno($id_aluno) {
-//        $this->db->select('*');
-//        $this->db->from('aluno');
-//        $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
-//        $this->db->join('turma', 'aluno_has_turma.turma_id_turma=turma.id_turma');
-//        $this->db->join('disciplina', 'disciplina.id_disciplina=turma.disciplina_id_disciplina');
-//        $this->db->where(array('aluno.id_aluno' => $id_aluno));
-//        return $this->db->get();
-//    }
+    // Obter as disciplinas e turmas do aluno.
+    function obter_disciplina_turma_ativa_arquivada_aluno($id_aluno) {
+        $this->db->select('*');
+        $this->db->from('aluno');
+        $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
+        $this->db->join('turma', 'aluno_has_turma.turma_id_turma=turma.id_turma');
+        $this->db->join('disciplina', 'disciplina.id_disciplina=turma.disciplina_id_disciplina');
+        $this->db->where(array('aluno.id_aluno' => $id_aluno,'turma.status_turma >'=>0));
+        return $this->db->get();
+    }
 
     // obter todos aluno já cadastrado  nesta turma.
     function alunos_na_turma($id_turma) {

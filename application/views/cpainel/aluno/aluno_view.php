@@ -10,7 +10,6 @@
         <div class="panel-body">
             <div class="col-lg-8">
                 <a  href="<?php echo base_url("cpainel/aluno/novo") ?>" class="btn btn-primary" id="btnNovaDdisciplina">Novo aluno</a>
-
                 <div style="margin-top: 5px">
                     <table class="table table-bordered" id="tabelaCategoria">
                         <thead>

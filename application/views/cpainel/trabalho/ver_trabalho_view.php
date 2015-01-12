@@ -3,11 +3,13 @@ $nome_disciplina;
 $id_disciplina;
 $nome_turma;
 $id_turma;
+$status_turma;
 foreach ($turma_disciplina as $td) {
     $nome_disciplina = $td->nome_disciplina;
     $id_disciplina = $td->id_disciplina;
     $nome_turma = $td->nome_turma;
     $id_turma = $td->id_turma;
+    $status_turma = $td->status_turma;
 }
 ?>
 <style type="text/css">
@@ -132,7 +134,11 @@ foreach ($turma_disciplina as $td) {
                                     <div id="mensagem"></div>
                                     <div class="inputFile col-lg-12">
                                         <span class="" id="textoCampoUp"><i class="glyphicon glyphicon-camera"></i> Selecione uma imagem </span>
-                                        <input  type="file" id="arquivo" accept="application/pdf" name="arquivo">
+                                        <input <?php
+                                        if ($status_turma == 2) {
+                                            echo 'disabled="true"';
+                                        }
+                                        ?> type="file" id="arquivo" accept="application/pdf" name="arquivo">
                                     </div>
 
                                     <div class="progress" id="porcentagem">
@@ -141,7 +147,11 @@ foreach ($turma_disciplina as $td) {
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        <input type="submit" class="btn btn-primary pull-right" name="enviar" id="btn_enviar">
+                                        <input type="submit" <?php
+                                        if ($status_turma == 2) {
+                                            echo 'disabled="true"';
+                                        }
+                                        ?>  class="btn btn-primary pull-right" name="enviar" id="btn_enviar">
                                     </div>
 
                                 </div>
@@ -157,9 +167,15 @@ foreach ($turma_disciplina as $td) {
                                     <?php foreach ($anexo_trabalho as $at) { ?>
                                         <li class="list-group-item" id="linha_anexo_<?php echo $at->id_anexo_trabalho ?>">
                                             <a target="blank" href="<?php echo base_url("trabalho/" . $pasta_trabalho . "/" . $at->arquivo_anexo_trabalho) ?>" ><?php echo $at->nome_anexo_trabalho; ?></a>
-                                            <a href="javascript:void(0)" title="Remover anexo" class="link pull-right" data-toggle="modal" data-target="#modelExcluirAnexoTrabalho" data-anexo_trabalho="<?php echo $at->id_anexo_trabalho ?>">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
+                                            <?php if ($status_turma != 2) { ?>
+                                                <a href="javascript:void(0)" title="Remover anexo" class="link pull-right" data-toggle="modal" data-target="#modelExcluirAnexoTrabalho" data-anexo_trabalho="<?php echo $at->id_anexo_trabalho ?>">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </a>
+                                            <?php } else { ?>
+                                                <span class="pull-right">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </span>
+                                            <?php } ?>
                                         </li>
                                         <?php
                                     }

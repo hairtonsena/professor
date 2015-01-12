@@ -16,9 +16,9 @@
                             <tr>
                                 <th class="col-lg-7"> Nome </th>
                                 <th class="col-lg-1 center"> Descrição </th>
+                                <th class="col-lg-1 center"> Turma </th>
                                 <th class="col-lg-1 center"> Alterar </th>
                                 <th class="col-lg-1 center"> Excluir </th>
-                                <th class="col-lg-1 center"> Turma </th>
                                 <th class="col-lg-1 center"> status </th>
                             </tr>
                         </thead>
@@ -30,9 +30,9 @@
                                     <tr>
                                         <td ><span id="nome_<?php echo $dc->id_disciplina ?>"> <?php echo $dc->nome_disciplina; ?></span></td>
                                         <td class="text-center"><span id="btnDescricaoDisciplina_<?php echo $dc->id_disciplina ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelVerDescricaDisciplina" data-disciplina="<?php echo $dc->id_disciplina ?>"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> </a></span></td>
+                                        <td class="text-center"><span id="btnAddTurma_<?php echo $dc->id_disciplina ?>"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </span></td>
                                         <td class="text-center"><span id="btnEditarDisciplina_<?php echo $dc->id_disciplina ?>"><a href="<?php echo base_url('cpainel/disciplina/alterar_disciplina/' . $dc->id_disciplina) ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a></span></td>
                                         <td class="text-center"><span id="btnExcluirDisciplina_<?php echo $dc->id_disciplina ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirDisciplina" data-disciplina="<?php echo $dc->id_disciplina ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span></td>
-                                        <td class="text-center"><span id="btnAddTurma_<?php echo $dc->id_disciplina ?>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </span></td>
                                         <td class="text-center"><span id="btnAtivarDisciplina_<?php echo $dc->id_disciplina ?>"><a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina('<?php echo $dc->id_disciplina ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>
                                     </tr>
                                 <?php } else {
@@ -40,9 +40,9 @@
                                     <tr>
                                         <td><span id="nome_<?php echo $dc->id_disciplina ?>"><?php echo $dc->nome_disciplina; ?></span></td>
                                         <td class="text-center"><span id="btnDescricaoDisciplina_<?php echo $dc->id_disciplina ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelVerDescricaDisciplina" data-disciplina="<?php echo $dc->id_disciplina ?>"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> </a></span></td>
+                                        <td class="text-center"><span id="btnAddTurma_<?php echo $dc->id_disciplina ?>"> <a href="<?php echo base_url('cpainel/turma?disciplina=' . $dc->id_disciplina) ?>" ><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </a></span></td>
                                         <td class="text-center"><span id="btnEditarDisciplina_<?php echo $dc->id_disciplina ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </span></td>
                                         <td class="text-center"><span id="btnExcluirDisciplina_<?php echo $dc->id_disciplina ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span></td>
-                                        <td class="text-center"> <span id="btnAddTurma_<?php echo $dc->id_disciplina ?>"> <a href="<?php echo base_url('cpainel/turma?disciplina=' . $dc->id_disciplina) ?>" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a></span></td>
                                         <td class="text-center"><span id="btnAtivarDisciplina_<?php echo $dc->id_disciplina ?>"> <a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina('<?php echo $dc->id_disciplina ?>')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a></span></td>
                                     </tr>
                                     <?php

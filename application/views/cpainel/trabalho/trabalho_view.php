@@ -3,11 +3,13 @@ $nome_disciplina;
 $id_disciplina;
 $nome_turma;
 $id_turma;
+$status_turma;
 foreach ($turma_disciplina as $td) {
     $nome_disciplina = $td->nome_disciplina;
     $id_disciplina = $td->id_disciplina;
     $nome_turma = $td->nome_turma;
     $id_turma = $td->id_turma;
+    $status_turma = $td->status_turma;
 }
 ?>
 <div class="row col-lg-12">
@@ -33,13 +35,15 @@ foreach ($turma_disciplina as $td) {
                 </ul>
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
-                        <a class="btn btn-primary" href="<?php echo base_url("cpainel/trabalho/novo/" . $id_turma); ?>">Novo Trabalho</a>
+                        <?php if ($status_turma != 2) { ?>
+                            <a class="btn btn-primary" href="<?php echo base_url("cpainel/trabalho/novo/" . $id_turma); ?>">Novo Trabalho</a>
+                        <?php } ?>
                         <div style="margin-top: 5px">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th> Descricao </th>
-                                        <th class="col-lg-1 center"> Data  </th>
+                                        <th class="col-lg-1 center"> Data entrega </th>
                                         <th class="col-lg-1 center"> valor </th>
                                         <th class="col-lg-1 center"> Alterar </th>
                                         <th class="col-lg-1 center"> Excluir </th>
@@ -57,8 +61,20 @@ foreach ($turma_disciplina as $td) {
                                             <td><a href="<?php echo base_url("cpainel/trabalho/ver_trabalho/" . $tt->id_trabalho) ?>"> <?php echo $tt->titulo_trabalho; ?></a></td>   
                                             <td class="text-center"><?php echo date('d/m/Y', strtotime($tt->data_entrega_trabalho)); ?></td> 
                                             <td  class="text-center"><span id="valor_nota_<?php echo $tt->id_trabalho ?>"><?php echo $tt->valor_nota_trabalho; ?></span></td> 
-                                            <td class="text-center"><span id="btnAtivarTurma_<?php echo $tt->id_trabalho ?>"><a href="<?php echo base_url("cpainel/trabalho/alterar_trabalho/" . $tt->id_trabalho) ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a></span></td>
-                                            <td class="text-center"><span id="btnExcluirTurma_<?php echo $tt->id_trabalho ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirTrabalho" data-trabalho="<?php echo $tt->id_trabalho ?>" > <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span></td>                                                
+                                            <td class="text-center">
+                                                <?php if ($status_turma != 2) { ?>
+                                                    <span id="btnAtivarTurma_<?php echo $tt->id_trabalho ?>"><a href="<?php echo base_url("cpainel/trabalho/alterar_trabalho/" . $tt->id_trabalho) ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a></span>
+                                                <?php } else { ?>
+                                                    <span id="btnAtivarTurma_<?php echo $tt->id_trabalho ?>"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></span>
+                                                <?php } ?>
+                                            </td>
+                                            <td class="text-center">
+                                                <?php if ($status_turma != 2) { ?>
+                                                    <span id="btnExcluirTurma_<?php echo $tt->id_trabalho ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirTrabalho" data-trabalho="<?php echo $tt->id_trabalho ?>" > <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span>
+                                                <?php } else { ?>
+                                                    <span id="btnExcluirTurma_<?php echo $tt->id_trabalho ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+                                                <?php } ?>
+                                            </td>
 
                                         </tr>
                                         <?php
