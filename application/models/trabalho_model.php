@@ -31,12 +31,30 @@ class trabalho_model extends CI_Model {
     function obter_todos_trabalhos_turma($id_turma) {
         return $this->db->get_where('trabalho', array('turma_id_turma' => $id_turma));
     }
-//
-//    // Função para pegar um trabalho pele id do trabalho.
-//    function obter_um_trabalho($id_trabalho) {
-//        return $this->db->get_where('trabalho', array('id_trabalho' => $id_trabalho));
-//    }
-//
+
+    // Função para pegar um trabalho pele id do trabalho.
+    function obter_um_trabalho($id_trabalho) {
+        return $this->db->get_where('trabalho', array('id_trabalho' => $id_trabalho));
+    }
+
+    // Função para pegar um anexo de trabalho
+    function obeter_aluno_trabalho($id_aluno,$id_trabalho) {
+        return $this->db->get_where('trabalho_aluno', array('aluno_id_aluno' => $id_aluno,'trabalho_id_trabalho'=>$id_trabalho));
+    }
+    
+    
+    // Função para adicionar anexos de trabalho.
+    function salvar_trabalho_aluno($dados) {
+        $this->db->insert('trabalho_aluno', $dados);
+    }
+    
+    // Função para alterar os dados do trabalho.
+    function alterar_trabalho_aluno($dados, $id_aluno, $id_trabalho) {
+        $this->db->where(array('aluno_id_aluno'=>$id_aluno,  'trabalho_id_trabalho' => $id_trabalho));
+        $this->db->update('trabalho_aluno', $dados);
+    }
+    
+    
 //    function obter_trabalho_salvo($dados) {
 //        return $this->db->get_where('trabalho', $dados);
 //    }
@@ -46,11 +64,7 @@ class trabalho_model extends CI_Model {
 //        $this->db->insert('trabalho', $dados);
 //    }
 //
-//    // Função para alterar os dados do trabalho.
-//    function alterar_trabalho($dados, $id_trabalho) {
-//        $this->db->where(array('id_trabalho' => $id_trabalho));
-//        $this->db->update('trabalho', $dados);
-//    }
+
 //
 //    // Função para verificar se nota já foi criada.
 //    function verificar_nota_exite($id_trabalho, $id_aluno) {
@@ -77,10 +91,7 @@ class trabalho_model extends CI_Model {
     //--------------------------------//
     // Trabalhando com anexo trabalho //
     //--------------------------------//
-//    // Função para adicionar anexos de trabalho.
-//    function add_anexo_trabalho($dados) {
-//        $this->db->insert('anexo_trabalho', $dados);
-//    }
+
 //
     // Função para pegar todos os anexos de trabalho
     function obeter_anexos_trabalho($id_trabalho) {
@@ -88,11 +99,7 @@ class trabalho_model extends CI_Model {
         return $this->db->get_where('anexo_trabalho', array('trabalho_id_trabalho' => $id_trabalho));
     }
 
-//    // Função para pegar um anexo de trabalho
-//    function obeter_um_anexo_trabalho($id_anexo) {
-//        $this->db->join('trabalho', 'trabalho.id_trabalho = anexo_trabalho.trabalho_id_trabalho');
-//        return $this->db->get_where('anexo_trabalho', array('id_anexo_trabalho' => $id_anexo));
-//    }
+
 //
 //    // Função para excluir anexo de trabalho
 //    function excluir_anexo_trabalho($id_anexo) {

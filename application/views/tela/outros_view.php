@@ -2,29 +2,34 @@
     <div class="titulos">Outros</div>
 
 
-    <div class="col-md-12 linha">
-        Login
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="e-mail" aria-describedby="basic-addon1">
-            <input type="text" class="form-control" placeholder="senha" aria-describedby="basic-addon1">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Logar</button>
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Esqueci</button>
+    <?php if (($this->session->userdata('id_aluno')) && ($this->session->userdata('nome_aluno')) && ($this->session->userdata('cpf_aluno')) && ($this->session->userdata('matricula_aluno')) && ($this->session->userdata('verificar_login') == 'cored.com')) { ?>
+        <div class="col-md-12 linha">
+            Bem Vindo(a)
+            <div class="input-group">
+                <p><?php echo $this->session->userdata('nome_aluno') ?></p>
+                <p>CPF : <?php echo $this->session->userdata('cpf_aluno') ?></p>
+                <p>Matrícula : <?php echo $this->session->userdata('matricula_aluno') ?></p>
+                <a href="<?php echo base_url("aluno") ?>" class="btn btn-default " >Painel</a>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Trocar Senha</button>
+                <a href="<?php echo base_url("inicio/logout_aluno") ?>" class="btn btn-default">Sair</a>
+            </div>
         </div>
-    </div>
 
-    <div class="col-md-12 linha">
-        Bem Vindo(a)
-        <div class="input-group">
-            <p>Danilo Moabb Sobral</p>
-            <p>Disciplina : Portugues</p>
-            <p>Turma : 0258-1</p>
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Painel</button>
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Trocar Senha</button>
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Sair</button>
+    <?php } else { ?>
+        <div class="col-md-12 linha">
+            Login
+            <form action="<?php echo base_url("inicio/acesso_aluno") ?>" method="post" >
+                <div class="input-group">
+                    <span class="text-danger"><?php echo validation_errors(); ?></span>
+                    <input type="text" name="cpf_or_matricula" class="form-control" placeholder="CPF ou Matricula" >
+                    <input type="password" name="senha" class="form-control" placeholder="senha" >
+                    <button type="submit" class="btn btn-default">Logar</button>
+                    <button type="button" class="btn btn-default">Esqueci</button>
+                </div>
+            </form>
         </div>
-    </div>
-
-<!-- Só Logado -->
+    <?php } ?>
+    <!-- Só Logado -->
     <div class="col-md-12 linha">
         Trabalho
         <div style="background-color: #F3F3F3" class="col-md-12 linha">
@@ -40,7 +45,7 @@
             <p>Trabalho tal - X</p>
         </div>
     </div>
-<!-- Fim Só logado -->
+    <!-- Fim Só logado -->
 
     <div class="col-md-12 linha">
         Contato

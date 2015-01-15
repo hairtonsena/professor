@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tempo de Geração: 12/01/2015 às 10:57
+-- Tempo de Geração: 15/01/2015 às 21:12
 -- Versão do servidor: 5.5.40-0ubuntu0.14.04.1
 -- Versão do PHP: 5.5.9-1ubuntu4.5
 
@@ -45,9 +45,9 @@ INSERT INTO `aluno` (`id_aluno`, `nome_aluno`, `matricula_aluno`, `senha_aluno`,
 (2, 'Vilson Cordeiro', '654123', '', '308.022.635-69', 1),
 (3, 'Grazy coutinho', '111225', '', '907.226.868-70', 1),
 (4, 'Simone Sobral', '521463', '', '99999999999', 1),
-(5, 'Vinicios Silva', '321456', '', '42352868033', 1),
+(5, 'Vinicios Silva', '321456', 'e10adc3949ba59abbe56e057f20f883e', '42352868033', 1),
 (6, 'Janice Oliveira', '741258', '', '481.077.520-82', 1),
-(7, 'Hairton Sobral', '101112', '4fa8d8a1890200f7183bf1f6a3248713', '103.661.826-92', 1),
+(7, 'Hairton Sobral', '101112', '25d55ad283aa400af464c76d713c07ad', '103.661.826-92', 1),
 (8, 'Murilo Sandiego', '101113', 'd41d8cd98f00b204e9800998ecf8427e', '812.235.745-80', 1),
 (9, 'Fabrício Dias', '111215', 'c4c777dc4811f11bffae3da4191dcb98', '732.214.835-54', 1),
 (10, 'Roberto Jorge', '111219', 'd41d8cd98f00b204e9800998ecf8427e', '250.266.537-07', 1),
@@ -90,19 +90,12 @@ INSERT INTO `aluno_has_turma` (`aluno_id_aluno`, `turma_id_turma`) VALUES
 
 CREATE TABLE IF NOT EXISTS `anexo_trabalho` (
   `id_anexo_trabalho` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_anexo_trabalho` varchar(50) NOT NULL,
-  `arquivo_anexo_trabalho` varchar(50) DEFAULT NULL,
+  `nome_anexo_trabalho` varchar(120) NOT NULL,
+  `arquivo_anexo_trabalho` varchar(120) DEFAULT NULL,
   `trabalho_id_trabalho` int(11) NOT NULL,
   PRIMARY KEY (`id_anexo_trabalho`,`trabalho_id_trabalho`),
   KEY `fk_anexo_trabalho_trabalho1_idx` (`trabalho_id_trabalho`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
-
---
--- Fazendo dump de dados para tabela `anexo_trabalho`
---
-
-INSERT INTO `anexo_trabalho` (`id_anexo_trabalho`, `nome_anexo_trabalho`, `arquivo_anexo_trabalho`, `trabalho_id_trabalho`) VALUES
-(32, 'boleto_dominio.pdf', 'boleto_dominio.pdf', 11);
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=35 ;
 
 -- --------------------------------------------------------
 
@@ -310,8 +303,34 @@ CREATE TABLE IF NOT EXISTS `trabalho` (
 --
 
 INSERT INTO `trabalho` (`id_trabalho`, `titulo_trabalho`, `descricao_trabalho`, `data_entrega_trabalho`, `valor_nota_trabalho`, `abilitar_upload_trabalho`, `turma_id_turma`, `pasta_upload_trabalho`) VALUES
-(11, 'teste', 'trabalho teste', '2015-01-31', 10, 1, 1, 'pas_54ac148f71e9c'),
-(12, 'Trabalho para testar', 'Parafraseando o diciona?rio Houaiss, matema?tica e? a cie?ncia que se ocupa do estudo de objetos abstratos, tais quais, como nu?meros, figuras e func?o?es, e estabelece relac?o?es existentes entre eles. Para tanto, e? uma cie?ncia que exige racioci?nio lo?gico. Na Pre?-Histo?ria, os pastores na?o tinham nenhum conhecimento matema?tico, mas sabiam comparar as grandezas.', '2015-02-08', 20, 1, 1, 'pas_54b024287497c');
+(11, 'teste', 'É o gerenciamento dos recursos humanos, materiais e financeiros de uma organização. O administrador é o profissional responsável pelo planejamento das estratégias e pelo gerenciamento do dia a dia de uma empresa. Ele ajuda a definir, a analisar e a cumprir as metas da organização. Trabalha em praticamente todos os departamentos, nos quais gere recursos financeiros, materiais, humanos e mercadológicos. Conduz as relações entre a empresa e os empregados, participando dos processos de seleção, admissão e demissão de funcionários, e do relacionamento com os sindicatos de cada categoria. Implementa planos de carreira e programas de benefícios. Coordena, ainda, os recursos materiais da companhia, controlando a compra e a estocagem de matérias-primas e produtos finais. No setor financeiro, cuida de orçamentos e fluxo de caixa. Também se envolve com a publicidade e o marketing, na promoção de vendas dos produtos ou serviços.', '2015-01-31', 10, 1, 1, 'pas_54ac148f71e9c'),
+(12, 'Trabalho para testar', 'Parafraseando o dicionário Houaiss, matemática e? a ciência que se ocupa do estudo de objetos abstratos, tais quais, como nu?meros, figuras e funções, e estabelece relações existentes entre eles. Para tanto, e? uma ciência que exige raciocínio lógico. Na Pre?-Histo?ria, os pastores na?o tinham nenhum conhecimento matemático, mas sabiam comparar as grandezas.', '2015-02-08', 20, 1, 1, 'pas_54b024287497c');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `trabalho_aluno`
+--
+
+CREATE TABLE IF NOT EXISTS `trabalho_aluno` (
+  `id_trabalho_aluno` int(11) NOT NULL AUTO_INCREMENT,
+  `data_envio_trabalho_aluno` date NOT NULL,
+  `hota_envio_trabalho_aluno` time NOT NULL,
+  `nome_arquivo_trabalho_aluno` varchar(120) NOT NULL,
+  `aluno_id_aluno` int(11) NOT NULL,
+  `trabalho_id_trabalho` int(11) NOT NULL,
+  PRIMARY KEY (`id_trabalho_aluno`,`aluno_id_aluno`,`trabalho_id_trabalho`),
+  KEY `fk_trabalho_aluno_aluno1_idx` (`aluno_id_aluno`),
+  KEY `fk_trabalho_aluno_trabalho1_idx` (`trabalho_id_trabalho`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Fazendo dump de dados para tabela `trabalho_aluno`
+--
+
+INSERT INTO `trabalho_aluno` (`id_trabalho_aluno`, `data_envio_trabalho_aluno`, `hota_envio_trabalho_aluno`, `nome_arquivo_trabalho_aluno`, `aluno_id_aluno`, `trabalho_id_trabalho`) VALUES
+(1, '0000-00-00', '00:00:00', 'Boleto_Moto_E.pdf', 5, 12),
+(2, '0000-00-00', '00:00:00', 'boleto_dominio.pdf', 5, 11);
 
 -- --------------------------------------------------------
 
@@ -333,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `turma` (
 --
 
 INSERT INTO `turma` (`id_turma`, `nome_turma`, `status_turma`, `disciplina_id_disciplina`) VALUES
-(1, '210', '2', 3),
+(1, '210', '1', 3),
 (3, 'agora', '1', 3),
 (4, 'Literatura', '1', 2);
 
@@ -392,6 +411,13 @@ ALTER TABLE `nota_trabalho`
 --
 ALTER TABLE `trabalho`
   ADD CONSTRAINT `fk_trabalho_turma1` FOREIGN KEY (`turma_id_turma`) REFERENCES `turma` (`id_turma`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Restrições para tabelas `trabalho_aluno`
+--
+ALTER TABLE `trabalho_aluno`
+  ADD CONSTRAINT `fk_trabalho_aluno_aluno1` FOREIGN KEY (`aluno_id_aluno`) REFERENCES `aluno` (`id_aluno`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_trabalho_aluno_trabalho1` FOREIGN KEY (`trabalho_id_trabalho`) REFERENCES `trabalho` (`id_trabalho`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Restrições para tabelas `turma`

@@ -11,10 +11,24 @@
         <link href="<?php echo base_url('css/saSlider.css') ?>" rel='stylesheet' type='text/css'>
         <link href="<?php echo base_url('css/demo.css') ?>" rel='stylesheet' type='text/css'>
 
+        <script>
+
+            Config = {
+                base_url: function (url) {
+                    var url_base = '<?php echo base_url() ?>';
+                    return url_base + url;
+                }
+            };
+
+        </script>
+
         <script type="text/javascript" src="<?php echo base_url('js/jquery.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url('bt/js/bootstrap.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url('js/jquery.scrollTo.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url('js/layout_geral.js'); ?>"></script>
+
+        <script src="<?php echo base_url("js/jquery-ui-1.10.4/ui/jquery-ui.js") ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url("js/jquery.form.js"); ?>"></script>
 
     </head>
     <body>

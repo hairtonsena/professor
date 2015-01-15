@@ -183,7 +183,6 @@ $(function () {
     });
 
 // Trabalho com upload de anexo
-
     var mensagem = $("#mensagem");
     var div_porcentagem = $("#porcentagem");
     var barra = $("#barra");
