@@ -4,12 +4,14 @@ $id_disciplina;
 $nome_turma;
 $id_turma;
 $status_turma;
+$horario_turma;
 foreach ($turma_disciplina as $td) {
     $nome_disciplina = $td->nome_disciplina;
     $id_disciplina = $td->id_disciplina;
     $nome_turma = $td->nome_turma;
     $id_turma = $td->id_turma;
     $status_turma = $td->status_turma;
+    $horario_turma = $td->horario_turma;
 }
 ?>
 <div class="row col-lg-12">
@@ -17,7 +19,7 @@ foreach ($turma_disciplina as $td) {
         <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
         <li><a href="<?php echo base_url("cpainel/disciplina") ?>">Disciplina</a></li>
         <li><a href="<?php echo base_url("cpainel/turma?disciplina=" . $id_disciplina) ?>">Turma</a></li>
-        <li class="active">Alunos </li>       
+        <li class="active">Horário </li>       
     </ol>
     <div class="panel panel-default">
         <!-- Default panel contents -->
@@ -37,41 +39,18 @@ foreach ($turma_disciplina as $td) {
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
                         <?php if ($status_turma != 2) { ?>
-                            <a class="btn btn-primary" href="<?php echo base_url("cpainel/aluno/novo_turma/" . $id_turma); ?>">Novo Aluno</a>
+                            <a class="btn btn-primary" href="<?php echo base_url("cpainel/turma/alterar_horario/" . $id_turma); ?>">Alterar horário</a>
                         <?php } ?> 
                         <div style="margin-top: 5px">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th> Nome </th>
-                                        <th class="col-lg-1 center"> Excluir </th>
-                                        <!--<th class="col-lg-1 center"> status </th>-->
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    foreach ($alunos_turma as $at) {
-                                        if ($at->status_aluno == 1) {
-                                            ?>
-                                            <tr id="linha_aluno_turma_<?php echo $at->id_aluno ?>">
-                                                <td><?php echo $at->nome_aluno; ?></td>                                                
-                                                <td class="text-center">
-                                                    <?php if ($status_turma != 2) { ?>
-                                                        <span id="btnExcluirTurma_<?php echo $at->id_aluno ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirAlunoTurma" data-aluno="<?php echo $at->id_aluno ?>" data-turma="<?php echo $id_turma ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span>
-                                                    <?php } else { ?>
-                                                        <span id="btnExcluirTurma_<?php echo $at->id_aluno ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>                      
+                            <?php if ($horario_turma == null) { ?>
+                                Horário nõa definido
+                            <?php
+                            } else {
 
-                                                    <?php } ?>
-                                                </td>                                                
-                                                <!--<td class="text-center"><span id="btnAtivarTurma_<?php// echo $at->id_aluno ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php// echo $at->id_aluno ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>-->
-                                            </tr>
-                                            <?php
-                                        }
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
+                                echo $horario_turma;
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>

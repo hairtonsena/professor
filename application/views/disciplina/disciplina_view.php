@@ -1,9 +1,11 @@
 <?php
 $nome_disciplina;
 $descricao_disciplina;
+$id_disciplina;
 foreach ($disciplina as $ds) {
     $nome_disciplina = $ds->nome_disciplina;
     $descricao_disciplina = $ds->descricao_disciplina;
+    $id_disciplina = $ds->id_disciplina;
 }
 ?>
 
@@ -19,7 +21,7 @@ foreach ($disciplina as $ds) {
 
         <div class="col-md-12 linha">
             <div class="col-md-12 sem_margen_pading">
-                <h4 class="col-md-12 sem_margen_pading pull-left">Turmas <span class=" sem_margen_pading"><a class="pull-right" href="">Arquivadas</a></span></h4>
+                <h4 class="col-md-12 sem_margen_pading pull-left">Turmas <span class=" sem_margen_pading"><a class="pull-right" href="<?php echo base_url("disciplina/turma_arquivada/".$id_disciplina) ?>">Arquivadas</a></span></h4>
                 <!--<span class="col-md-6 sem_margen_pading"><a class="pull-right" href="">Arquivadas</a></span>-->
             </div>
             <div class="col-md-12">

@@ -22,9 +22,6 @@ class aluno_model extends CI_Model {
 //        $this->db->where('id_aluno', $id_aluno);
 //        $this->db->update('aluno', $dados);
 //    }
-
-
-
     // Obter as disciplinas e turmas do aluno.
     function obter_disciplina_turma_aluno($id_aluno) {
         $this->db->select('*');
@@ -32,12 +29,20 @@ class aluno_model extends CI_Model {
         $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
         $this->db->join('turma', 'aluno_has_turma.turma_id_turma=turma.id_turma');
         $this->db->join('disciplina', 'disciplina.id_disciplina=turma.disciplina_id_disciplina');
-        $this->db->where(array('aluno.id_aluno' => $id_aluno,'turma.status_turma'=>1));
+        $this->db->where(array('aluno.id_aluno' => $id_aluno, 'turma.status_turma' => 1));
         return $this->db->get();
     }
 
-    
-    
+    // Obter turma e disciplina do aluno logado
+    function obter_turma_disciplina_aluno($id_turma,$id_aluno) {
+        $this->db->select('*');
+        $this->db->from('turma');
+        $this->db->join('disciplina', 'disciplina.id_disciplina=turma.disciplina_id_disciplina');
+        $this->db->join('aluno_has_turma', 'aluno_has_turma.turma_id_turma=turma.id_turma');
+        $this->db->where(array('turma.id_turma'=> $id_turma,'aluno_has_turma.aluno_id_aluno'=>$id_aluno));
+        return $this->db->get();
+    }
+
 //    // Obter as disciplinas e turmas do aluno.
 //    function obter_disciplina_turma_ativa_arquivada_aluno($id_aluno) {
 //        $this->db->select('*');
@@ -62,7 +67,6 @@ class aluno_model extends CI_Model {
 //    function excluir_aluno_em_tuma($id_aluno, $id_turma) {
 //        $this->db->delete('aluno_has_turma', array('aluno_id_aluno' => $id_aluno, 'turma_id_turma' => $id_turma));
 //    }
-
     //put your code here
 }
 

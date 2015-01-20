@@ -72,7 +72,7 @@ foreach ($turma_disciplina as $td) {
                     <li role="presentation" class="active"><a href="#">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
                 </ul>
-                <div class="col-lg-12 semMargem" style="/*border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; */">
+                <div class="row col-lg-12 semMargem" style="/*border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; */">
 
 
                     <div class="col-lg-6"  style="padding-top: 5px; /* border-right: 1px solid #ddd; */">
@@ -184,6 +184,25 @@ foreach ($turma_disciplina as $td) {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row col-lg-12 semMargem" style="padding-top: 25px;">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Trabalhos dos alunos</div>
+                        <div class="panel-body">
+                            <?php foreach ($trabalhos_alunos as $tra) { ?>
+                                <div style="background-color: #F3F3F3; padding-bottom: 10px; border: 1px solid #dcdcdc;" class="col-md-2 ">
+                                    <h4><?php echo $tra->nome_aluno ?></h4>
+                                    <p class="text-center">
+                                        <a target="blank" href="<?php echo base_url("trabalho/" . $tra->pasta_upload_trabalho . "/" . $tra->nome_arquivo_trabalho_aluno) ?>"> 
+                                            <span class="glyphicon glyphicon-file"></span><br/>
+                                            <?php echo $tra->nome_arquivo_trabalho_aluno ?> 
+                                        </a>
+                                    </p>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

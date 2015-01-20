@@ -3,11 +3,13 @@ $nome_disciplina;
 $descricao_disciplina;
 
 $nome_turma;
+$horario_turma;
 foreach ($disciplina_turma as $dt) {
     $nome_disciplina = $dt->nome_disciplina;
     $descricao_disciplina = $dt->descricao_disciplina;
 
     $nome_turma = $dt->nome_turma;
+    $horario_turma = $dt->horario_turma;
 }
 ?>
 
@@ -23,7 +25,9 @@ foreach ($disciplina_turma as $dt) {
         <div class="titulos">Turma: <?php echo $nome_turma ?></div>
         <div class="col-md-12 linha">
             <h4>Horários</h4>
-            <p>Aqui fica os Horarios!</p>
+            <p>
+               <?php echo $horario_turma ?>
+            </p>
         </div>
 
         <div class="col-md-12 linha">
@@ -66,32 +70,54 @@ foreach ($disciplina_turma as $dt) {
                                     <br/>
                                     <br/>
 
-                                    <?php if ($trt->abilitar_upload_trabalho == 1) { ?>
-                                    <form action="<?php echo base_url("trabalho/salvar_anexo_tsarabalh_o") ?>"  method="post" id="form_upload_<?php echo $trt->id_trabalho ?>" enctype="multipart/form-data">
+                                    <?php
+                                    $data_hoje = date("Y-m-d", time());
+//                                    
+//                                    echo "<br/>".$trt->data_entrega_trabalho ."<br/><br/>";
+//                                    
+                                    if (($trt->abilitar_upload_trabalho == 1) && ($trt->data_entrega_trabalho >= $data_hoje)) {
+                                        ?>
+                                        <form action="<?php echo base_url("trabalho/salvar_anexo_tsarabalh_o") ?>"  method="post" id="form_upload_<?php echo $trt->id_trabalho ?>" enctype="multipart/form-data">
                                             <fieldset>
                                                 <legend>Enviar tabalho</legend>
                                                 <!--<div id="container">-->
-                                                    <input type="hidden" id="iptTrabalho" name="trabalho" value="<?php echo $trt->id_trabalho ?>"/> 
-                                                    <div id="mensagem_<?php echo $trt->id_trabalho ?>"></div>
-                                                    <div class="inputFile col-lg-12">
-                                                        <span class="" id="textoCampoUp"><i class="glyphicon glyphicon-camera"></i> Selecione uma imagem </span>
-                                                        <input type="file" class="form-control" id="arquivo_<?php echo $trt->id_trabalho ?>" accept="application/pdf" name="arquivo">
-                                                    </div>
+                                                <input type="hidden" id="iptTrabalho" name="trabalho" value="<?php echo $trt->id_trabalho ?>"/> 
+                                                <div id="mensagem_<?php echo $trt->id_trabalho ?>"></div>
+                                                <div class="inputFile col-lg-12">
+                                                    <span class="" id="textoCampoUp"><i class="glyphicon glyphicon-camera"></i> Selecione uma imagem </span>
+                                                    <input type="file" class="form-control" id="arquivo_<?php echo $trt->id_trabalho ?>" accept="application/pdf" name="arquivo">
+                                                </div>
 
-                                                    <div class="progress" id="porcentagem_<?php echo $trt->id_trabalho ?>">
-                                                        <div class="progress-bar" id="barra_<?php echo $trt->id_trabalho ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
-                                                            0%
-                                                        </div>
+                                                <div class="progress" id="porcentagem_<?php echo $trt->id_trabalho ?>">
+                                                    <div class="progress-bar" id="barra_<?php echo $trt->id_trabalho ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
+                                                        0%
                                                     </div>
-                                                    <div class="text-center">
-                                                        <input type="submit" class="btn btn-primary pull-right" data-enviar_trabalho="<?php echo $trt->id_trabalho ?>" onclick="enviar_arquivo_aluno('<?php echo $trt->id_trabalho ?>')" name="enviar" id="btn_enviar_old">
-                                                    </div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <input type="submit" class="btn btn-primary pull-right" data-enviar_trabalho="<?php echo $trt->id_trabalho ?>" onclick="enviar_arquivo_aluno('<?php echo $trt->id_trabalho ?>')" name="enviar" id="btn_enviar_old">
+                                                </div>
 
                                                 <!--</div>-->
                                             </fieldset>
                                         </form>
-
                                     <?php } ?>
+
+                                    <br/>
+                                    Meu trabalho
+                                    <div id="meu_trabalho_<?php echo $trt->id_trabalho ?>">
+                                        <div style="background-color: #F3F3F3; padding-bottom: 10px; border: 1px solid #dcdcdc;" class="col-md-4 text-center">
+
+                                            <?php
+                                            foreach ($trt->trabalho_aluno as $tra) {
+                                                ?>
+                                                <a target="blank" href="<?php echo base_url("trabalho/" . $trt->pasta_upload_trabalho . "/" . $tra->nome_arquivo_trabalho_aluno) ?>"> 
+                                                    <span class="glyphicon glyphicon-file"></span><br/>
+                                                    <?php echo $tra->nome_arquivo_trabalho_aluno ?> 
+                                                </a>
+                                            <?php } ?>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

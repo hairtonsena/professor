@@ -52,7 +52,9 @@ class Trabalho extends CI_Controller {
 
             $trabalho = $this->trabalho_model->obter_um_trabalho($id_trabalho)->result();
             $anexos_trabalho = $this->trabalho_model->obeter_anexos_trabalho($id_trabalho)->result();
-
+            $trabalhos_alunos = $this->trabalho_model->obeter_trabalho_dos_alunos($id_trabalho)->result();
+            
+            
             $id_turma;
             foreach ($trabalho as $tr) {
                 $id_turma = $tr->turma_id_turma;
@@ -65,6 +67,7 @@ class Trabalho extends CI_Controller {
                 "turma_disciplina" => $turma_disciplina,
                 "trabalho" => $trabalho,
                 "anexo_trabalho" => $anexos_trabalho,
+                "trabalhos_alunos" => $trabalhos_alunos
             );
 
             $this->load->view('cpainel/tela/titulo');

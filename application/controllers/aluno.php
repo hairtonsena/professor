@@ -18,6 +18,7 @@ class aluno extends CI_Controller {
         $this->load->model('turma_model');
         $this->load->model('avaliacao_model');
         $this->load->model('trabalho_model');
+        date_default_timezone_set('UTC');
     }
 
     public function index() {
@@ -60,7 +61,11 @@ class aluno extends CI_Controller {
             $id_aluno = $this->session->userdata('id_aluno');
 
 
-            $disciplina_turma = $disciplina_turma = $this->turma_model->obter_turma_disciplina($id_turma)->result(); //$this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+            $disciplina_turma = $this->aluno_model->obter_turma_disciplina_aluno($id_turma,$id_aluno)->result(); //$this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+            if(count($disciplina_turma)==0){
+                redirect(base_url());
+            }
+
             // Carregar o menu disciplina
             $disciplina_menu = $this->disciplina_model->ver_todas_disciplina_ativas()->result();
             $dados_menu = array(
@@ -74,8 +79,8 @@ class aluno extends CI_Controller {
             // Buscando todos os trabalhos da turma selecionada.
             $trabalhos = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
             foreach ($trabalhos as $trb) {
-
                 $trb->anexos_trabalho = $this->trabalho_model->obeter_anexos_trabalho($trb->id_trabalho)->result();
+                $trb->trabalho_aluno = $this->trabalho_model->obeter_aluno_trabalho($id_aluno, $trb->id_trabalho)->result();
             }
 
 
@@ -140,37 +145,57 @@ class aluno extends CI_Controller {
                 if (count($trabalho_aluno) == 0) {
                     $dados = array(
                         'nome_arquivo_trabalho_aluno' => $dadosImagem['file_name'],
-//                        'data_envio_trabalho_aluno' => date("y-M-d"),
-//                        'hora_envio_trabalho_aluno' => date("y-M-d"),
+                        'data_envio_trabalho_aluno' => date("Y-m-d"),
+                        'hora_envio_trabalho_aluno' => date("H:i:s"),
                         'aluno_id_aluno' => $id_aluno,
                         'trabalho_id_trabalho' => $id_trabalho
                     );
-                    
+
                     $this->trabalho_model->salvar_trabalho_aluno($dados);
-                }else{
-                    $arquivo_antigo ='';
-                    foreach ($trabalho_aluno as $ta){
+                } else {
+                    $arquivo_antigo = '';
+                    foreach ($trabalho_aluno as $ta) {
                         $arquivo_antigo = $ta->nome_arquivo_trabalho_aluno;
                     }
                     if (file_exists("trabalho/" . $pasta . "/" . $arquivo_antigo)) {
                         unlink("trabalho/" . $pasta . "/" . $arquivo_antigo);
                     }
-                    
-                    
+
+
                     $dados = array(
                         'nome_arquivo_trabalho_aluno' => $dadosImagem['file_name'],
-//                        'data_envio_trabalho_aluno' => date("y-M-d"),
-//                        'hora_envio_trabalho_aluno' => date("y-M-d"),
+                        'data_envio_trabalho_aluno' => date("Y-m-d"),
+                        'hora_envio_trabalho_aluno' => date("H:i:s"),
                     );
-                    
-                    
-                    $this->trabalho_model->alterar_trabalho_aluno($dados,$id_aluno,$id_trabalho);
+
+
+                    $this->trabalho_model->alterar_trabalho_aluno($dados, $id_aluno, $id_trabalho);
                 }
 
                 echo "sucesso";
             }
         } else {
             redirect(base_url());
+        }
+    }
+
+    // Função para pegar trablho do aluno;
+    public function obter_trabalho_aluno_json() {
+        // veirificando usuario logado
+        if (($this->session->userdata('id_aluno')) && ($this->session->userdata('nome_aluno')) && ($this->session->userdata('cpf_aluno')) && ($this->session->userdata('matricula_aluno')) && ($this->session->userdata('verificar_login') == 'cored.com')) {
+
+            $id_aluno = $this->session->userdata('id_aluno');
+            $id_trabalho = $this->input->get('trabalho');
+
+            $trabalho_aluno = $this->trabalho_model->obeter_trabalho_aluno($id_trabalho,$id_aluno)->result();
+
+            $trabalho = array();
+            foreach ($trabalho_aluno as $ta) {
+                $trabalho[] = $ta;
+            }
+            echo json_encode($trabalho);
+        } else {
+            redirect(base_url("cpainel/seguranca"));
         }
     }
 

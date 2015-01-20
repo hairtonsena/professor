@@ -28,8 +28,8 @@ class Inicio extends CI_Controller {
 
         $this->load->view('tela/titulo');
         $this->load->view('tela/menu', $dados_menu);
-        $this->load->view('tela/inicio_view');
-        //$this->load->view('tela/disciplina_sem_logar_view');
+        //$this->load->view('tela/inicio_view');
+        $this->load->view('tela/disciplina_sem_logar_view');
         // $this->load->view('tela/disciplina_logado_view');
         $this->load->view('tela/outros_view');
         $this->load->view('tela/rodape');

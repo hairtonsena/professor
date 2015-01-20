@@ -99,6 +99,16 @@ class trabalho_model extends CI_Model {
         $this->db->delete('anexo_trabalho', array('id_anexo_trabalho' => $id_anexo));
     }
 
+    //-------------------------------------//
+    // trabalho com os trabalho dos alunos //
+    //-------------------------------------//
+    // Função para pegar todos os trabalho enviados pelos alunos da turma
+    function obeter_trabalho_dos_alunos($id_trabalho) {
+        $this->db->join('trabalho', 'trabalho.id_trabalho = trabalho_aluno.trabalho_id_trabalho');
+        $this->db->join('aluno', 'aluno.id_aluno = trabalho_aluno.aluno_id_aluno');
+        return $this->db->get_where('trabalho_aluno', array('trabalho_id_trabalho' => $id_trabalho));
+    }
+
     //put your code here
 }
 

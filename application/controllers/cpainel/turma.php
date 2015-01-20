@@ -364,6 +364,80 @@ class turma extends CI_Controller {
         }
     }
 
+    //----------------------------------//
+    // Trabalho com o harário da turma  //
+    //----------------------------------//
+    // função para mostra a turma, disciplina e o horário da turma
+    public function horario() {
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            $id_turma = $this->uri->segment(4);
+
+            $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+//            $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
+
+
+            $dados = array(
+                "turma_disciplina" => $turma_disciplina,
+//                "alunos_turma" => $alunos_por_turma
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/turma/horario_turma_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    // Função para mostra o formulário de alterar horário da turma.
+    public function alterar_horario() {
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            $id_turma = $this->uri->segment(4);
+
+            $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+//            $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
+
+
+            $dados = array(
+                "turma_disciplina" => $turma_disciplina,
+//                "alunos_turma" => $alunos_por_turma
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/turma/forme_alterar_horario_turma_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    public function salvar_horario(){
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            if(!$this->input->post("turma",TRUE)){
+                redirect(base_url("cpainel/"));
+            }
+
+            $id_turma = $this->input->post("turma");
+            $horario_turma = $this->input->post("horario_turma");
+            
+            $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if(count($turma_disciplina)==0){
+                redirect(base_url("cpainel/"));
+            }
+ 
+            $dados = array(
+                "horario_turma" => $horario_turma
+            );
+            
+            $this->turma_model->alterar_dados_turma($dados,$id_turma);
+            
+            redirect(base_url("cpainel/turma/horario/".$id_turma));
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
 }
 
 ?>

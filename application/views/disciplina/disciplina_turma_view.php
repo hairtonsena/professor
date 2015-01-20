@@ -3,11 +3,13 @@ $nome_disciplina;
 $descricao_disciplina;
 
 $nome_turma;
+$horario_turma;
 foreach ($disciplina_turma as $dt) {
     $nome_disciplina = $dt->nome_disciplina;
     $descricao_disciplina = $dt->descricao_disciplina;
 
     $nome_turma = $dt->nome_turma;
+    $horario_turma = $dt->horario_turma;
 }
 ?>
 
@@ -18,14 +20,16 @@ foreach ($disciplina_turma as $dt) {
         <div class="col-md-12 linha">
             <?php echo $descricao_disciplina ?>
         </div>
-        <div class="titulos"><?php echo $nome_turma ?></div>
+        <div class="titulos">Turma: <?php echo $nome_turma ?></div>
         <div class="col-md-12 linha">
             <h4>Horários</h4>
-            <p>Aqui fica os Horarios!</p>
+            <p>
+                <?php echo $horario_turma ?>
+            </p>
         </div>
 
         <div class="col-md-12 linha">
-            <h4>Trabalhos 2</h4>
+            <h4>Trabalhos</h4>
             <table class="table table-bordered">
                 <thead>
                     <tr>
