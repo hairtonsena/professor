@@ -20,10 +20,14 @@ class avaliacao extends CI_Controller {
     public function index() {
         // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            
             $id_turma = $this->input->get('turma');
 
 
             $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if(count($query)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
             $avaliacao_por_turma = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
 
 
@@ -49,7 +53,10 @@ class avaliacao extends CI_Controller {
                 $id_turma = $this->uri->segment(4);
             }
             $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
-
+            if(count($query)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
+            
             $dados = array(
                 "turma_disciplina" => $query
             );
@@ -154,6 +161,10 @@ class avaliacao extends CI_Controller {
             }
 
             $avaliacao = $this->avaliacao_model->obter_uma_avaliacao($id_avaliacao)->result();
+            if(count($avaliacao)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
+            
             $id_turma;
             foreach ($avaliacao as $av) {
                 $id_turma = $av->turma_id_turma;
@@ -274,6 +285,9 @@ class avaliacao extends CI_Controller {
                 $id_turma = $this->uri->segment(4);
             }
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if(count($turma_disciplina)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
             $avaliacao_recuperacao = $this->avaliacao_model->obter_avaliacao_recuperacao($id_turma)->result();
 
             $dados = array(
@@ -287,6 +301,38 @@ class avaliacao extends CI_Controller {
             $this->load->view('cpainel/tela/rodape');
         } else {
             redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
+    public function salvar_avaliacao_recuperacao_alterarda() {
+        // verificando usuário logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $this->form_validation->set_rules('descricao', 'Descrição', 'required|trim|min_length[4]|max_length[45]');
+            $this->form_validation->set_rules('data', 'Data', 'required|data|trim|min_length[8]|max_length[10]');
+           
+
+            $id_avaliacao_recuperacao = $this->input->post('avaliacao_recuperacao');
+
+            if ($this->form_validation->run() == FALSE) {
+                
+                echo validation_errors();
+                
+            } else {
+
+                $descricao = $this->input->post('descricao');
+                $data = $this->input->post('data');
+
+                    $dados = array(
+                        "descricao_avaliacao_recuperacao" => $descricao,
+                        "data_avaliacao_recuperacao" => implode("-", array_reverse(explode("/", $data))),
+                    );
+                    $this->avaliacao_model->alterando_dados_avaliacao_recuperacao($dados, $id_avaliacao_recuperacao);
+                
+               echo "1";
+            }
+        } else {
+            echo "Acesso negado!";
         }
     }
 

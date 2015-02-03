@@ -33,6 +33,7 @@ foreach ($turma_disciplina as $td) {
                     <li role="presentation"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
                     <li role="presentation"  class="active"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/turma/horario/" . $id_turma) ?>">Horário</a></li>
                 </ul>
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
@@ -79,7 +80,7 @@ foreach ($turma_disciplina as $td) {
                                             ?>
                                             <td>
                                                 <?php if ($status_turma != 2) { ?>
-                                                    <a title="Alterar notas" href="' . base_url("cpainel/notas/alterar_notas_trabalho?turma=" . $id_turma) . '&trabalho=' . $ttt->id_trabalho . ' "><span class="glyphicon glyphicon-pencil"></span></a>
+                                                    <a title="Alterar notas" href="<?php echo base_url("cpainel/notas/alterar_notas_trabalho?turma=" . $id_turma) . '&trabalho=' . $ttt->id_trabalho ?>"><span class="glyphicon glyphicon-pencil"></span></a>
                                                 <?php } else { ?>
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 <?php } ?>
@@ -89,7 +90,7 @@ foreach ($turma_disciplina as $td) {
                                         ?>
                                         <td></td>
                                         <td>
-                                            <?php if (($total_pontos_distribuido >= 100)&&($status_turma !=2)) { ?>
+                                            <?php if (($total_pontos_distribuido >= 100) && ($status_turma != 2)) { ?>
                                                 <a title="Alterar notas" href="<?php echo base_url("cpainel/notas/alterar_notas_avaliacao_recuperacao?turma=" . $id_turma) ?>">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </a>
@@ -139,7 +140,7 @@ foreach ($turma_disciplina as $td) {
                                             <?php
                                             $verificar_recuperacao = 0;
                                             $valor_nota_recuperacao = 0;
-                                            if ($total_ponto_aluno >= 20 && $total_ponto_aluno < 60 && $total_pontos_distribuido >= 100) {
+                                            if ($total_ponto_aluno >= 40 && $total_ponto_aluno < 60 && $total_pontos_distribuido >= 100) {
                                                 $alunos_recuperacao[] = $alunoTurma->id_aluno;
 
                                                 foreach ($avaliacao_recuperacao as $ar) {
@@ -180,7 +181,7 @@ foreach ($turma_disciplina as $td) {
                                                     ?>
                                                     <span class="text-success">Aprovado</span>
                                                     <?php
-                                                } else if ($total_ponto_aluno >= 20 && $verificar_recuperacao == 0) {
+                                                } else if ($total_ponto_aluno >= 40 && $verificar_recuperacao == 0) {
                                                     ?>
                                                     <span class="text-warning">Recuperação</span>
                                                 <?php } else { ?>

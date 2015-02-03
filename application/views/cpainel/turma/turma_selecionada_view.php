@@ -28,7 +28,7 @@ foreach ($turma_disciplina as $td) {
         <div class="panel-body">
             <div class="col-lg-12 semMargem">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#">Alunos</a></li>
+                    <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
@@ -44,8 +44,9 @@ foreach ($turma_disciplina as $td) {
                                 <thead>
                                     <tr>
                                         <th> Nome </th>
+                                        <th> Email </th>
                                         <th class="col-lg-1 center"> Excluir </th>
-                                        <!--<th class="col-lg-1 center"> status </th>-->
+
 
                                     </tr>
                                 </thead>
@@ -55,7 +56,8 @@ foreach ($turma_disciplina as $td) {
                                         if ($at->status_aluno == 1) {
                                             ?>
                                             <tr id="linha_aluno_turma_<?php echo $at->id_aluno ?>">
-                                                <td><?php echo $at->nome_aluno; ?></td>                                                
+                                                <td><?php echo $at->nome_aluno; ?></td>
+                                                <td><?php echo $at->email_aluno; ?></td>
                                                 <td class="text-center">
                                                     <?php if ($status_turma != 2) { ?>
                                                         <span id="btnExcluirTurma_<?php echo $at->id_aluno ?>"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirAlunoTurma" data-aluno="<?php echo $at->id_aluno ?>" data-turma="<?php echo $id_turma ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a></span>
@@ -64,7 +66,7 @@ foreach ($turma_disciplina as $td) {
 
                                                     <?php } ?>
                                                 </td>                                                
-                                                <!--<td class="text-center"><span id="btnAtivarTurma_<?php// echo $at->id_aluno ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php// echo $at->id_aluno ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>-->
+                                                <!--<td class="text-center"><span id="btnAtivarTurma_<?php // echo $at->id_aluno  ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php // echo $at->id_aluno  ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>-->
                                             </tr>
                                             <?php
                                         }
@@ -88,7 +90,11 @@ foreach ($turma_disciplina as $td) {
                 <h4 class="modal-title">Excluir aluno da turma</h4>
             </div>
             <div class="modal-body">
-                <p>Você realmente deseja excluir este aluno? </p>
+                <p><strong>Atenção: </strong> Este aluno será excluido apenas desta turma, porém continuara cadastrado no site.
+                    Desta forma, todos os arquivo e notas deste aluno para esta turma também serão excluidos. </p>
+                <p>
+                    Deseja continuar?
+                </p>
                 <input type="hidden" id="aluno_excluir" value="" />
                 <input type="hidden" id="turma_excluir" value="" />
             </div>

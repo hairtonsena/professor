@@ -21,12 +21,14 @@ foreach ($disciplina as $ds) {
 
         <div class="col-md-12 linha">
             <div class="col-md-12 sem_margen_pading">
-                <h4 class="col-md-12 sem_margen_pading pull-left">Turmas <span class=" sem_margen_pading"><a class="pull-right" href="<?php echo base_url("disciplina/turma_arquivada/".$id_disciplina) ?>">Arquivadas</a></span></h4>
+                <h4 class="col-md-12 sem_margen_pading">Turmas <span class=" sem_margen_pading"><a class="pull-right arquivado" href="<?php echo base_url("disciplina/turma_arquivada/".$id_disciplina) ?>">Arquivadas</a></span></h4>
                 <!--<span class="col-md-6 sem_margen_pading"><a class="pull-right" href="">Arquivadas</a></span>-->
             </div>
             <div class="col-md-12">
                 <?php foreach ($turmas as $tr){ ?>
-                <a href="<?php echo base_url("disciplina/turma/".$tr->id_turma) ?>" class=""> <?php echo $tr->nome_turma ?></a> |
+                
+                <a href="<?php echo base_url("disciplina/turma/".$tr->id_turma) ?>"class="botao_turmas"> <?php echo $tr->nome_turma ?></a>
+                
                 <?php } ?>
             </div>
         </div>

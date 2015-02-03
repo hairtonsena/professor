@@ -26,7 +26,7 @@ foreach ($disciplina_turma as $dt) {
         <div class="col-md-12 linha">
             <h4>Horários</h4>
             <p>
-               <?php echo $horario_turma ?>
+                <?php echo $horario_turma ?>
             </p>
         </div>
 
@@ -44,7 +44,7 @@ foreach ($disciplina_turma as $dt) {
                     <?php foreach ($trabalhos_turma as $trt) { ?>
 
                         <tr>
-                            <td><a class="" data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><?php echo $trt->titulo_trabalho ?></a></td>
+                            <td><a class="link_diversos" data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><?php echo $trt->titulo_trabalho ?></a></td>
                             <td class="text-center"><?php echo date('d/m/Y', strtotime($trt->data_entrega_trabalho)) ?></td>
                             <td class="text-center"><?php echo $trt->valor_nota_trabalho ?></td>
                         </tr>
@@ -67,8 +67,8 @@ foreach ($disciplina_turma as $dt) {
                                             <?php } ?>
                                         </ul>
                                     </div>
-                                    <br/>
-                                    <br/>
+<!--                                    <br/>
+                                    <br/>-->
 
                                     <?php
                                     $data_hoje = date("Y-m-d", time());
@@ -78,18 +78,20 @@ foreach ($disciplina_turma as $dt) {
                                     if (($trt->abilitar_upload_trabalho == 1) && ($trt->data_entrega_trabalho >= $data_hoje)) {
                                         ?>
                                         <form action="<?php echo base_url("trabalho/salvar_anexo_tsarabalh_o") ?>"  method="post" id="form_upload_<?php echo $trt->id_trabalho ?>" enctype="multipart/form-data">
-                                            <fieldset>
-                                                <legend>Enviar tabalho</legend>
-                                                <!--<div id="container">-->
+                                            <div class="linha">
+
+
                                                 <input type="hidden" id="iptTrabalho" name="trabalho" value="<?php echo $trt->id_trabalho ?>"/> 
                                                 <div id="mensagem_<?php echo $trt->id_trabalho ?>"></div>
-                                                <div class="inputFile col-lg-12">
-                                                    <span class="" id="textoCampoUp"><i class="glyphicon glyphicon-camera"></i> Selecione uma imagem </span>
-                                                    <input type="file" class="form-control" id="arquivo_<?php echo $trt->id_trabalho ?>" accept="application/pdf" name="arquivo">
+
+                                                <div class="inputFile col-lg-12 sem_margen_pading">
+                                                    <h4>Enviar tabalho</h4>
+        <!--                                                    <span class="" id="textoCampoUp"><i class="glyphicon glyphicon-file"></i> Selecione o arquivo </span>-->
+                                                    <input type="file" class="" id="arquivo_<?php echo $trt->id_trabalho ?>" accept="application/pdf" name="arquivo">
                                                 </div>
 
-                                                <div class="progress" id="porcentagem_<?php echo $trt->id_trabalho ?>">
-                                                    <div class="progress-bar" id="barra_<?php echo $trt->id_trabalho ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
+                                                <div class="progress invisivel" id="porcentagem_<?php echo $trt->id_trabalho ?>">
+                                                    <div class="progress-bar invisivel" id="barra_<?php echo $trt->id_trabalho ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
                                                         0%
                                                     </div>
                                                 </div>
@@ -97,8 +99,8 @@ foreach ($disciplina_turma as $dt) {
                                                     <input type="submit" class="btn btn-primary pull-right" data-enviar_trabalho="<?php echo $trt->id_trabalho ?>" onclick="enviar_arquivo_aluno('<?php echo $trt->id_trabalho ?>')" name="enviar" id="btn_enviar_old">
                                                 </div>
 
-                                                <!--</div>-->
-                                            </fieldset>
+
+                                            </div>
                                         </form>
                                     <?php } ?>
 

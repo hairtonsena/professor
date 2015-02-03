@@ -27,9 +27,11 @@ foreach ($turma_disciplina as $td) {
         <div class="panel-body">
             <div class="col-lg-12 semMargem">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#">Alunos</a></li>
-                    <li role="presentation"><a href="#">Avaliações</a></li>
-                    <li role="presentation"><a href="#">Trabalhos</a></li>
+                    <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/turma/horario/" . $id_turma) ?>">Horário</a></li>
                 </ul>
                 <div class="col-lg-12 semMargem" style="/*border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; */">
 
@@ -45,6 +47,16 @@ foreach ($turma_disciplina as $td) {
                                     <div class="col-sm-10">
                                         <input type="text" name="nome_aluno" class="form-control" id="nome_turma" value="<?php echo set_value('nome_aluno') ?>" placeholder="Nome">
                                         <span class="text-danger"> <?php echo form_error('nome_aluno'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email_aluno" class="col-sm-2 control-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="email" name="email_aluno" class="form-control" id="nome_turma" value="<?php echo set_value('email_aluno') ?>" placeholder="Email">
+                                            <span class="input-group-addon" >Opcional</span>
+                                        </div>
+                                        <span class="text-danger"> <?php echo form_error('email_aluno'); ?></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -80,13 +92,13 @@ foreach ($turma_disciplina as $td) {
                             <div class="form-group">
                                 Filtrar por: 
                                 <label class="radio-inline">
-                                    <input type="radio" checked="true" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Nome
+                                    <input type="radio" checked="true" name="rdbFiltroPesquisa" id="rdbFiltroPesquisa" value="nome"> Nome
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Matricula
+                                    <input type="radio" name="rdbFiltroPesquisa" id="rdbFiltroPesquisa" value="matricula"> Matricula
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> CPF
+                                    <input type="radio" name="rdbFiltroPesquisa" id="rdbFiltroPesquisa" value="cpf"> CPF
                                 </label>
                                 <div class="col-lg-12 semMargem">
                                     <div class="input-group">
@@ -109,7 +121,7 @@ foreach ($turma_disciplina as $td) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                
+
                                 </tbody>
                             </table>
                             <div id="imag_carrgando"></div>

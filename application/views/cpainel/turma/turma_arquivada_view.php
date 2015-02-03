@@ -25,7 +25,7 @@ foreach ($disciplina as $dc) {
                             <tr>
                                 <th> Nome </th>
                                 <th class="col-lg-1 center"> Selecionar </th>
-                                <th class="col-lg-1 center"> Arquivar </th>
+                                <th class="col-lg-1 center"> Desarquivar </th>
                             </tr>
                         </thead>
                         <tbody>

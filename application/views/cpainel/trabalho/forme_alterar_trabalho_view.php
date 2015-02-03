@@ -29,8 +29,9 @@ foreach ($turma_disciplina as $td) {
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
                     <li role="presentation" ><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
-                    <li role="presentation" class="active"><a href="#">Trabalhos</a></li>
+                    <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/turma/horario/" . $id_turma) ?>">Horário</a></li>
                 </ul>
                 <div class="col-lg-12 semMargem" style="/*border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; */">
 
@@ -54,7 +55,7 @@ foreach ($turma_disciplina as $td) {
                                     <div class="form-group">
                                         <label for="descricao_trabalho" class="col-sm-2 control-label">Descrição</label>
                                         <div class="col-sm-10">
-                                            <textarea name="descricao_trabalho" class="form-control" id="descricao_trabalho" placeholder="Descrição"><?php echo $tr->descricao_trabalho ?></textarea>
+                                            <textarea name="descricao_trabalho" rows="4" class="form-control" id="descricao_trabalho" placeholder="Descrição"><?php echo $tr->descricao_trabalho ?></textarea>
                                             <span class="text-danger"> <?php echo form_error('descricao_trabalho'); ?></span>
                                         </div>
                                     </div>

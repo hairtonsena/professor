@@ -42,7 +42,7 @@ foreach ($disciplina_turma as $dt) {
                     <?php foreach ($trabalhos_turma as $trt) { ?>
 
                         <tr>
-                            <td><a class="" data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><?php echo $trt->titulo_trabalho ?></a></td>
+                            <td><a class="link_diversos" data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><?php echo $trt->titulo_trabalho ?></a></td>
                             <td class="text-center"><?php echo date('d/m/Y', strtotime($trt->data_entrega_trabalho)) ?></td>
                             <td class="text-center"><?php echo $trt->valor_nota_trabalho ?></td>
                         </tr>

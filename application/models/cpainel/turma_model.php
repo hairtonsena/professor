@@ -4,6 +4,7 @@ class turma_model extends CI_Model {
 
     // Obter turma ativa por disciplina.
     function obter_turma_ativa_por_disciplina($id_disciplina) {
+        $this->db->order_by("nome_turma","asc");
         $this->db->where(['disciplina_id_disciplina' => $id_disciplina, 'status_turma <>' => 2]);
         return $this->db->get('turma');
     }
@@ -29,12 +30,18 @@ class turma_model extends CI_Model {
         $this->db->from('aluno');
         $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
         $this->db->where(array('aluno_has_turma.turma_id_turma' => $id_turma, 'aluno.status_aluno <>' => 0));
+        $this->db->order_by("nome_aluno","asc");
         return $this->db->get();
     }
 
     // salvando nava turma no banco de dados
     function salvar_nova_turma($data) {
         $this->db->insert('turma', $data);
+    }
+
+    function obter_ultimo_id_turma() {
+        $this->db->select_max('id_turma', 'id_turma');
+        return $this->db->get('turma');
     }
 
     // Obtendo uma turma no banco de dados pelo id_turma.
@@ -54,7 +61,14 @@ class turma_model extends CI_Model {
         $this->db->delete('turma', array('id_turma' => $id_turma));
     }
 
-    //put your code here
+    ///////////////////////////////////////////
+    // Trabalho com avaliacao de recuperacao //
+    ///////////////////////////////////////////
+    // Função para salvar avaliacão de recuperação da turma.
+    function salvar_avaliacao_recuperacao($dados) {
+        $this->db->insert('avaliacao_recuperacao', $dados);
+    }
+
 }
 
 ?>

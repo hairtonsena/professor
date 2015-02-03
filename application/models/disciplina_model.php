@@ -14,7 +14,7 @@ class disciplina_model extends CI_Model {
 
     // pegando apenas uma disciplina no banco e filtrando pelo id
     function obter_uma_disciplina($id_disciplina) {
-        return $this->db->get_where('disciplina', array('id_disciplina' => $id_disciplina));
+        return $this->db->get_where('disciplina', array('id_disciplina' => $id_disciplina,'status_disciplina' => 1));
     }
 
 //    // salvando uma nova disciplina no banco de dados

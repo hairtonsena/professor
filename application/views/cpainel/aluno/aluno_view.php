@@ -8,13 +8,14 @@
         <!-- Default panel contents -->
         <div class="panel-heading">Aluno</div>
         <div class="panel-body">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <a  href="<?php echo base_url("cpainel/aluno/novo") ?>" class="btn btn-primary" id="btnNovaDdisciplina">Novo aluno</a>
                 <div style="margin-top: 5px">
                     <table class="table table-bordered" id="tabelaCategoria">
                         <thead>
                             <tr>
-                                <th class="col-lg-4"> Nome </th>
+                                <th class="col-lg-3"> Nome </th>
+                                <th class="col-lg-3">Email</th>
                                 <th class="col-lg-1 text-center"> Matricula </th>
                                 <th class="col-lg-2 text-center">CPF</th>
                                 <th class="col-lg-1 text-center">ver</th>
@@ -31,6 +32,7 @@
                                     ?>
                                     <tr>
                                         <td> <?php echo $an->nome_aluno ?></td>
+                                        <td> <?php echo $an->email_aluno ?></td>
                                         <td class="text-center"><?php echo $an->matricula_aluno ?></td>
                                         <td class="text-center"><?php echo $an->cpf_aluno ?></td>
                                         <td class="text-center"><span id="btnVerAluno_<?php echo $an->id_aluno ?>"><span class="glyphicon glyphicon-eye-open"></span></span></td>
@@ -43,13 +45,14 @@
                                     ?>
                                     <tr>
                                         <td><?php echo $an->nome_aluno; ?></td>
+                                        <td> <?php echo $an->email_aluno ?></td>
                                         <td class="text-center"><?php echo $an->matricula_aluno ?></td>
                                         <td class="text-center"><?php echo $an->cpf_aluno ?></td>
                                         <td class="text-center"><span id="btnVerAluno_<?php echo $an->id_aluno ?>"><a href="<?php echo base_url("cpainel/aluno/ver/".$an->id_aluno) ?>"> <span class="glyphicon glyphicon-eye-open"></span> </a></span></td>
                                         <td class="text-center"><span id="btnEditarAluno_<?php echo $an->id_aluno ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </span></td>
                                         <td class="text-center"><span id="btnSenhaAluno_<?php echo $an->id_aluno ?>"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></span></td>
                                         <td class="text-center"><span id="btnExcluirAluno_<?php echo $an->id_aluno ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span></td>
-                                        <td class="text-center"><span id="btnAtivarAluno_<?php echo $an->id_aluno ?>"> <a href="javascript:void(0)" onclick="Aluno.ativar_destivar_aluno('<?php echo $an->id_aluno ?>')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a></span></td>
+                                        <td class="text-center"><span id="btnAtivarAluno_<?php echo $an->id_aluno ?>"> <a href="javascript:void(0)" onclick="Aluno.ativar_destivar_aluno('<?php echo $an->id_aluno ?>')"> <span class="glyphicon glyphicon-check" aria-hidden="true"></span> </a></span></td>
                                     </tr>
                                     <?php
                                 }

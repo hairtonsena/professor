@@ -77,6 +77,7 @@ foreach ($disciplina as $dc) {
                 <h4 class="modal-title">Excluir turma</h4>
             </div>
             <div class="modal-body">
+                <p id="mensagem_retorno" class="text-danger"></p>
                 <p>Você realmente deseja excluir está turma? </p>
                 <input type="hidden" id="turma_excluir" value="" />
             </div>

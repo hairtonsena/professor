@@ -14,6 +14,9 @@ class turma extends CI_Controller {
         $this->load->library('session');
         $this->load->model('cpainel/disciplina_model');
         $this->load->model('cpainel/turma_model');
+        $this->load->model('cpainel/aluno_model');
+        $this->load->model('cpainel/avaliacao_model');
+        $this->load->model('cpainel/trabalho_model');
         $this->load->library('upload');
         date_default_timezone_set('UTC');
     }
@@ -22,29 +25,21 @@ class turma extends CI_Controller {
     public function index() {
         // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
-            // verificando se o request disciplina foi criando
             if (!$this->input->get('disciplina', TRUE)) {
-                // se não retorne para disciplina.
                 redirect(base_url('cpainel/disciplina'));
             }
-            // pegando o id da disciplina pelo get
             $id_disciplina = $this->input->get('disciplina');
-            // buscando a disciplina no banco de dados
             $discipliana = $this->disciplina_model->obter_uma_disciplina($id_disciplina)->result();
-            // verificando se a disciplina existe
             if (count($discipliana) == 0) {
-                // se não exite rediteciona para disciplina.
                 redirect(base_url('cpainel/disciplina'));
             }
-            // buscando as turmas ativas por categorias
             $turma = $this->turma_model->obter_turma_ativa_por_disciplina($id_disciplina)->result();
-
 
             $dados = array(
                 'disciplina' => $discipliana,
                 'turma' => $turma
             );
-            // mestrando a tela.
+
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
             $this->load->view('cpainel/turma/turma_view', $dados);
@@ -106,7 +101,6 @@ class turma extends CI_Controller {
                 "disciplina" => $discipliana
             );
 
-
             $this->load->view('cpainel/tela/titulo');
             $this->load->view('cpainel/tela/menu');
             $this->load->view('cpainel/turma/forme_nova_turma_view', $dados);
@@ -126,10 +120,8 @@ class turma extends CI_Controller {
             $id_disciplina = $this->input->post('disciplina');
             // testando validação
             if ($this->form_validation->run() == FALSE) {
-                // rotornando para o fomulário com erros.
                 $this->nova($id_disciplina);
             } else {
-                // pagando o campo nome da nova turma
                 $nome_turma = $this->input->post("nome_turma");
                 // pegando a descrição da nova disciplina
                 $dados = array(
@@ -140,9 +132,17 @@ class turma extends CI_Controller {
                 // enviando os dados para ser salvos 
                 $this->turma_model->salvar_nova_turma($dados);
 
+                $turma_cadastrada = $this->turma_model->obter_ultimo_id_turma()->result();
+                foreach ($turma_cadastrada as $tc) {
+                    $dados = array(
+                        "turma_id_turma" => $tc->id_turma,
+                        "descricao_avaliacao_recuperacao" => "Avaliação de Recuperação",
+                        "valor_avaliacao_recuperacao" => 100
+                    );
 
+                    $this->turma_model->salvar_avaliacao_recuperacao($dados);
+                }
 
-                // redirecionando para turma
                 redirect(base_url("cpainel/turma?disciplina=" . $id_disciplina));
             }
         } else {
@@ -172,14 +172,16 @@ class turma extends CI_Controller {
                     }
                     $this->turma_model->alterar_dados_turma($dados, $id_turma);
                 }
+            } else {
+                $reterno = "Turma não encontrada!";
             }
             echo $reterno;
         } else {
-            //redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
 
-    // Função para alterar turma
+    // Função para exibir o formulário de alterar turma.
     public function alterar($id_turma = NULL) {
         // Verificando usuário logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -195,11 +197,9 @@ class turma extends CI_Controller {
                 // Se não existe redireciona para discipina
                 redirect(base_url("cpainel/disciplina"));
             }
-            // Criando uma variavel para armazenar o id disciplina.
+
             $id_disciplina = '';
-            // Percorrendo o arrar.
             foreach ($turma as $tm) {
-                // Pegando o id_disciplina presente na turma;
                 $id_disciplina = $tm->disciplina_id_disciplina;
             }
 
@@ -231,7 +231,7 @@ class turma extends CI_Controller {
         // verificando usuário logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
             // funçõa do codeigniter para validar campos do formulário de alterar turma.
-            $this->form_validation->set_rules('nome_turma', 'Nome', 'required|trim|min_length[2]');
+            $this->form_validation->set_rules('nome_turma', 'Nome', 'required|trim|min_length[2]|max_length[45]');
             //pegando o id da turma que será alterada
             $id_turma = $this->input->post('turma');
             // verificando se a validação foi aceita.
@@ -265,7 +265,7 @@ class turma extends CI_Controller {
         }
     }
 
-    // Função para excluir um turma;
+    // Função para excluir um turma. Requisição ajax.
     public function excluir() {
         // verificando usuario logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -276,18 +276,53 @@ class turma extends CI_Controller {
             $query = $this->turma_model->obter_uma_turma($id_turma)->result();
 
             if (count($query) != 0) {
-                $this->turma_model->excluir_turma($id_turma);
-                $retorno = '1';
+                // Função verifica se existe algum dados gadastrado de aluno, avaliação e trabalho.
+                if ($this->verificar_avaliacao_trabalho_aluno_na_turma($id_turma) == TRUE) {
+
+                    $avaliacao_recuperacao = $this->avaliacao_model->obter_avaliacao_recuperacao($id_turma)->result();
+                    foreach ($avaliacao_recuperacao as $ar) {
+                        $this->avaliacao_model->excluir_nota_avaliacao_recuperacao_todos_aluno($ar->id_avaliacao_recuperacao);
+                    }
+                    $this->avaliacao_model->excluir_avaliacao_recuperacao_turma($id_turma);
+
+                    $this->turma_model->excluir_turma($id_turma);
+                    $retorno = '1';
+                } else {
+                    $retorno = "A turma não pode ser excluida!<br/>Exclua primeiro os alunos, as avaliações e os trabalhos";
+                }
             } else {
                 $retorno = 'Turma não foi encontrada!';
             }
             echo $retorno;
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
 
-    // Função para arquivar um turma;
+    // Função para verificar de existe aluno, avaliação ou trabalho cadastrada na turma.
+    protected function verificar_avaliacao_trabalho_aluno_na_turma($id_turma) {
+
+        $retorno = TRUE;
+
+        $aluno_turma = $this->aluno_model->alunos_na_turma($id_turma)->result();
+        if (count($aluno_turma) > 0) {
+            $retorno = FALSE;
+        }
+
+        $avaliacao_turma = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
+        if (count($avaliacao_turma) > 0) {
+            $retorno = FALSE;
+        }
+
+        $trabalho_turma = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
+        if (count($trabalho_turma) > 0) {
+            $retorno = FALSE;
+        }
+
+        return $retorno;
+    }
+
+    // Função para arquivar um turma. Requisição ajax.
     public function arquivar() {
         // verificando usuario logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -310,11 +345,11 @@ class turma extends CI_Controller {
             }
             echo $retorno;
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
 
-    // Função para desarquiva um turma;
+    // Função para desarquiva um turma e retornar o valor para requisição ajax.
     public function desarquivar() {
         // verificando usuario logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -337,7 +372,7 @@ class turma extends CI_Controller {
             }
             echo $retorno;
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
 
@@ -347,8 +382,10 @@ class turma extends CI_Controller {
             $id_turma = $this->uri->segment(4);
 
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if (count($turma_disciplina) == 0) {
+                redirect(base_url("cpainel/disciplina"));
+            }
             $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
-
 
             $dados = array(
                 "turma_disciplina" => $turma_disciplina,
@@ -371,14 +408,13 @@ class turma extends CI_Controller {
     public function horario() {
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
             $id_turma = $this->uri->segment(4);
-
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
-//            $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
-
+            if (count($turma_disciplina) == 0) {
+                redirect(base_url("cpainel/disciplina"));
+            }
 
             $dados = array(
                 "turma_disciplina" => $turma_disciplina,
-//                "alunos_turma" => $alunos_por_turma
             );
 
             $this->load->view('cpainel/tela/titulo');
@@ -396,12 +432,12 @@ class turma extends CI_Controller {
             $id_turma = $this->uri->segment(4);
 
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
-//            $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
-
+            if (count($turma_disciplina) == 0) {
+                redirect(base_url("cpainel/disciplina"));
+            }
 
             $dados = array(
                 "turma_disciplina" => $turma_disciplina,
-//                "alunos_turma" => $alunos_por_turma
             );
 
             $this->load->view('cpainel/tela/titulo');
@@ -413,31 +449,32 @@ class turma extends CI_Controller {
         }
     }
 
-    public function salvar_horario(){
+    public function salvar_horario() {
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
-            if(!$this->input->post("turma",TRUE)){
+            if (!$this->input->post("turma", TRUE)) {
                 redirect(base_url("cpainel/"));
             }
 
             $id_turma = $this->input->post("turma");
             $horario_turma = $this->input->post("horario_turma");
-            
+
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
-            if(count($turma_disciplina)==0){
+            if (count($turma_disciplina) == 0) {
                 redirect(base_url("cpainel/"));
             }
- 
+
             $dados = array(
                 "horario_turma" => $horario_turma
             );
-            
-            $this->turma_model->alterar_dados_turma($dados,$id_turma);
-            
-            redirect(base_url("cpainel/turma/horario/".$id_turma));
+
+            $this->turma_model->alterar_dados_turma($dados, $id_turma);
+
+            redirect(base_url("cpainel/turma/horario/" . $id_turma));
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
+
 }
 
 ?>

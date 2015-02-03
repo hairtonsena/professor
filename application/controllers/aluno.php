@@ -61,8 +61,8 @@ class aluno extends CI_Controller {
             $id_aluno = $this->session->userdata('id_aluno');
 
 
-            $disciplina_turma = $this->aluno_model->obter_turma_disciplina_aluno($id_turma,$id_aluno)->result(); //$this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
-            if(count($disciplina_turma)==0){
+            $disciplina_turma = $this->aluno_model->obter_turma_disciplina_aluno($id_turma, $id_aluno)->result(); //$this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+            if (count($disciplina_turma) == 0) {
                 redirect(base_url());
             }
 
@@ -100,6 +100,7 @@ class aluno extends CI_Controller {
         }
     }
 
+    // Função para salvar trabalho do aluno. Requisição AJAX.
     public function salvar_trabalho_aluno() {
         if (($this->session->userdata('id_aluno')) && ($this->session->userdata('nome_aluno')) && ($this->session->userdata('cpf_aluno')) && ($this->session->userdata('matricula_aluno')) && ($this->session->userdata('verificar_login') == 'cored.com')) {
             $id_aluno = $this->session->userdata('id_aluno');
@@ -179,7 +180,7 @@ class aluno extends CI_Controller {
         }
     }
 
-    // Função para pegar trablho do aluno;
+    // Função para pega trablho do aluno. Requisição JSON.
     public function obter_trabalho_aluno_json() {
         // veirificando usuario logado
         if (($this->session->userdata('id_aluno')) && ($this->session->userdata('nome_aluno')) && ($this->session->userdata('cpf_aluno')) && ($this->session->userdata('matricula_aluno')) && ($this->session->userdata('verificar_login') == 'cored.com')) {
@@ -187,13 +188,91 @@ class aluno extends CI_Controller {
             $id_aluno = $this->session->userdata('id_aluno');
             $id_trabalho = $this->input->get('trabalho');
 
-            $trabalho_aluno = $this->trabalho_model->obeter_trabalho_aluno($id_trabalho,$id_aluno)->result();
+            $trabalho_aluno = $this->trabalho_model->obeter_trabalho_aluno($id_trabalho, $id_aluno)->result();
 
             $trabalho = array();
             foreach ($trabalho_aluno as $ta) {
                 $trabalho[] = $ta;
             }
             echo json_encode($trabalho);
+        } else {
+            echo "Acesso negado!";
+        }
+    }
+
+    public function alterar_senha() {
+        // veirificando usuario logado
+        if (($this->session->userdata('id_aluno')) && ($this->session->userdata('nome_aluno')) && ($this->session->userdata('cpf_aluno')) && ($this->session->userdata('matricula_aluno')) && ($this->session->userdata('verificar_login') == 'cored.com')) {
+            // incrementando o menu.
+            $disciplina_menu = $this->disciplina_model->ver_todas_disciplina_ativas()->result();
+
+            $dados_menu = array(
+                "munu_disciplina" => $disciplina_menu,
+            );
+
+
+
+            $this->load->view('tela/titulo');
+            $this->load->view('tela/menu', $dados_menu);
+            $this->load->view('painel_aluno/forme_alterar_senha_view');
+            $this->load->view('tela/outros_view');
+            $this->load->view('tela/rodape');
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    // Função para salvar nova senha do aluno.
+    public function salvar_nova_senha() {
+        // veirificando usuario logado
+        if (($this->session->userdata('id_aluno')) && ($this->session->userdata('nome_aluno')) && ($this->session->userdata('cpf_aluno')) && ($this->session->userdata('matricula_aluno')) && ($this->session->userdata('verificar_login') == 'cored.com')) {
+
+            $cpf_aluno = $this->session->userdata('cpf_aluno');
+
+            $this->form_validation->set_rules('senha_atual', 'Senha atual', 'required|trim|min_length[6]|max_length[20]|callback_verificar_senha_atual_check');
+            $this->form_validation->set_rules('nova_senha', 'Nova senha', 'required|trim|min_length[6]|max_length[20]');
+            $this->form_validation->set_rules('confirma_senha', 'Confirmar senha', 'required|trim|min_length[6]|max_length[20]|matches[nova_senha]');
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->alterar_senha();
+            } else {
+
+                $nova_senha = $this->input->post("nova_senha");
+
+                $dados_alterar = array(
+                    "senha_aluno" => md5($nova_senha),
+                );
+
+                $this->aluno_model->alterar_dados_aluno($dados_alterar, $cpf_aluno);
+
+                //$this->session->set_flashdata("senha_alterada", '<div class="alert alert-success" role="alert">A senha foi alterada com sucesso!</div>');
+                redirect(base_url("aluno"));
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+//    Função para verificar se a senha informada no formulário de
+//    alterar senha está igual a senha salva no banco de daods.
+    public function verificar_senha_atual_check($valor_campo) {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_aluno')) && ($this->session->userdata('nome_aluno')) && ($this->session->userdata('cpf_aluno')) && ($this->session->userdata('matricula_aluno')) && ($this->session->userdata('verificar_login') == 'cored.com')) {
+            $cpf_aluno = $this->session->userdata('cpf_aluno');
+            $verificar_senha_igual = FALSE;
+            $aluno = $this->aluno_model->obter_aluno_cpf($cpf_aluno)->result();
+            foreach ($aluno as $al) {
+                if ($al->senha_aluno == md5($valor_campo)) {
+                    $verificar_senha_igual = TRUE;
+                }
+            }
+
+            if ($verificar_senha_igual == TRUE) {
+                return TRUE;
+            } else {
+                $this->form_validation->set_message('verificar_senha_atual_check', 'A %s está incorreta');
+                return FALSE;
+            }
         } else {
             redirect(base_url("cpainel/seguranca"));
         }

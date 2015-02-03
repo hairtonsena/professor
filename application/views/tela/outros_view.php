@@ -10,7 +10,7 @@
                 <p>CPF : <?php echo $this->session->userdata('cpf_aluno') ?></p>
                 <p>Matrícula : <?php echo $this->session->userdata('matricula_aluno') ?></p>
                 <a href="<?php echo base_url("aluno") ?>" class="btn btn-default " >Painel</a>
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Trocar Senha</button>
+                <a href="<?php echo base_url("aluno/alterar_senha") ?>" class="btn btn-default" >Alterar Senha</button>
                 <a href="<?php echo base_url("inicio/logout_aluno") ?>" class="btn btn-default">Sair</a>
             </div>
         </div>

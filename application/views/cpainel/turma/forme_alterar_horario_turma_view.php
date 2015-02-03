@@ -36,11 +36,11 @@ foreach ($turma_disciplina as $td) {
         <div class="panel-body">
             <div class="col-lg-12 semMargem">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#">Alunos</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
-                    <li role="presentation"><a href="<?php echo base_url("cpainel/turma/horario/" . $id_turma) ?>">Horário</a></li>
+                    <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/turma/horario/" . $id_turma) ?>">Horário</a></li>
                 </ul>
                 <div class="col-lg-12 semMargem" style="">
                     <div class="col-lg-8" style="padding-top: 5px;">

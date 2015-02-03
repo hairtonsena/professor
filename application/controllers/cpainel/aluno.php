@@ -102,6 +102,12 @@ class Aluno extends CI_Controller {
             if (count($aluno) == 0) {
                 redirect(base_url("cpainel/aluno"));
             }
+            // Verificando se aluno pertence a turma.
+            $aluno_na_turma = $this->aluno_model->aluno_em_turma($id_aluno, $id_turma)->result();
+            if (count($aluno_na_turma) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+
             foreach ($aluno as $an) {
                 if ($an->status_aluno == 0) {
                     redirect(base_url("cpainel/aluno"));
@@ -129,6 +135,53 @@ class Aluno extends CI_Controller {
         }
     }
 
+    // Função para visualizar o horário da turma que o aluno particiopa.
+    public function disciplina_turma_horario() {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            if (!$this->input->get("aluno", TRUE) && !$this->input->get("turma", TRUE)) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            $id_aluno = $this->input->get("aluno");
+            $id_turma = $this->input->get("turma");
+
+            $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
+            if (count($aluno) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            // Verificando se o aluno pertence a turma.
+            $aluno_na_turma = $this->aluno_model->aluno_em_turma($id_aluno, $id_turma)->result();
+            if (count($aluno_na_turma) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+
+            foreach ($aluno as $an) {
+                if ($an->status_aluno == 0) {
+                    redirect(base_url("cpainel/aluno"));
+                }
+            }
+
+            $disciplina_turma_aluno = $this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
+            $disciplina_turma = array();
+            foreach ($disciplina_turma_aluno as $dta) {
+                if ($dta->id_turma == $id_turma)
+                    $disciplina_turma[] = $dta;
+            }
+
+            $dados = array(
+                "aluno" => $aluno,
+                "disciplina_turma" => $disciplina_turma
+            );
+
+            $this->load->view('cpainel/tela/titulo');
+            $this->load->view('cpainel/tela/menu');
+            $this->load->view('cpainel/aluno/disciplina_turma_horario_view', $dados);
+            $this->load->view('cpainel/tela/rodape');
+        } else {
+            redirect(base_url("cpainel/seguranca"));
+        }
+    }
+
     // Função para visualizar as avaliações do aluno selecionado
     public function disciplina_turma_avaliacao() {
         // verificando se o usuário está logado.
@@ -142,6 +195,11 @@ class Aluno extends CI_Controller {
 
             $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
             if (count($aluno) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            // Verificando se o aluno pertence a turma.
+            $aluno_na_turma = $this->aluno_model->aluno_em_turma($id_aluno, $id_turma)->result();
+            if (count($aluno_na_turma) == 0) {
                 redirect(base_url("cpainel/aluno"));
             }
             foreach ($aluno as $an) {
@@ -202,6 +260,12 @@ class Aluno extends CI_Controller {
             if (count($aluno) == 0) {
                 redirect(base_url("cpainel/aluno"));
             }
+            // Verificando se o aluno pertence a turma.
+            $aluno_na_turma = $this->aluno_model->aluno_em_turma($id_aluno, $id_turma)->result();
+            if (count($aluno_na_turma) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+
             foreach ($aluno as $an) {
                 if ($an->status_aluno == 0) {
                     redirect(base_url("cpainel/aluno"));
@@ -259,6 +323,11 @@ class Aluno extends CI_Controller {
 
             $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
             if (count($aluno) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
+            // Verificando se o aluno pertence a turma.
+            $aluno_na_turma = $this->aluno_model->aluno_em_turma($id_aluno, $id_turma)->result();
+            if (count($aluno_na_turma) == 0) {
                 redirect(base_url("cpainel/aluno"));
             }
             foreach ($aluno as $an) {
@@ -346,6 +415,7 @@ class Aluno extends CI_Controller {
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
             $this->form_validation->set_rules('nome_aluno', 'Nome', 'required|trim|min_length[4]|max_length[45]');
+            $this->form_validation->set_rules('email_aluno', 'Email', 'trim|min_length[4]|max_length[70]|valid_email');
             $this->form_validation->set_rules('matricula_aluno', 'Matricula', 'required|trim|min_length[5]|max_length[10]|callback_aluno_existe_check');
             $this->form_validation->set_rules('cpf_aluno', 'CPF', 'required|trim|min_length[11]|max_length[14]|callback_cpf_check|callback_aluno_existe_check');
 
@@ -356,6 +426,7 @@ class Aluno extends CI_Controller {
             } else {
 
                 $nome_aluno = $this->input->post('nome_aluno');
+                $email_aluno = $this->input->post('email_aluno');
                 $matricula_aluno = $this->input->post('matricula_aluno');
                 $cpf_aluno = $this->input->post('cpf_aluno');
 
@@ -363,10 +434,11 @@ class Aluno extends CI_Controller {
 
                 $dados = array(
                     "nome_aluno" => $nome_aluno,
+                    "email_aluno" => $email_aluno,
                     "matricula_aluno" => $matricula_aluno,
                     "cpf_aluno" => $cpf_aluno,
                     "senha_aluno" => md5($cpf_aluno),
-                    "status_aluno" => 0
+                    "status_aluno" => 1
                 );
 
                 $this->aluno_model->salvar_novo_aluno($dados);
@@ -401,7 +473,7 @@ class Aluno extends CI_Controller {
                 echo "1";
             }
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
 
@@ -413,6 +485,9 @@ class Aluno extends CI_Controller {
                 $id_aluno = $this->uri->segment(4);
             }
             $aluno = $this->aluno_model->obter_aluno_id($id_aluno)->result();
+            if (count($aluno) == 0) {
+                redirect(base_url("cpainel/aluno"));
+            }
 
             $dados = array(
                 "aluno" => $aluno
@@ -433,6 +508,7 @@ class Aluno extends CI_Controller {
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
             $this->form_validation->set_rules('nome_aluno', 'Nome', 'required|trim|min_length[4]|max_length[45]');
+            $this->form_validation->set_rules('email_aluno', 'Email', 'trim|min_length[4]|max_length[70]|valid_email');
             $this->form_validation->set_rules('matricula_aluno', 'Matricula', 'required|trim|min_length[5]|max_length[10]|callback_aluno_existe_alterar_check');
             $this->form_validation->set_rules('cpf_aluno', 'CPF', 'required|trim|min_length[11]|max_length[14]|callback_cpf_check|callback_aluno_existe_alterar_check');
 
@@ -443,6 +519,7 @@ class Aluno extends CI_Controller {
             } else {
 
                 $nome_aluno = $this->input->post('nome_aluno');
+                $email_aluno = $this->input->post('email_aluno');
                 $matricula_aluno = $this->input->post('matricula_aluno');
                 $cpf_aluno = $this->input->post('cpf_aluno');
 
@@ -450,6 +527,7 @@ class Aluno extends CI_Controller {
 
                 $dados = array(
                     "nome_aluno" => $nome_aluno,
+                    "email_aluno" => $email_aluno,
                     "matricula_aluno" => $matricula_aluno,
                     "cpf_aluno" => $cpf_aluno
                 );
@@ -471,6 +549,9 @@ class Aluno extends CI_Controller {
                 $id_turma = $this->uri->segment(4);
             }
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if (count($turma_disciplina) == 0) {
+                redirect(base_url("cpainel/disciplina"));
+            }
 
             $dados = array(
                 "turma_disciplina" => $turma_disciplina
@@ -491,6 +572,7 @@ class Aluno extends CI_Controller {
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
             $this->form_validation->set_rules('nome_aluno', 'Nome', 'required|trim|min_length[4]|max_length[45]');
+            $this->form_validation->set_rules('email_aluno', 'Email', 'trim|min_length[4]|max_length[70]|valid_email');
             $this->form_validation->set_rules('matricula_aluno', 'Matricula', 'required|trim|min_length[5]|max_length[10]|callback_aluno_existe_check');
             $this->form_validation->set_rules('cpf_aluno', 'CPF', 'required|trim|min_length[11]|max_length[14]|callback_cpf_check|callback_aluno_existe_check');
 
@@ -501,6 +583,7 @@ class Aluno extends CI_Controller {
             } else {
 
                 $nome_aluno = $this->input->post('nome_aluno');
+                $email_aluno = $this->input->post('email_aluno');
                 $matricula_aluno = $this->input->post('matricula_aluno');
                 $cpf_aluno = $this->input->post('cpf_aluno');
 
@@ -508,10 +591,11 @@ class Aluno extends CI_Controller {
 
                 $dados = array(
                     "nome_aluno" => $nome_aluno,
+                    "email_aluno" => $email_aluno,
                     "matricula_aluno" => $matricula_aluno,
                     "cpf_aluno" => $cpf_aluno,
                     "senha_aluno" => md5($cpf_aluno),
-                    "status_aluno" => 0
+                    "status_aluno" => 1
                 );
 
                 $this->aluno_model->salvar_novo_aluno($dados);
@@ -692,15 +776,18 @@ class Aluno extends CI_Controller {
         }
     }
 
+    // Função para pesquisar os alunos já cadastrado e ativos que
+    // não estão na mesma turma para ser adicionado na turma. Requisição ajax.
     public function obter_alunos_cadastrados() {
         // veirificando usuario logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
             $texto_pesquisa = $this->input->get('q');
             $id_turma = $this->input->get('turma');
+            $opcao_pesquisa = $this->input->get('opcao');
 
             $alunos_da_turma = $this->aluno_model->alunos_na_turma($id_turma)->result();
-            $alunos_pesquisado = $this->aluno_model->obter_alunos_pesquisa_nome($texto_pesquisa, $id_turma)->result();
+            $alunos_pesquisado = $this->aluno_model->obter_alunos_pesquisa_nome($texto_pesquisa, $id_turma, $opcao_pesquisa)->result();
             $alunos_nao_adicionado = array();
 
             foreach ($alunos_pesquisado as $ap) {
@@ -754,6 +841,36 @@ class Aluno extends CI_Controller {
 
             $query = $this->aluno_model->aluno_em_turma($id_aluno, $id_turma)->result();
             if (count($query) != 0) {
+
+
+                // Este código foi inserido agora 
+                // Excluido as nota da avaliações que o aluno participou na turma x
+                $avaliacoes_turma = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
+                foreach ($avaliacoes_turma as $avt) {
+                    $this->avaliacao_model->excluir_nota_avaliacao_aluno($avt->id_avaliacao, $id_aluno);
+                }
+
+                // Excluindo a nota da avaliacão de recuperacao se tiver.
+                $avaliacao_recuperacao = $this->avaliacao_model->obter_avaliacao_recuperacao($id_turma)->result();
+                foreach ($avaliacao_recuperacao as $avrp) {
+                    $this->avaliacao_model->excluir_nota_avaliacao_recuperacao_aluno($avrp->id_avaliacao_recuperacao, $id_aluno);
+                }
+
+                // Excluindo as notas e os arquivos dos trabalhos  do aluno para determinada turma.
+                $trabalhos_turma = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
+                foreach ($trabalhos_turma as $trt) {
+                    $this->trabalho_model->excluir_nota_trabalho_aluno($trt->id_trabalho, $id_aluno);
+
+                    $trabalho_aluno = $this->trabalho_model->obter_trabalho_do_aluno($trt->id_trabalho, $id_aluno)->result();
+                    foreach ($trabalho_aluno as $tral) {
+                        $arquivo = "trabalho/" . $trt->pasta_upload_trabalho . "/" . $tral->nome_arquivo_trabalho_aluno;
+                        if (is_file($arquivo)) {
+                            unlink($arquivo);
+                        }
+                    }
+                    $this->trabalho_model->excluir_trabalho_aluno($trt->id_trabalho, $id_aluno);
+                }
+
                 $this->aluno_model->excluir_aluno_em_tuma($id_aluno, $id_turma);
                 $retorno = '1';
             } else {

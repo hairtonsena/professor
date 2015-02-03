@@ -4,7 +4,7 @@ class turma_model extends CI_Model {
 
     // Obter turma ativa por disciplina.
     function obter_turma_ativa_por_disciplina($id_disciplina) {
-        $this->db->where(['disciplina_id_disciplina' => $id_disciplina, 'status_turma <>' => 2]);
+        $this->db->where(['disciplina_id_disciplina' => $id_disciplina, 'status_turma =' => 1]);
         return $this->db->get('turma');
     }
 
@@ -19,42 +19,10 @@ class turma_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('turma');
         $this->db->join('disciplina', 'disciplina.id_disciplina=turma.disciplina_id_disciplina');
-        $this->db->where('turma.id_turma', $id_turma);
+        $this->db->where(array('turma.id_turma'=> $id_turma,'turma.status_turma'=>1));
         return $this->db->get();
     }
 
-
-
-//    // Obter todos os alunos te uma turma.
-//    function obter_todos_alunos_turma($id_turma) {
-//        $this->db->select('*');
-//        $this->db->from('aluno');
-//        $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
-//        $this->db->where(array('aluno_has_turma.turma_id_turma' => $id_turma, 'aluno.status_aluno <>' => 0));
-//        return $this->db->get();
-//    }
-//
-//    // salvando nava turma no banco de dados
-//    function salvar_nova_turma($data) {
-//        $this->db->insert('turma', $data);
-//    }
-//
-//    // Obtendo uma turma no banco de dados pelo id_turma.
-//    function obter_uma_turma($id_turma) {
-//        $this->db->where('id_turma', $id_turma);
-//        return $this->db->get('turma');
-//    }
-//
-//    // Alterando os dados da turma.
-//    function alterar_dados_turma($dados, $id_turma) {
-//        $this->db->where('id_turma', $id_turma);
-//        $this->db->update('turma', $dados);
-//    }
-//
-//    // Excluindo uma tuma
-//    function excluir_turma($id_turma) {
-//        $this->db->delete('turma', array('id_turma' => $id_turma));
-//    }
 }
 
 ?>

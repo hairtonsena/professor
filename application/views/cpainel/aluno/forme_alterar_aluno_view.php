@@ -12,8 +12,8 @@
                 <div class="col-lg-6"  style="padding-top: 5px; border-right: 1px solid #ddd;">
                     <?php foreach ($aluno as $al) { ?>
                         <form class="form-horizontal" action="<?php echo base_url("cpainel/aluno/salvar_aluno_alterado"); ?>" method="post" role="form">
-                            <input type="hidden" name="aluno" value="<?php echo $al->id_aluno?>"
-                            <fieldset>
+                            <input type="hidden" name="aluno" value="<?php echo $al->id_aluno ?>"
+                                   <fieldset>
                                 <legend>Alterar aluno</legend>
                                 <div class="form-group">
                                     <label for="nome_aluno" class="col-sm-2 control-label">Nome</label>
@@ -23,9 +23,20 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="email_aluno" class="col-sm-2 control-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="email" name="email_aluno" class="form-control" id="nome_turma" value="<?php echo $al->email_aluno ?>" placeholder="Email">
+                                            <span class="input-group-addon" >Opcional</span>
+                                        </div>
+                                        <span class="text-danger"> <?php echo form_error('email_aluno'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label for="matricula_aluno" class="col-sm-2 control-label">Matricula</label>
                                     <div class="col-sm-10">
                                         <input type="text" name="matricula_aluno" class="form-control" id="matricula_aluno" value="<?php echo $al->matricula_aluno ?>" placeholder="Matricula">
+
                                         <span class="text-danger"> <?php echo form_error('matricula_aluno'); ?></span>
                                     </div>
                                 </div>
@@ -48,8 +59,8 @@
                     <?php } ?>
                 </div>
                 <div class="col-lg-6"  style="padding-top: 5px;">
-<!--                    <h2>informativo</h2>
-                    <p><strong>Atenção !</strong> Os alunos cadastrados neste formulário não estara vinculados a uma turma. </p>-->
+                    <!--                    <h2>informativo</h2>
+                                        <p><strong>Atenção !</strong> Os alunos cadastrados neste formulário não estara vinculados a uma turma. </p>-->
                 </div>
             </div>
         </div>

@@ -25,7 +25,7 @@ and open the template in the editor.
 
     top: 0px;
     bottom: 0px;
-    overflow: auto;
+/*    overflow: auto;*/
 }
 
 .nome
@@ -53,6 +53,20 @@ and open the template in the editor.
     width: auto;
     height: 450px;
     overflow: auto;
+}
+
+.barra_rolar_menu
+{
+    width: auto;
+    height: 250px;
+    width:auto;
+    overflow: auto;
+}
+
+.box_menu
+{
+    height: 350px;
+    bottom: 0px;
 }
 
 /*----------------------------------------------------------*/
@@ -193,29 +207,36 @@ and open the template in the editor.
         margin-left: 230px;
         padding-top: 50px;
         padding-left: 50px;
-        /*background-image: url("../imagens/fundo.jpg");*/
+        /*        background-image: url("../imagens/fundo.jpg");*/
         background-color: #F3F3F3;
         -webkit-transition: 0.3s ease-in;
         -moz-transition: 0.3s ease-in;
         -o-transition: 0.3s ease-in;
     }
 
-    .link_ativo a
-    {
-        background-color: #dcdcdc;
-        color: #000000;
-    }
+    /*    .link a:enabled
+        {
+            background-color: #dcdcdc;
+            color: #000000;
+        }*/
 
     .link a
     {
         color: #F7F7F7;
         font-size: 18px;
+
     }
 
     .link a:hover
     {
-        color: #2B2B2B;
+        color: #000;
     }
+    
+    .link a:active
+    {
+        color: #000;
+    }
+    
 
     .fim_roda_pe
     {
@@ -280,6 +301,77 @@ and open the template in the editor.
 
 
 /*-------------------------------------------------------*/
+.arquivado
+{
+    float: right;
+    width: auto;
+    height: 35px;
+    padding: 5px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    color: #000000;
+    background-color: #FFFFFF;
+    text-align: center;
+    font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+    font-size: 18px;
+}
 
 
+.botao_turmas
+{
+    float: left;
+    width: 100%;
+    height: 45px;
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #666;
+    border-radius: 5px;
+    color: #F7F7F7;
+    background-color: #428BCA;
+    text-align: center;
+    font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+    font-size: 28px;
+    line-height: 1;
+}
 
+
+.arquivado:hover
+{
+    color: #000;
+    background-color: #EBEBEB;
+    border:  1px solid #ADADAD;
+    text-decoration: none;
+}
+
+.botao_turmas:hover
+{
+    color: #000000;
+    background-color: #A2C3DF;
+    text-decoration: none;
+}
+
+
+.link_diversos
+{
+    width: 100%;
+    color: #0066cc;
+/*    background-color: #0066cc;*/
+    text-align: center;
+    font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+.invisivel
+{
+    background-color: #F3F3F3;
+    color: #F3F3F3;
+}
+
+
+.col-md-4
+{
+    word-wrap: break-word;
+}

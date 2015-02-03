@@ -4,6 +4,7 @@ class disciplina_model extends CI_Model {
 
     // pegando todas as diciplinas do banco de dados
     function ver_todas_disciplina() {
+        $this->db->order_by("nome_disciplina","asc");
         return $this->db->get('disciplina');
     }
 
@@ -27,9 +28,16 @@ class disciplina_model extends CI_Model {
         $this->db->where('id_disciplina', $id_disciplina);
         $this->db->update('disciplina', $dados);
     }
+
     // excluindo um diciplina
     function excluir_disciplina($id_disciplina) {
         $this->db->delete('disciplina', array('id_disciplina' => $id_disciplina));
+    }
+
+    // Obter as turmas de uma disciplina.
+    function obter_turmas_da_disciplina($id_disciplina) {
+        $this->db->where(['disciplina_id_disciplina' => $id_disciplina]);
+        return $this->db->get('turma');
     }
 
     //put your code here

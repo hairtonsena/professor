@@ -36,7 +36,7 @@ foreach ($disciplina_turma as $dt) {
             <div class="col-lg-12">
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="<?php echo base_url("cpainel/aluno/disciplina_turma?turma=" . $id_turma . "&aluno=" . $id_aluno) ?>">Descrição</a></li>
-                    <li role="presentation"><a href="#">Horários</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/aluno/disciplina_turma_horario?turma=".$id_turma."&aluno=".$id_aluno) ?>">Horários</a></li>
                     <li role="presentation" ><a href="<?php echo base_url("cpainel/aluno/disciplina_turma_avaliacao?turma=" . $id_turma . "&aluno=" . $id_aluno) ?>">Avaliações</a></li>
                     <li role="presentation"  class="active"><a href="<?php echo base_url("cpainel/aluno/disciplina_turma_trabalho?turma=" . $id_turma . "&aluno=" . $id_aluno) ?>">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/aluno/disciplina_turma_nota?turma=" . $id_turma . "&aluno=" . $id_aluno) ?>">Notas</a></li>
@@ -48,7 +48,7 @@ foreach ($disciplina_turma as $dt) {
                         <thead>
                         <th>Trabalhos</th>
                         <th class="col-lg-1 text-center">Nota trabalho</th>
-                        <th  class="col-lg-1 text-center">Nota Aluno</th>
+                        <th class="col-lg-1 text-center">Nota Aluno</th>
                         </thead>
                         <tbody>
                             <?php

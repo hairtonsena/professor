@@ -24,6 +24,9 @@ class Trabalho extends CI_Controller {
             $id_turma = $this->input->get('turma');
 
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if(count($turma_disciplina)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
             $trabalho_por_turma = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
 
 
@@ -51,6 +54,9 @@ class Trabalho extends CI_Controller {
 
 
             $trabalho = $this->trabalho_model->obter_um_trabalho($id_trabalho)->result();
+            if(count($trabalho)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
             $anexos_trabalho = $this->trabalho_model->obeter_anexos_trabalho($id_trabalho)->result();
             $trabalhos_alunos = $this->trabalho_model->obeter_trabalho_dos_alunos($id_trabalho)->result();
             
@@ -86,6 +92,9 @@ class Trabalho extends CI_Controller {
                 $id_turma = $this->uri->segment(4);
             }
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if(count($turma_disciplina)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
 
             $dados = array(
                 "turma_disciplina" => $turma_disciplina
@@ -103,7 +112,6 @@ class Trabalho extends CI_Controller {
     public function salvar_novo_trabalho() {
 // veirificando usuario logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
-
 
             $this->form_validation->set_rules('titulo_trabalho', 'Titulo', 'required|trim|min_length[4]|max_length[45]');
             $this->form_validation->set_rules('descricao_trabalho', 'Descrição', 'required|trim|min_length[4]');
@@ -214,6 +222,9 @@ class Trabalho extends CI_Controller {
             }
 
             $trabalho = $this->trabalho_model->obter_um_trabalho($id_trabalho)->result();
+            if(count($trabalho)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
             $id_turma;
             foreach ($trabalho as $tr) {
                 $id_turma = $tr->turma_id_turma;
@@ -309,7 +320,7 @@ class Trabalho extends CI_Controller {
         }
     }
 
-// Função para excluir trabalho e as nota se já estive dada;
+// Função para excluir trabalho e as nota se já estive dada. Requisição AJAX.
     public function excluir_trabalho() {
 // verificando usuario logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -328,12 +339,11 @@ class Trabalho extends CI_Controller {
                 // apagando anexo do professor.
                 $anexo_trabalho = $this->trabalho_model->obeter_anexos_trabalho($id_trabalho)->result();
                 foreach ($anexo_trabalho as $at) {
-                    if (file_exists("trabalho/" . $pasta . "/" . $at->arquivo_anexo_trabalho)) {
+                    if (is_file("trabalho/" . $pasta . "/" . $at->arquivo_anexo_trabalho)) {
                         unlink("trabalho/" . $pasta . "/" . $at->arquivo_anexo_trabalho);
                     }
                     $this->trabalho_model->excluir_anexo_trabalho($at->id_anexo_trabalho);
                 }
-
 
                 $dir = 'trabalho/' . $pasta;
                 if (is_dir($dir)) {
@@ -347,7 +357,6 @@ class Trabalho extends CI_Controller {
                     rmdir($dir);
                 }
 
-
                 $this->trabalho_model->excluir_trabalho($id_trabalho);
                 $retorno = '1';
             } else {
@@ -355,14 +364,14 @@ class Trabalho extends CI_Controller {
             }
             echo $retorno;
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
 
     //-----------------------------------//
     // Trabalhando com anexo de trabalho // 
     //-----------------------------------//
-    // Função para pegar todos os anexo dos trabalho;
+    // Função para pegar todos os anexo dos trabalho. Requisição JSON;
     public function obter_anexos_trabalho_json() {
         // veirificando usuario logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -377,10 +386,10 @@ class Trabalho extends CI_Controller {
             }
             echo json_encode($anexos);
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
-
+    // Função para salvar upload dos anexos do professor. Requisição AJAX.
     public function salvar_anexo_trabalho() {
         // verificando usuario logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -407,7 +416,7 @@ class Trabalho extends CI_Controller {
             $config['file_name'] = $nome_arquivo;
             $config['upload_path'] = $diretorio_anexo; // server directory
             $config['allowed_types'] = 'pdf'; // by extension, will check for whether it is an image
-            $config['max_size'] = 1024 * 10; // in kb -> total 10MB
+            $config['max_size'] = 1024 * 1024 * 10; // in kb -> total 10MB
             $config['is_image'] = 0;
 
             $this->upload->initialize($config);
@@ -432,11 +441,11 @@ class Trabalho extends CI_Controller {
                 echo "sucesso";
             }
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
 
-    // Função para excluir anexo de trabalho.
+    // Função para excluir anexo de trabalho. Requisição AJAX.
     public function excluir_anexo_trabalho() {
         // verificando usuario logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
@@ -454,7 +463,7 @@ class Trabalho extends CI_Controller {
                     $nome_arquivo = $an->arquivo_anexo_trabalho;
                 }
 
-                if (file_exists("trabalho/" . $pasta . "/" . $nome_arquivo)) {
+                if (is_file("trabalho/" . $pasta . "/" . $nome_arquivo)) {
                     unlink("trabalho/" . $pasta . "/" . $nome_arquivo);
                 }
 
@@ -465,7 +474,7 @@ class Trabalho extends CI_Controller {
             }
             echo $retorno;
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo 'Acesso negado!';
         }
     }
 

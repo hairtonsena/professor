@@ -15,7 +15,8 @@ foreach ($turma_disciplina as $td) {
         <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
         <li><a href="<?php echo base_url("cpainel/disciplina") ?>">Disciplina</a></li>
         <li><a href="<?php echo base_url("cpainel/turma?disciplina=" . $id_disciplina) ?>">Turma</a></li>
-        <li class="active">Avaliaçao </li>       
+        <li><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliação</a></li>
+        <li class="active">Avaliação de recuperacao </li>       
     </ol>
     <div class="panel panel-default">
         <!-- Default panel contents -->
@@ -27,14 +28,14 @@ foreach ($turma_disciplina as $td) {
             <div class="col-lg-12 semMargem">
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
-                    <li role="presentation" class="active"><a href="#">Avaliações</a></li>
+                    <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/turma/horario/" . $id_turma) ?>">Horário</a></li>
                 </ul>
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
-                        <a class="btn btn-primary" href="<?php echo base_url("cpainel/avaliacao/nova/" . $id_turma); ?>">Nova Avaliacão</a>
-                        <a class="btn btn-danger" href="<?php echo base_url("cpainel/avaliacao_recuperacao/" . $id_turma); ?>">Avaliacão de recuperação</a>
+                        <h3>Avaliação de recuperação</h3>
                         <div style="margin-top: 5px">
                             <table class="table table-bordered">
                                 <thead>
@@ -54,13 +55,13 @@ foreach ($turma_disciplina as $td) {
                                         $total_pontos+=$ar->valor_avaliacao_recuperacao;
                                         ?>
                                         <tr id="linha_aluno_turma_<?php echo $ar->id_avaliacao_recuperacao ?>">
-                                            <td><?php echo $ar->descricao_avaliacao_recuperacao; ?></td>   
-                                            <td class="text-center"><?php echo implode("/", array_reverse(explode("-", $ar->data_avaliacao_recuperacao))); ?></td> 
+                                            <td><span id="descricao_ar"><?php echo $ar->descricao_avaliacao_recuperacao; ?></span></td>   
+                                            <td class="text-center"><span id="data_ar"><?php echo implode("/", array_reverse(explode("-", $ar->data_avaliacao_recuperacao))); ?></span></td> 
                                             <td  class="text-center"><?php echo $ar->valor_avaliacao_recuperacao; ?></td> 
 
 
-                                            <td class="text-center"><span id="btnExcluirTurma_<?php echo $ar->id_avaliacao_recuperacao ?>"><a href="javascript:void(0)"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a></span></td>                                                
-                                            
+                                            <td class="text-center"><a href="javascript:void(0)" data-toggle="modal" data-target="#modelFormeAlerarAvaliacaoRecuperacao" data-avaliacao_recuperacao="<?php echo $ar->id_avaliacao_recuperacao ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
+
                                         </tr>
                                         <?php
                                     }
@@ -79,3 +80,43 @@ foreach ($turma_disciplina as $td) {
         </div>
     </div>
 </div>
+<!--Comfimação de exclusão-->
+<div class="modal fade" id="modelFormeAlerarAvaliacaoRecuperacao" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">        
+        <div class="modal-content">
+            <form class="">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Alterar avaliação de recupercação</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="mensagem_retorno">
+                        
+                    </p>
+                    
+                    
+                    <input type="hidden" id="iptAvaliacao_recuperacao" value="" />
+                    <div class="form-group">
+                        <label class="col-lg-12">Descrição</label>
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" name="iptDescricao_avaliacao_recuperacao" id="iptDescricao_avaliacao_recuperacao" value=""/> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-12">Data</label>
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" name="iptData_avaliacao_recuperacao" id="iptData_avaliacao_recuperacao" value="" placeholder="00/00/0000"/> 
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="Avaliacao.alterar_avaliacao_recuperacao()">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Final de confirmação-->

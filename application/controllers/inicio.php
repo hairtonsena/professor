@@ -14,27 +14,35 @@ class Inicio extends CI_Controller {
         $this->load->helper('form');
         $this->load->model('disciplina_model');
         $this->load->model('aluno_model');
+        $this->load->model('noticia_model');
     }
 
     // Funçao da pagina inicial
     public function index() {
 
         $disciplina_menu = $this->disciplina_model->ver_todas_disciplina_ativas()->result();
+
+        $noticias_pagina_inicial = $this->noticia_model->obter_noticias_pagina_inicial()->result();
+
+
         $dados_menu = array(
-            "munu_disciplina" => $disciplina_menu
+            "munu_disciplina" => $disciplina_menu,
         );
 
-
+        $dados_conteudo = array(
+            "noticias_pagina_inicial" => $noticias_pagina_inicial
+        );
 
         $this->load->view('tela/titulo');
         $this->load->view('tela/menu', $dados_menu);
-        //$this->load->view('tela/inicio_view');
-        $this->load->view('tela/disciplina_sem_logar_view');
+        $this->load->view('tela/inicio_view',$dados_conteudo);
+        //$this->load->view('tela/disciplina_sem_logar_view');
         // $this->load->view('tela/disciplina_logado_view');
         $this->load->view('tela/outros_view');
         $this->load->view('tela/rodape');
     }
 
+    // função para verificar os dados dos alunos e logar no sistema no modulo aluno.
     public function acesso_aluno() {
         $this->form_validation->set_rules('cpf_or_matricula', 'CPF ou Matrícula', 'required|trim|min_length[5]');
         $this->form_validation->set_rules('senha', 'Senha', 'required|min_length[6]|callback_validarUsuario_check');
@@ -85,7 +93,6 @@ class Inicio extends CI_Controller {
             }
         }
 
-
         if ($verificar_aluno_logado === FALSE) {
 
             $this->form_validation->set_message('validarUsuario_check', $mensagem_erro);
@@ -96,7 +103,7 @@ class Inicio extends CI_Controller {
     }
 
     protected function criar_sessao_aluno($aluno) {
-        // foreach ($userLogin as $ul) {
+        
         $dadosUser = array(
             'id_aluno' => $aluno->id_aluno,
             'nome_aluno' => $aluno->nome_aluno,
@@ -105,7 +112,6 @@ class Inicio extends CI_Controller {
             'verificar_login' => "cored.com"
         );
         $this->session->set_userdata($dadosUser);
-        // }
     }
 
     public function logout_aluno() {
@@ -118,6 +124,3 @@ class Inicio extends CI_Controller {
     }
 
 }
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */

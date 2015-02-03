@@ -15,7 +15,7 @@
 |
 */
 //$config['base_url']	= 'http://localhost/professor/professor/';
-//$config['base_url']	= 'http://192.168.2.109/andre/';
+// $config['base_url']	= 'http://192.168.2.109/andre/';
   $config['base_url']	= 'http://localhost/andre/';
 
 /*

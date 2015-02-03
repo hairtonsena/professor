@@ -39,21 +39,27 @@ class aluno_model extends CI_Model {
 
     // Pegando todos os alunos
     function obter_todos_alunos() {
+        $this->db->order_by("nome_aluno","asc");
         return $this->db->get('aluno');
     }
 
     // Pegando alunos ativos
     function obter_todos_alunos_ativo() {
-        return $this->db->get_where('aluno', array('status_aluno' => 0));
+        return $this->db->get_where('aluno', array('status_aluno' => 1));
     }
 
     // Buscando as aluno pesquisado inicialmente por nome.
-    function obter_alunos_pesquisa_nome($q, $id_turma) {
+    function obter_alunos_pesquisa_nome($q, $id_turma, $opcao) {
         $this->db->select('*');
         $this->db->from('aluno');
-        // $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno','left');
-        $this->db->like('aluno.nome_aluno', $q);
-        $this->db->where(array('aluno.status_aluno' => 0));
+        if ($opcao == "matricula") {
+            $this->db->like('aluno.matricula_aluno', $q);
+        } else if ($opcao == "cpf") {
+            $this->db->like('aluno.cpf_aluno', $q);
+        } else {
+            $this->db->like('aluno.nome_aluno', $q);
+        }
+        $this->db->where(array('aluno.status_aluno' => 1));
         return $this->db->get();
     }
 
@@ -75,7 +81,7 @@ class aluno_model extends CI_Model {
         $this->db->join('aluno_has_turma', 'aluno_has_turma.aluno_id_aluno=aluno.id_aluno');
         $this->db->join('turma', 'aluno_has_turma.turma_id_turma=turma.id_turma');
         $this->db->join('disciplina', 'disciplina.id_disciplina=turma.disciplina_id_disciplina');
-        $this->db->where(array('aluno.id_aluno' => $id_aluno,'turma.status_turma >'=>0));
+        $this->db->where(array('aluno.id_aluno' => $id_aluno, 'turma.status_turma >' => 0));
         return $this->db->get();
     }
 

@@ -2,6 +2,9 @@ Config = {
     base_url: function (url) {
         var url_base = 'http://localhost/andre/';
         return url_base + url;
+    },
+    redirecionar_pagina: function (pg) {
+        window.location.href = pg;
     }
 };
 
@@ -23,8 +26,7 @@ Turma = {
                     $('#linha_' + turma).hide("slow");
 
                 } else {
-                    alert(retorno);
-                    // $("#modelExcluirDisciplina").modal("hide");
+                    $("#mensagem_retorno").html(retorno);
                 }
             }
         });
@@ -124,6 +126,90 @@ Turma = {
 };
 
 
+Noticia = {
+    // Função para ativar ou desativar a notícia.
+    ativar_desativar_noticia: function (id) {
+
+
+        var btnAtivarNoticia = '#btnAtivarNoticia_' + id;
+        var btnEditarNoticia = '#btnEditarNoticia_' + id;
+        var btnExcluirNoticia = '#btnExcluirNoticia_' + id;
+        var btnImagemMini = '#btnImagemMini_' + id;
+
+        var parametro = "noticia=" + id;
+        var pg = Config.base_url('cpainel/noticia/ativar_desativar_noticia');
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                var linkAtivarNoticia;
+                var linkEditarNoticia;
+                var linkExcluirNoticia;
+                var linkArquivaTurma;
+                var linkImagemMini;
+                if (retorno === '1') {
+                    linkAtivarNoticia = '<a href="javascript:void(0)" onclick="Noticia.ativar_desativar_noticia(\'' + id + '\')"> <span class="glyphicon glyphicon-check" aria-hidden="true"></span> </a>';
+                    linkEditarNoticia = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
+                    linkExcluirNoticia = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span>';
+                    linkImagemMini = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';
+
+                } else if (retorno === '0') {
+                    linkAtivarNoticia = '<a href="javascript:void(0)" onclick="Noticia.ativar_desativar_noticia(\'' + id + '\')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a>';
+                    linkEditarNoticia = '<a href="' + Config.base_url('cpainel/noticia/alterar/' + id) + '"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
+                    linkExcluirNoticia = '<a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirNoticia" data-noticia="' + id + '"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a>';
+                    linkImagemMini = '<a href="' + Config.base_url("cpainel/noticia/alterar_imagem_mini/" + id) + ' "><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> <a href="#"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>';
+                }
+
+                $(btnAtivarNoticia).html(linkAtivarNoticia);
+                $(btnEditarNoticia).html(linkEditarNoticia);
+                $(btnExcluirNoticia).html(linkExcluirNoticia);
+                $(btnImagemMini).html(linkImagemMini);
+
+            }
+        });
+    },
+    excluir_noticia: function () {
+        var noticia = $('#noticia_excluir').val();
+        var parametro = "noticia=" + noticia;
+        var pg = Config.base_url('cpainel/noticia/excluir_noticia');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === "1") {
+                    window.location.href = Config.base_url("cpainel/noticia");
+                } else {
+                    alert(retorno);
+                    $("#modelExcluirNoticia").modal("hide");
+                }
+            }
+        });
+    },
+     excluir_imagem_mini: function (noticia) {
+//        var noticia = $('#noticia_excluir').val();
+        var parametro = "noticia=" + noticia;
+        var pg = Config.base_url('cpainel/noticia/excluir_imagem_mini_noticia');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === "1") {
+                    window.location.href = Config.base_url("cpainel/noticia");
+                } else {
+                    alert(retorno);
+                    $("#modelExcluirNoticia").modal("hide");
+                }
+            }
+        });
+    }
+};
+
+
 Disciplina = {
     ativar_desativar_disciplina: function (id) {
         var btnAtivarDisciplina = '#btnAtivarDisciplina_' + id;
@@ -143,7 +229,7 @@ Disciplina = {
                 var linkExcluirDisciplina;
                 var linkAddTurma;
                 if (retorno === '1') {
-                    linkAtivarDisciplina = '<a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina(\'' + id + '\')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a>';
+                    linkAtivarDisciplina = '<a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina(\'' + id + '\')"> <span class="glyphicon glyphicon-check" aria-hidden="true"></span> </a>';
                     linkEditarDisciplina = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
                     linkExcluirDisciplina = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span>';
                     linkAddTurma = '<a href="' + Config.base_url("cpainel/turma?disciplina=" + id) + '"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </a>';
@@ -180,11 +266,9 @@ Disciplina = {
             data: parametro,
             success: function (retorno) {
                 if (retorno === '1') {
-                    //$(".bs-example-modal-sm").modal("hide");
                     window.location.href = Config.base_url("cpainel/disciplina");
                 } else {
-                    alert(retorno);
-                    $("#modelExcluirDisciplina").modal("hide");
+                    $("#mensagem_retorno").html(retorno);
                 }
             }
         });
@@ -278,7 +362,7 @@ Aluno = {
                 var linkExcluirAluno;
                 var linkverAluno;
                 if (retorno === '1') {
-                    linkAtivarAluno = '<a href="javascript:void(0)" onclick="Aluno.ativar_destivar_aluno(\'' + id + '\')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a>';
+                    linkAtivarAluno = '<a href="javascript:void(0)" onclick="Aluno.ativar_destivar_aluno(\'' + id + '\')"> <span class="glyphicon glyphicon-check" aria-hidden="true"></span> </a>';
                     linkEditarAluno = '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ';
                     linkSenhaAluno = '<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>'
                     linkExcluirAluno = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span>';
@@ -330,6 +414,28 @@ Avaliacao = {
                 } else {
                     alert(retorno);
                     $("#modelExcluirDisciplina").modal("hide");
+                }
+            }
+        });
+    },
+    alterar_avaliacao_recuperacao: function () {
+        var avaliacao_recuperacao = $('#iptAvaliacao_recuperacao').val();
+        var descricao = $('#iptDescricao_avaliacao_recuperacao').val();
+        var data = $('#iptData_avaliacao_recuperacao').val();
+        var parametro = "avaliacao_recuperacao=" + avaliacao_recuperacao + "&descricao=" + descricao + "&data=" + data;
+        var pg = Config.base_url('cpainel/avaliacao/salvar_avaliacao_recuperacao_alterarda');
+
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                if (retorno === '1') {
+                    alert("Avaliacao de recuperacao alterada com sucesso!");
+                    Config.redirecionar_pagina(Config.base_url("cpainel/avaliacao/avaliacao_recuperacao/" + avaliacao_recuperacao));
+                } else {
+                    var texto_erro = "<span class='text-danger'>" + retorno + "</span>";
+                    $("#mensagem_retorno").html(texto_erro);
                 }
             }
         });

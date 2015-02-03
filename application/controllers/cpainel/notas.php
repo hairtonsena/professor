@@ -88,6 +88,7 @@ class Notas extends CI_Controller {
     public function alterar_notas($id_turma = NULL, $id_avaliacao = NULL) {
 // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
             $verificar_requisicao_get = FALSE;
             if ($id_turma == null) {
                 $verificar_requisicao_get = TRUE;
@@ -96,8 +97,15 @@ class Notas extends CI_Controller {
             }
 
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if (count($turma_disciplina) == 0) {
+                redirect(base_url("cpainel/disciplina"));
+            }
+
             $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
             $avaliacao = $this->avaliacao_model->obter_uma_avaliacao($id_avaliacao)->result();
+            if (count($avaliacao) == 0) {
+                redirect(base_url("cpainel/disciplina"));
+            }
             $notas_aluno_avaliacao = $this->avaliacao_model->obter_notas_avaliacao($id_turma)->result();
 
 
@@ -150,7 +158,9 @@ class Notas extends CI_Controller {
     public function salvar_nota_alunos() {
 // veirificando usuario logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
-
+            if (!$this->input->post('turma', TRUE)) {
+                redirect(base_url("cpainel/disciplina"));
+            }
             $id_turma = $this->input->post('turma');
             $id_avaliacao = $this->input->post('avaliacao');
 
@@ -224,6 +234,7 @@ class Notas extends CI_Controller {
     public function alterar_notas_trabalho($id_turma = NULL, $id_trabalho = NULL) {
 // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
             $verificar_requisicao_get = FALSE;
             if ($id_turma == null) {
                 $verificar_requisicao_get = TRUE;
@@ -232,9 +243,14 @@ class Notas extends CI_Controller {
             }
 
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if (count($turma_disciplina) == 0) {
+                redirect(base_url("cpainel/disciplina"));
+            }
             $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
             $trabalho = $this->trabalho_model->obter_um_trabalho($id_trabalho)->result();
-
+            if(count($trabalho)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
             $notas_aluno_trabalho = $this->trabalho_model->obter_notas_trabalho($id_turma)->result();
 
 
@@ -291,13 +307,15 @@ class Notas extends CI_Controller {
     public function salvar_nota_trabalho_alunos() {
 // veirificando usuario logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            if(!$this->input->post("turma",TRUE)){
+                redirect(base_url("cpainel/disciplina"));
+            }
             $id_turma = $this->input->post('turma');
             $id_trabalho = $this->input->post('trabalho');
             $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
 
             foreach ($alunos_por_turma as $apt) {
                 $input_name = 'aluno_' . $apt->id_aluno;
-                // $valor_nota_aluno = $this->input->post($input_name);
                 $this->form_validation->set_rules($input_name, $apt->nome_aluno, 'required|trim|min_length[1]|max_length[20]|callback_nota_maxima_e_minima_para_trabalho_check');
             }
             if ($this->form_validation->run() == FALSE) {
@@ -317,13 +335,13 @@ class Notas extends CI_Controller {
                             "aluno_id_aluno" => $apt->id_aluno,
                             "trabalho_id_trabalho" => $id_trabalho
                         );
-//                        $this->trabalho_model->salvar_nota_trabalho_aluno($dados);
+                        $this->trabalho_model->salvar_nota_trabalho_aluno($dados);
                     } else {
 
                         $dados = array(
                             "valor_nota_trabalho" => $valor_nota_aluno
                         );
-//                        $this->trabalho_model->alterando_nota_trabalho_aluno($dados, $id_trabalho, $apt->id_aluno);
+                        $this->trabalho_model->alterando_nota_trabalho_aluno($dados, $id_trabalho, $apt->id_aluno);
                     }
                 }
 
@@ -362,7 +380,6 @@ class Notas extends CI_Controller {
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
             if ($id_turma == null) {
                 $id_turma = $this->input->get('turma');
-//$id_trabalho = $this->input->get('trabalho');
             }
 
             $id_alunos_recuperacao = $this->session->userdata("alunos_recuperacao");
@@ -372,6 +389,9 @@ class Notas extends CI_Controller {
 
 
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
+            if(count($turma_disciplina)==0){
+                redirect(base_url("cpainel/disciplina"));
+            }
             $alunos_por_turma = $this->turma_model->obter_todos_alunos_turma($id_turma)->result();
 
             $alunos_recuperacao = array();

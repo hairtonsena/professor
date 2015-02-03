@@ -24,7 +24,7 @@ foreach ($disciplina_turma as $dt) {
         <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
         <li><a href="<?php echo base_url("cpainel/aluno") ?>">Aluno</a></li>
         <li><a href="<?php echo base_url("cpainel/aluno/ver/".$id_aluno) ?>">Ver aluno</a></li>
-        <li class="active">Disciplina/Turma</li>       
+        <li class="active">Descrição</li>       
     </ol>
     <div class="panel panel-default">
         <!-- Default panel contents -->
@@ -36,7 +36,7 @@ foreach ($disciplina_turma as $dt) {
             <div class="col-lg-12">
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/aluno/disciplina_turma?turma=".$id_turma."&aluno=".$id_aluno) ?>">Descrição</a></li>
-                    <li role="presentation"><a href="#">Horários</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/aluno/disciplina_turma_horario?turma=".$id_turma."&aluno=".$id_aluno) ?>">Horários</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/aluno/disciplina_turma_avaliacao?turma=".$id_turma."&aluno=".$id_aluno) ?>">Avaliações</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/aluno/disciplina_turma_trabalho?turma=".$id_turma."&aluno=".$id_aluno) ?>">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/aluno/disciplina_turma_nota?turma=" . $id_turma . "&aluno=" . $id_aluno) ?>">Notas</a></li>

@@ -35,6 +35,7 @@ $(function () {
 
     // Confirmação da exclusão da disciplina
     $('#modelExcluirDisciplina').on('show.bs.modal', function (event) {
+        $("#mensagem_retorno").html("");
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('disciplina') // Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -43,6 +44,23 @@ $(function () {
         //modal.find('.modal-title').text('New message to ' + recipient)
         modal.find('#disciplina_excluir').val(recipient)
     });
+
+
+    // Exibir formulário de alterar avaliação de recuperacao
+    $('#modelFormeAlerarAvaliacaoRecuperacao').on('show.bs.modal', function (event) {
+        $("#mensagem_retorno").html("");
+        var button = $(event.relatedTarget)
+        var recipient = button.data('avaliacao_recuperacao') 
+        var modal = $(this)
+        
+        $('#iptAvaliacao_recuperacao').val(recipient)
+        
+        $("#iptDescricao_avaliacao_recuperacao").val($("#descricao_ar").html());
+        $("#iptData_avaliacao_recuperacao").val($("#data_ar").html());
+        
+    });
+
+
     // Visualização da descrição da diciplina.
     $('#modelVerDescricaDisciplina').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
@@ -65,6 +83,7 @@ $(function () {
     });
     // Confirmação de exclusão de turma
     $('#modelExcluirTurma').on('show.bs.modal', function (event) {
+        $("#mensagem_retorno").html("");
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('turma') // Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -75,18 +94,55 @@ $(function () {
     });
 
 
+    // Visualização do conteudo da notícia.
+    $('#modelExibirConteudoNoticia').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('noticia') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        // var modal = $(this)
+        //modal.find('.modal-title').text('New message to ' + recipient)
+
+        var parametro = "noticia=" + recipient;
+        var pg = Config.base_url('cpainel/noticia/ver_conteudo_noticia_ajax');
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: parametro,
+            success: function (retorno) {
+                $('#textoNoticia').html(retorno);
+            }
+        });
+    });
+
+
+    // Confirmação da exclusão da notícia.
+    $('#modelExcluirNoticia').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('noticia') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        //modal.find('.modal-title').text('New message to ' + recipient)
+        modal.find('#noticia_excluir').val(recipient)
+    });
+
+
     //    Autocomplete pesquisa aluno para cadastra novo aluno 
     $("#ipt_aluno").autocomplete({
         minLength: 2,
         source: function (request, response) {
             var turma = $("#turma").val();
+            var opcao_pesquisa = $(":input:radio[name=rdbFiltroPesquisa]:checked").val();
+            
             $('#imag_carrgando').html('Carregando...');
             $.ajax({
                 url: Config.base_url("cpainel/aluno/obter_alunos_cadastrados"),
                 dataType: "json",
                 data: {
                     q: request.term,
-                    turma: turma
+                    turma: turma,
+                    opcao: opcao_pesquisa
                 },
                 success: function (data) {
                     $('tbody tr').remove();
@@ -182,6 +238,8 @@ $(function () {
         modal.find('#aluno').val(recipient)
     });
 
+
+
 // Trabalho com upload de anexo
     var mensagem = $("#mensagem");
     var div_porcentagem = $("#porcentagem");
@@ -271,5 +329,95 @@ $(function () {
         $(this).prev().html($(this).val());
     });
     // fim upload de anexo.
+
+
+
+
+// Trabalho com upload de imagem mini das noticias
+    var mensagem = $("#mensagem");
+    var div_porcentagem = $("#porcentagem");
+    var barra = $("#barra");
+    var campoImgame = $("#arquivo");
+    var textoCampoUp = $("#textoCampoUp");
+
+
+    $("#btn_enviar_imagem_mini").on('click', function (event) {
+        barra.width('0%');
+        barra.html('0%');
+
+        event.preventDefault();
+
+        if (campoImgame.val() == "") {
+            mensagem.html("<div class='alert alert-danger'>Por favor, selecione uma imagem!<div>");
+        } else {
+            $("#form_upload").ajaxForm({
+                url: Config.base_url('cpainel/noticia/salvar_imagem_mini_noticia_ajax'),
+                uploadProgress: function (event, position, total, percentComplete) {
+                    div_porcentagem.css('display', 'block');
+                    barra.width(percentComplete + '%');
+                    barra.html(percentComplete + '%');
+                },
+                success: function (data) {
+
+                    if (data == "sucesso") {
+                        barra.width('100%');
+                        console.log(data);
+                        mensagem.html("<div class='alert alert-success'>Imagem enviada com sucesso!");
+                        campoImgame.val("");
+                        $('#anexo_trabalho').html("Carregando...");
+
+
+                        // iniciando ajax para recaregar os anexos
+//                        $.ajax({
+//                            url: Config.base_url("cpainel/trabalho/obter_anexos_trabalho_json"),
+//                            dataType: "json",
+//                            data: {
+//                                trabalho: $('#iptTrabalho').val(),
+//                            },
+//                            success: function (data) {
+//                                $('#anexo_trabalho').html("");
+//                                //$('tbody tr').remove();
+//                                // $('#imag_carrgando').html('');
+//                                if (data.length == 0) {
+//                                    $('#imag_carrgando').html('<div class="alert alert-danger" role="alert">Aluno não encontrado!</div>');
+//                                } else {
+//                                    var linhasanexo;
+//                                    for (var n = 0; n <= data.length; n++) {
+//                                        var objeto = data[n];
+//
+//                                        linhasanexo = '<li class="list-group-item" id="linha_anexo_' + objeto.id_anexo_trabalho + '">' +
+//                                                '<a target="blank" href = "' + Config.base_url("trabalho/" + objeto.pasta_upload_trabalho + "/" + objeto.arquivo_anexo_trabalho) + '" > ' + objeto.nome_anexo_trabalho + '</a>' +
+//                                                '<a href="javascript:void(0)" title = "Remover anexo" class="link pull-right" data-toggle="modal" data-target="#modelExcluirAnexoTrabalho" data-anexo_trabalho="' + objeto.id_anexo_trabalho + '">' +
+//                                                '<span class="glyphicon glyphicon-remove" > </span>' +
+//                                                '</a>' +
+//                                                '</li>';
+//
+//                                        $("#anexo_trabalho").append(linhasanexo);
+//                                    }
+//                                }
+//                            }
+//                        });
+
+                    } else {
+
+                        barra.width('100%');
+                        console.log(data);
+                        mensagem.html(data);
+                        campoImgame.val("");
+                        textoCampoUp.html('<i class="glyphicon glyphicon-camera"></i> Selecione uma imagem </span>');
+                    }
+                },
+                error: function () {
+                    mensagem.html('Erro ao tentar acessar o arquivo!');
+                },
+                //  datatype: 'post',
+                //  data: 'id_mural=agora',
+                resetFrom: true
+            }).submit();
+        }
+    });
+
+
+
 });
 

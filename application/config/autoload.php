@@ -80,6 +80,7 @@ $autoload['helper'] = array();
 |
 */
 
+
 $autoload['config'] = array();
 
 
@@ -109,7 +110,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array();
+$autoload['model'] = array('professor_vw_model');
 
 
 /* End of file autoload.php */

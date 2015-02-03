@@ -43,7 +43,7 @@
                                         <td class="text-center"><span id="btnAddTurma_<?php echo $dc->id_disciplina ?>"> <a href="<?php echo base_url('cpainel/turma?disciplina=' . $dc->id_disciplina) ?>" ><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </a></span></td>
                                         <td class="text-center"><span id="btnEditarDisciplina_<?php echo $dc->id_disciplina ?>"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </span></td>
                                         <td class="text-center"><span id="btnExcluirDisciplina_<?php echo $dc->id_disciplina ?>"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </span></td>
-                                        <td class="text-center"><span id="btnAtivarDisciplina_<?php echo $dc->id_disciplina ?>"> <a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina('<?php echo $dc->id_disciplina ?>')"> <span class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span> </a></span></td>
+                                        <td class="text-center"><span id="btnAtivarDisciplina_<?php echo $dc->id_disciplina ?>"> <a href="javascript:void(0)" onclick="Disciplina.ativar_desativar_disciplina('<?php echo $dc->id_disciplina ?>')"> <span class="glyphicon glyphicon-check" aria-hidden="true"></span> </a></span></td>
                                     </tr>
                                     <?php
                                 }
@@ -67,6 +67,7 @@
                 <h4 class="modal-title">Excluir disciplina</h4>
             </div>
             <div class="modal-body">
+                <p id="mensagem_retorno" class="text-danger"></p>
                 <p>Você realmente deseja excluir está disciplina? </p>
                 <input type="hidden" id="disciplina_excluir" value="" />
             </div>

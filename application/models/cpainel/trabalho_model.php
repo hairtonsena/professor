@@ -68,9 +68,15 @@ class trabalho_model extends CI_Model {
         $this->db->update('nota_trabalho', $dados);
     }
 
+    // Função para excluir nota do trabalho de determinado aluno.
+    function excluir_nota_trabalho_aluno($id_trabalho, $id_aluno) {
+        $this->db->delete('nota_trabalho', array('trabalho_id_trabalho' => $id_trabalho, 'aluno_id_aluno' => $id_aluno));
+    }
+
 // Função para excluir trabalho e suas notas
     function excluir_trabalho($id_trabalho) {
         $this->db->delete('nota_trabalho', array('trabalho_id_trabalho' => $id_trabalho));
+        $this->db->delete('trabalho_aluno', array('trabalho_id_trabalho' => $id_trabalho));
         $this->db->delete('trabalho', array('id_trabalho' => $id_trabalho));
     }
 
@@ -107,6 +113,16 @@ class trabalho_model extends CI_Model {
         $this->db->join('trabalho', 'trabalho.id_trabalho = trabalho_aluno.trabalho_id_trabalho');
         $this->db->join('aluno', 'aluno.id_aluno = trabalho_aluno.aluno_id_aluno');
         return $this->db->get_where('trabalho_aluno', array('trabalho_id_trabalho' => $id_trabalho));
+    }
+
+    // Função para obter o trabalho enviado pelo aluno.
+    function obter_trabalho_do_aluno($id_trabalho, $id_aluno) {
+        return $this->db->get_where("trabalho_aluno", array("trabalho_id_trabalho" => $id_trabalho, "aluno_id_aluno" => $id_aluno));
+    }
+
+    // Função para excluir o trabalho enviado pelo aluno.
+    function excluir_trabalho_aluno($id_trabalho, $id_aluno) {
+        $this->db->delete("trabalho_aluno", array("trabalho_id_trabalho" => $id_trabalho, "aluno_id_aluno" => $id_aluno));
     }
 
     //put your code here

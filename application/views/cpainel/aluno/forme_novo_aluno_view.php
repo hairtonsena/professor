@@ -22,6 +22,16 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="email_aluno" class="col-sm-2 control-label">Email</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="email" name="email_aluno" class="form-control" id="nome_turma" value="<?php echo set_value('email_aluno') ?>" placeholder="Email">
+                                        <span class="input-group-addon" >Opcional</span>
+                                    </div>
+                                    <span class="text-danger"> <?php echo form_error('email_aluno'); ?></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="matricula_aluno" class="col-sm-2 control-label">Matricula</label>
                                 <div class="col-sm-10">
                                     <input type="text" name="matricula_aluno" class="form-control" id="matricula_aluno" value="<?php echo set_value('matricula_aluno') ?>" placeholder="Matricula">

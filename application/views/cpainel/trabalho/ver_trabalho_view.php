@@ -69,8 +69,9 @@ foreach ($turma_disciplina as $td) {
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
                     <li role="presentation" ><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
-                    <li role="presentation" class="active"><a href="#">Trabalhos</a></li>
+                    <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/turma/horario/" . $id_turma) ?>">Horário</a></li>
                 </ul>
                 <div class="row col-lg-12 semMargem" style="/*border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; */">
 
@@ -98,7 +99,7 @@ foreach ($turma_disciplina as $td) {
                             <div class="">
                                 <div class="col-sm-3 control-label"><strong>Data entrega</strong></div>
                                 <div class="col-sm-9">
-                                    <?php echo $tr->data_entrega_trabalho; ?>
+                                    <?php  echo  date('d/m/Y', strtotime($tr->data_entrega_trabalho)); ?>
                                 </div>
                             </div>
                             <div class="">
@@ -190,7 +191,7 @@ foreach ($turma_disciplina as $td) {
                         <div class="panel-heading">Trabalhos dos alunos</div>
                         <div class="panel-body">
                             <?php foreach ($trabalhos_alunos as $tra) { ?>
-                                <div style="background-color: #F3F3F3; padding-bottom: 10px; border: 1px solid #dcdcdc;" class="col-md-2 ">
+                                <div style="background-color: #F3F3F3; padding-bottom: 10px; border: 1px solid #dcdcdc; word-wrap: break-word;" class="col-md-2 ">
                                     <h4><?php echo $tra->nome_aluno ?></h4>
                                     <p class="text-center">
                                         <a target="blank" href="<?php echo base_url("trabalho/" . $tra->pasta_upload_trabalho . "/" . $tra->nome_arquivo_trabalho_aluno) ?>"> 

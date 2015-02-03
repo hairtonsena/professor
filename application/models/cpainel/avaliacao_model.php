@@ -63,9 +63,9 @@ class avaliacao_model extends CI_Model {
         $this->db->update('nota_avaliacao', $dados);
     }
 
-    // // Função para excluir todas as nota da avaliaçao
-    function excluir_nota_avaliacao($id_avaliacao) {
-        $this->db->delete('avaliacao', array('id_avaliacao' => $id_avaliacao));
+    // Função para excluir a nota da avaliaçao de determinado aluno. 
+    function excluir_nota_avaliacao_aluno($id_avaliacao, $id_aluno) {
+        $this->db->delete('nota_avaliacao', array('avaliacao_id_avaliacao' => $id_avaliacao, "aluno_id_aluno" => $id_aluno));
     }
 
     // Função para excluir avaliacao e as notas dos alunos que fizerão a avaliaçõa.
@@ -80,6 +80,11 @@ class avaliacao_model extends CI_Model {
 
     function obter_avaliacao_recuperacao($id_turma) {
         return $this->db->get_where('avaliacao_recuperacao', array('turma_id_turma' => $id_turma));
+    }
+
+    // Função para excluir recuperacao da turma.
+    function excluir_avaliacao_recuperacao_turma($id_turma) {
+        $this->db->delete('avaliacao_recuperacao', array('turma_id_turma' => $id_turma));
     }
 
     // Função para pegar a nota de um aluno da avaliação de recuperação
@@ -110,6 +115,22 @@ class avaliacao_model extends CI_Model {
     function alterando_nota_avaliacao_recuperacao_aluno($dados, $id_avaliacao_recuperacao, $id_aluno) {
         $this->db->where(array('aluno_id_aluno' => $id_aluno, 'avaliacao_recuperacao_id_avaliacao_recuperacao' => $id_avaliacao_recuperacao));
         $this->db->update('nota_avaliacao_recuperacao', $dados);
+    }
+
+    // Função para excluir a nota de recuperacao de determinado aluno.
+    function excluir_nota_avaliacao_recuperacao_aluno($id_avaliacao_recuperacao, $id_aluno) {
+        $this->db->delete('nota_avaliacao_recuperacao', array('avaliacao_recuperacao_id_avaliacao_recuperacao' => $id_avaliacao_recuperacao, 'aluno_id_aluno' => $id_aluno));
+    }
+
+    // Função para excluir a nota de recuperacao de todos alunos.
+    function excluir_nota_avaliacao_recuperacao_todos_aluno($id_avaliacao_recuperacao) {
+        $this->db->delete('nota_avaliacao_recuperacao', array('avaliacao_recuperacao_id_avaliacao_recuperacao' => $id_avaliacao_recuperacao));
+    }
+
+    // Alterando dadas da avaliacao de recuperação.
+    function alterando_dados_avaliacao_recuperacao($dados, $id_avaliacao_recuperacao) {
+        $this->db->where(array('id_avaliacao_recuperacao' => $id_avaliacao_recuperacao));
+        $this->db->update('avaliacao_recuperacao', $dados);
     }
 
 }
