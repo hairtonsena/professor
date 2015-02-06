@@ -8,18 +8,18 @@
             if ($ntpi->imagem_mini_noticia == NULL) {
                 ?>
                 <div class="col-md-12 linha">
-                    <a href="<?php echo base_url("publicacao/ler/" . $ntpi->url_noticia) ?>">
+                    <a class="link_diversos" href="<?php echo base_url("publicacao/ler/" . $ntpi->url_noticia) ?>">
         <!--                <div class="img_conteudo"><img src="./imagens/imagen_teste.jpg" alt="..."></div>-->
                         <h3><?php echo $ntpi->titulo_noticia ?></h3>
-                        <p>jhsdfhshf jh klashdfk kjhf sjdhf asdflhasdf asdfkjhsadf sdafhasdf sadlkjfhasd fasdfjh sdfjh sdfhsdf asdjfh sdfjhasdf kljhsd fkljhasdfhsd kjhsdf asjh</p>
+                        <p><?php echo substr(strip_tags($ntpi->conteudo_noticia),0,50) ?></p>
                     </a>
                 </div>
             <?php } else { ?>
                 <div class="col-md-12 linha">
-                    <a href="<?php echo base_url("publicacao/ler/" . $ntpi->url_noticia) ?>">
+                    <a class="link_diversos" href="<?php echo base_url("publicacao/ler/" . $ntpi->url_noticia) ?>">
                         <div class="img_conteudo"><img src="<?php echo base_url("noticia/imagem_mini/" . $ntpi->imagem_mini_noticia) ?>" alt="..."></div>
                         <h3><?php echo $ntpi->titulo_noticia ?></h3>
-                        <p>jhsdfhshf jh klashdfk kjhf sjdhf asdflhasdf asdfkjhsadf sdafhasdf sadlkjfhasd fasdfjh sdfjh sdfhsdf asdjfh sdfjhasdf kljhsd fkljhasdfhsd kjhsdf asjh</p>
+                        <p><?php echo substr(strip_tags($ntpi->conteudo_noticia),0,50) ?></p>
                     </a>
                 </div>
                 <?php

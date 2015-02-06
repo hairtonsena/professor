@@ -42,15 +42,15 @@ foreach ($disciplina_turma as $dt) {
                     <?php foreach ($trabalhos_turma as $trt) { ?>
 
                         <tr>
-                            <td><a class="link_diversos" data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><?php echo $trt->titulo_trabalho ?></a></td>
-                            <td class="text-center"><?php echo date('d/m/Y', strtotime($trt->data_entrega_trabalho)) ?></td>
-                            <td class="text-center"><?php echo $trt->valor_nota_trabalho ?></td>
+                            <td class="col-md-10">
+                                <a class="botao" data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><?php echo $trt->titulo_trabalho ?></a></td>
+                            <td class="text-center col-md-2"><?php echo date('d/m/Y', strtotime($trt->data_entrega_trabalho)) ?></td>
+                            <td class="text-center col-md-1"><?php echo $trt->valor_nota_trabalho ?></td>
                         </tr>
                         <tr>
                             <td colspan="3" >
                                 <div class="collapse" id="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>">
-                                    <?php echo $trt->descricao_trabalho ?>
-                                    <br/>
+                                    <p><?php echo $trt->descricao_trabalho ?></p>
                                     <br/>
                                     <div class="panel panel-primary">
                                         <div class="panel-heading" style="color: white">

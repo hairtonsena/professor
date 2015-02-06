@@ -5,13 +5,13 @@ class turma_model extends CI_Model {
     // Obter turma ativa por disciplina.
     function obter_turma_ativa_por_disciplina($id_disciplina) {
         $this->db->order_by("nome_turma","asc");
-        $this->db->where(['disciplina_id_disciplina' => $id_disciplina, 'status_turma <>' => 2]);
+        $this->db->where(array('disciplina_id_disciplina' => $id_disciplina, 'status_turma <>' => 2));
         return $this->db->get('turma');
     }
 
     // Obter turma ativa por disciplina.
     function obter_turmas_arquivadas_por_disciplina($id_disciplina) {
-        $this->db->where(['disciplina_id_disciplina' => $id_disciplina, 'status_turma ' => 2]);
+        $this->db->where(array('disciplina_id_disciplina' => $id_disciplina, 'status_turma ' => 2));
         return $this->db->get('turma');
     }
 

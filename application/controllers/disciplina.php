@@ -94,10 +94,7 @@ class Disciplina extends CI_Controller {
     }
 
     public function turma_arquivada() {
-//
-//        if (!$this->input->get('disciplina', TRUE)) {
-//            redirect(base_url());
-//        }
+
 
         $id_disciplina = (int) mysql_real_escape_string($this->uri->segment(3));
         // Buscando e verificando a disciplina escolhida.

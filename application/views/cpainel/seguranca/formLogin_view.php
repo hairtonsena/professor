@@ -22,7 +22,7 @@
             }
 
             #pnlLogin {
-                margin: 6% 40%;
+                margin: 6% 30%;
                 background-color: #eee;
             }
 
@@ -31,17 +31,19 @@
     </head>
     <body>
         <div class="nav navbar" style="background-color: #eee;">
-            <div class="col-lg-3 pull-right" >
-                Professor André
-            </div>
-            <div class="col-lg-9">
-                <a href="<?php echo base_url("./../") ?>" class="btn btn-large btn-primary"> Voltar para o inicio </a> 
+            <div class="container">
+                <!--<div class="col-lg-3 pull-right" >-->
+                    <p class="navbar-text navbar-right"> Professor André </p>
+                <!--</div>-->
+                <!--<div class="col-lg-9">-->
+                    <a href="<?php echo base_url() ?>" class="btn btn-large btn-primary navbar-btn"> Voltar para o inicio </a> 
+                <!--</div>-->
             </div>
         </div>
         <div id="conteiner">
-            <div class="thumbnail col-lg-3" id="pnlLogin">
+            <div class="thumbnail col-lg-5" id="pnlLogin">
                 <form name="frmLogin" action="<?php echo base_url("cpainel/seguranca/logarUsuario") ?>" method="post">
-                    <fieldset>
+                    <fieldset class="col-lg-12">
 
                         <legend> Painel de Controle </legend>
                         <span class="text-error"> 

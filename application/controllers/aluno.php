@@ -29,7 +29,6 @@ class aluno extends CI_Controller {
         if (($this->session->userdata('id_aluno')) && ($this->session->userdata('nome_aluno')) && ($this->session->userdata('cpf_aluno')) && ($this->session->userdata('matricula_aluno')) && ($this->session->userdata('verificar_login') == 'cored.com')) {
             $id_aluno = $this->session->userdata('id_aluno');
 
-
             $disciplina_turma = $this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
 
             // Carregar o menu disciplina
@@ -37,8 +36,6 @@ class aluno extends CI_Controller {
             $dados_menu = array(
                 "munu_disciplina" => $disciplina_menu
             );
-
-
 
             $dados = array(
                 "disciplina_turma" => $disciplina_turma,
@@ -60,7 +57,6 @@ class aluno extends CI_Controller {
 
             $id_aluno = $this->session->userdata('id_aluno');
 
-
             $disciplina_turma = $this->aluno_model->obter_turma_disciplina_aluno($id_turma, $id_aluno)->result(); //$this->aluno_model->obter_disciplina_turma_aluno($id_aluno)->result();
             if (count($disciplina_turma) == 0) {
                 redirect(base_url());
@@ -72,7 +68,6 @@ class aluno extends CI_Controller {
                 "munu_disciplina" => $disciplina_menu
             );
 
-
             // Buscando todas avaliações da turma selecionada.
             $avaliacoes = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
 
@@ -82,7 +77,6 @@ class aluno extends CI_Controller {
                 $trb->anexos_trabalho = $this->trabalho_model->obeter_anexos_trabalho($trb->id_trabalho)->result();
                 $trb->trabalho_aluno = $this->trabalho_model->obeter_aluno_trabalho($id_aluno, $trb->id_trabalho)->result();
             }
-
 
             $dados = array(
                 "disciplina_turma" => $disciplina_turma,
@@ -106,7 +100,6 @@ class aluno extends CI_Controller {
             $id_aluno = $this->session->userdata('id_aluno');
             $id_trabalho = $this->input->post('trabalho');
 
-
             $trabalho = $this->trabalho_model->obter_um_trabalho($id_trabalho)->result();
             $pasta;
             if (count($trabalho) > 0) {
@@ -121,13 +114,12 @@ class aluno extends CI_Controller {
 
             $nome_arquivo = $_FILES[$field_name]['name'];
 
-
             $config['remove_spaces'] = TRUE;
             $config['overwrite'] = FALSE;
             $config['file_name'] = $nome_arquivo;
             $config['upload_path'] = $diretorio_anexo; // server directory
             $config['allowed_types'] = 'pdf'; // by extension, will check for whether it is an image
-            $config['max_size'] = 1024 * 10; // in kb -> total 10MB
+            $config['max_size'] = 1024 * 1024 * 10; // in kb -> total 10MB
             $config['is_image'] = 0;
 
             $this->upload->initialize($config);
@@ -135,7 +127,6 @@ class aluno extends CI_Controller {
             $files = $this->upload->do_upload($field_name);
 
             if (!$files) {
-
                 $error = $this->upload->display_errors('<div class="alert alert-danger">', '<div>');
                 echo $error;
             } else {
@@ -162,13 +153,11 @@ class aluno extends CI_Controller {
                         unlink("trabalho/" . $pasta . "/" . $arquivo_antigo);
                     }
 
-
                     $dados = array(
                         'nome_arquivo_trabalho_aluno' => $dadosImagem['file_name'],
                         'data_envio_trabalho_aluno' => date("Y-m-d"),
                         'hora_envio_trabalho_aluno' => date("H:i:s"),
                     );
-
 
                     $this->trabalho_model->alterar_trabalho_aluno($dados, $id_aluno, $id_trabalho);
                 }
@@ -176,7 +165,7 @@ class aluno extends CI_Controller {
                 echo "sucesso";
             }
         } else {
-            redirect(base_url());
+            echo "Acesso nogado!";
         }
     }
 
@@ -209,8 +198,6 @@ class aluno extends CI_Controller {
             $dados_menu = array(
                 "munu_disciplina" => $disciplina_menu,
             );
-
-
 
             $this->load->view('tela/titulo');
             $this->load->view('tela/menu', $dados_menu);

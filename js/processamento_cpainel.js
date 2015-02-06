@@ -1,13 +1,3 @@
-Config = {
-    base_url: function (url) {
-        var url_base = 'http://localhost/andre/';
-        return url_base + url;
-    },
-    redirecionar_pagina: function (pg) {
-        window.location.href = pg;
-    }
-};
-
 Turma = {
     // Função para excluir uma turma
     excluir_turma: function () {
@@ -158,7 +148,7 @@ Noticia = {
                     linkAtivarNoticia = '<a href="javascript:void(0)" onclick="Noticia.ativar_desativar_noticia(\'' + id + '\')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a>';
                     linkEditarNoticia = '<a href="' + Config.base_url('cpainel/noticia/alterar/' + id) + '"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
                     linkExcluirNoticia = '<a href="javascript:void(0)" data-toggle="modal" data-target="#modelExcluirNoticia" data-noticia="' + id + '"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </a>';
-                    linkImagemMini = '<a href="' + Config.base_url("cpainel/noticia/alterar_imagem_mini/" + id) + ' "><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> <a href="#"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>';
+                    linkImagemMini = '<a href="' + Config.base_url("cpainel/noticia/alterar_imagem_mini/" + id) + ' "><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> <a href="javascript:void(0)" onclick="Noticia.excluir_imagem_mini(\'' + id + '\')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>';
                 }
 
                 $(btnAtivarNoticia).html(linkAtivarNoticia);
@@ -188,7 +178,7 @@ Noticia = {
             }
         });
     },
-     excluir_imagem_mini: function (noticia) {
+    excluir_imagem_mini: function (noticia) {
 //        var noticia = $('#noticia_excluir').val();
         var parametro = "noticia=" + noticia;
         var pg = Config.base_url('cpainel/noticia/excluir_imagem_mini_noticia');

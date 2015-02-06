@@ -1,20 +1,8 @@
 <?php
 
 if (!defined('BASEPATH'))
-    exit
-            ('No direct script access allowed');
+    exit('No direct script access allowed');
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of seguranca
- *
- * @author hairton
- * 
- */
 class seguranca extends CI_Controller {
 
     public function __construct() {
@@ -91,7 +79,6 @@ class seguranca extends CI_Controller {
                     'nome_professor' => $ul->nome_professor,
                     'email_professor' => $ul->email_professor,
                     'senha_professor' => $ul->senha_professor
-                    
                 );
                 $this->session->set_userdata($dadosUser);
             }

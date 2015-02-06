@@ -4,7 +4,7 @@ class turma_model extends CI_Model {
 
     // Obter turma ativa por disciplina.
     function obter_turma_ativa_por_disciplina($id_disciplina) {
-        $this->db->where(['disciplina_id_disciplina' => $id_disciplina, 'status_turma =' => 1]);
+        $this->db->where(array('disciplina_id_disciplina' => $id_disciplina, 'status_turma =' => 1));
         return $this->db->get('turma');
     }
 

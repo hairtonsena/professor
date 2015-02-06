@@ -35,7 +35,7 @@ foreach ($noticia as $nt) {
                     <div class="form-group">
                         <label for="data_noticia" class="col-sm-12">Data</label>
                         <div class="col-sm-12">
-                            <input type="text" disabled="true" name="data_noticia" class="form-control" id="data_noticia" value="<?php if($data_noticia!="0000-00-00") echo date('d/m/Y', strtotime($data_noticia ))?>" placeholder="00/00/0000">
+                            <input type="text" disabled="true" name="data_noticia" class="form-control" id="data_noticia" value="<?php if ($data_noticia != "0000-00-00") echo date('d/m/Y', strtotime($data_noticia)) ?>" placeholder="00/00/0000">
                             <span class="text-danger"> <?php echo form_error('data_noticia'); ?></span>
                         </div>
                     </div>
@@ -43,14 +43,14 @@ foreach ($noticia as $nt) {
                 <div class="col-lg-8"  style="padding-top: 5px; border-left: 1px solid #ddd;">
 
 
-                    <form action="<?php echo base_url("cpainel/trabalho/salvar_anexo_trabalh_o") ?>" method="post" id="form_upload" enctype="multipart/form-data">
+                    <form action="<?php echo base_url("cpainel/") ?>" method="post" id="form_upload" enctype="multipart/form-data">
                         <fieldset>
-                            <legend>Adicionar anexo</legend>
+                            <legend>Adicionar imagem de capa</legend>
                             <div id="container">
-                                <input type="hidden" name="noticia" value="<?php echo $id_noticia ?>"/>
+                                <input type="hidden" name="noticia" id="iptNoticia" value="<?php echo $id_noticia ?>"/>
                                 <div id="mensagem"></div>
                                 <div class="inputFile col-lg-12">
-                                    <span class="" id="textoCampoUp"><i class="glyphicon glyphicon-camera"></i> Selecione uma imagem </span>
+                                    <span class="" id=""><i class="glyphicon glyphicon-camera"></i> Selecione uma imagem </span>
                                     <input type="file" id="arquivo"  name="arquivo">
                                     <!--accept="application/pdf"-->
                                 </div>
@@ -62,8 +62,7 @@ foreach ($noticia as $nt) {
                                 </div>
                                 <div class="text-center">
                                     <input type="submit" class="btn btn-primary pull-right" name="enviar" id="btn_enviar_imagem_mini">
-                                </div>
-
+                                </div>  
                             </div>
                         </fieldset>
                     </form>
@@ -71,12 +70,14 @@ foreach ($noticia as $nt) {
                     <div>
                         <div class="panel panel-primary">
                             <div class="panel-heading" style="color: white">
-                                Anexos
+                                Imagem
                             </div>
                             <div class="panel-body">
-                                
-                                <?php echo $imagem_mini_noticia ?>
-                                
+                                <div id="imagem_mini_retorno">
+                                    <?php if ( $imagem_mini_noticia != NULL) { ?>
+                                        <img src="<?php echo base_url("noticia/imagem_mini/" . $imagem_mini_noticia) ?>" />
+                                    <?php } ?>
+                                </div>
                             </div>
                         </div>
                     </div>

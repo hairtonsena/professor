@@ -150,7 +150,7 @@ class turma extends CI_Controller {
         }
     }
 
-    // Função para ativar e desativar turma
+    // Função para ativar e desativar turma. Requisição AJAX.
     public function ativar_desativar_turma() {
         // verificando usuário logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {

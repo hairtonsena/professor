@@ -50,14 +50,14 @@ $(function () {
     $('#modelFormeAlerarAvaliacaoRecuperacao').on('show.bs.modal', function (event) {
         $("#mensagem_retorno").html("");
         var button = $(event.relatedTarget)
-        var recipient = button.data('avaliacao_recuperacao') 
+        var recipient = button.data('avaliacao_recuperacao')
         var modal = $(this)
-        
+
         $('#iptAvaliacao_recuperacao').val(recipient)
-        
+
         $("#iptDescricao_avaliacao_recuperacao").val($("#descricao_ar").html());
         $("#iptData_avaliacao_recuperacao").val($("#data_ar").html());
-        
+
     });
 
 
@@ -134,7 +134,7 @@ $(function () {
         source: function (request, response) {
             var turma = $("#turma").val();
             var opcao_pesquisa = $(":input:radio[name=rdbFiltroPesquisa]:checked").val();
-            
+
             $('#imag_carrgando').html('Carregando...');
             $.ajax({
                 url: Config.base_url("cpainel/aluno/obter_alunos_cadastrados"),
@@ -333,7 +333,7 @@ $(function () {
 
 
 
-// Trabalho com upload de imagem mini das noticias
+// Trabalhando com upload de imagem mini das noticias
     var mensagem = $("#mensagem");
     var div_porcentagem = $("#porcentagem");
     var barra = $("#barra");
@@ -362,41 +362,24 @@ $(function () {
                     if (data == "sucesso") {
                         barra.width('100%');
                         console.log(data);
-                        mensagem.html("<div class='alert alert-success'>Imagem enviada com sucesso!");
+                        mensagem.html("<div class='alert alert-success'>Imagem inserida com sucesso!");
                         campoImgame.val("");
                         $('#anexo_trabalho').html("Carregando...");
 
 
                         // iniciando ajax para recaregar os anexos
-//                        $.ajax({
-//                            url: Config.base_url("cpainel/trabalho/obter_anexos_trabalho_json"),
-//                            dataType: "json",
-//                            data: {
-//                                trabalho: $('#iptTrabalho').val(),
-//                            },
-//                            success: function (data) {
-//                                $('#anexo_trabalho').html("");
-//                                //$('tbody tr').remove();
-//                                // $('#imag_carrgando').html('');
-//                                if (data.length == 0) {
-//                                    $('#imag_carrgando').html('<div class="alert alert-danger" role="alert">Aluno não encontrado!</div>');
-//                                } else {
-//                                    var linhasanexo;
-//                                    for (var n = 0; n <= data.length; n++) {
-//                                        var objeto = data[n];
-//
-//                                        linhasanexo = '<li class="list-group-item" id="linha_anexo_' + objeto.id_anexo_trabalho + '">' +
-//                                                '<a target="blank" href = "' + Config.base_url("trabalho/" + objeto.pasta_upload_trabalho + "/" + objeto.arquivo_anexo_trabalho) + '" > ' + objeto.nome_anexo_trabalho + '</a>' +
-//                                                '<a href="javascript:void(0)" title = "Remover anexo" class="link pull-right" data-toggle="modal" data-target="#modelExcluirAnexoTrabalho" data-anexo_trabalho="' + objeto.id_anexo_trabalho + '">' +
-//                                                '<span class="glyphicon glyphicon-remove" > </span>' +
-//                                                '</a>' +
-//                                                '</li>';
-//
-//                                        $("#anexo_trabalho").append(linhasanexo);
-//                                    }
-//                                }
-//                            }
-//                        });
+                        $.ajax({
+                            url: Config.base_url("cpainel/noticia/obter_imagem_noticia_ajax"),
+//                            dataType: "AJAX",
+                            type: "post",
+                            data: {
+                                noticia: $('#iptNoticia').val()
+                            },
+                            success: function (retorno) {
+                                $('#imagem_mini_retorno').html(retorno);
+
+                            }
+                        });
 
                     } else {
 

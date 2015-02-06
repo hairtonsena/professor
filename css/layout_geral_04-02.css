@@ -25,7 +25,7 @@ and open the template in the editor.
 
     top: 0px;
     bottom: 0px;
-    /*    overflow: auto;*/
+/*    overflow: auto;*/
 }
 
 .nome
@@ -58,7 +58,7 @@ and open the template in the editor.
 .barra_rolar_menu
 {
     width: auto;
-    height: 450px;
+    height: 250px;
     width:auto;
     overflow: auto;
 }
@@ -68,8 +68,6 @@ and open the template in the editor.
     height: 350px;
     bottom: 0px;
 }
-
-
 
 /*----------------------------------------------------------*/
 
@@ -175,7 +173,7 @@ and open the template in the editor.
     {
         width: 100%;
         color: #F7F7F7;
-        font-size: 70px;
+        font-size: 35px;
         border: 1px solid #000000;
     }
 
@@ -183,134 +181,6 @@ and open the template in the editor.
     {
         color: #2B2B2B;
     }
-
-
-    .arquivado
-    {
-        float: right;
-        width: auto;
-        height: 65px;
-        padding: 5px;
-        border: 1px solid #dcdcdc;
-        border-radius: 5px;
-        color: #000000;
-        background-color: #FFFFFF;
-        text-align: center;
-        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-        font-size: 40px;
-    }
-
-
-    .botao_turmas
-    {
-        float: left;
-        width: 100%;
-        height: 95px;
-        margin: 5px;
-        padding: 15px;
-        border: 1px solid #666;
-        border-radius: 5px;
-        color: #F7F7F7;
-        background-color: #428BCA;
-        text-align: center;
-        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-        font-size: 55px;
-        line-height: 1;
-    }
-
-    .link_diversos
-    {
-        width: 100%;
-        color: #2b2b2b;
-        /*    background-color: #0066cc;*/
-        /*text-align: ;*/
-        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-        font-size: 40px;
-        /*    font-weight: bold;*/
-        text-decoration: none;
-    }
-
-    .botao
-    {
-        float: left;
-        width: 100%;
-        height: 65px;
-        /*margin: 5px;*/
-        padding: 10px;
-        border: 1px solid #666;
-        /*        border-radius: 5px;*/
-        color: #F7F7F7;
-        background-color: #428BCA;
-        text-align: center;
-        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-        font-size: 40px;
-        line-height: 1;
-    }
-
-    .botao:hover
-    {
-        text-decoration: none;
-        color: #2a6496;
-    }
-
-
-
-    a:hover
-    {
-        color: #2a6496;
-        text-decoration: none;
-    }
-
-    a:focus
-    {
-        text-decoration: none;
-        color: #FFFFFF;
-    }
-    /*    a
-        {
-            color: #F7F7F7;
-            text-decoration: none;
-        }
-    
-        a:hover
-        {
-            text-decoration: none;
-            color: #2a6496;
-        }
-    
-    
-        a:active
-        {
-            color: #F7F7F7;
-            text-decoration: none;
-        }
-    
-        a:visited
-        {
-            color: #F7F7F7;
-            text-decoration: none;
-        }*/
-
-
-    .table
-    {
-        font-size: 30px;
-    }
-
-
-    h3
-    {
-        font-size: 50px;
-    }
-
-    p
-    {
-        font-size: 22px;
-        text-align: justify;
-        line-height: 1;
-    }
-
-
 }
 
 .fim_roda_pe_smart
@@ -324,8 +194,6 @@ and open the template in the editor.
     background-color: #dcdcdc;
     text-align: center;
 }
-
-
 
 
 /*---------------------------------------------------*/
@@ -346,85 +214,11 @@ and open the template in the editor.
         -o-transition: 0.3s ease-in;
     }
 
-    .arquivado
-    {
-        float: right;
-        width: auto;
-        height: 35px;
-        padding: 5px;
-        border: 1px solid #dcdcdc;
-        border-radius: 5px;
-        color: #000000;
-        background-color: #FFFFFF;
-        text-align: center;
-        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-        font-size: 18px;
-    }
-
-    .arquivado:visited
-    {
-        background-color: #ffffff;
-        color: #000;
-    }
-
-    .botao_turmas
-    {
-        float: left;
-        width: 100%;
-        height: 45px;
-        margin: 5px;
-        padding: 5px;
-        border: 1px solid #666;
-        border-radius: 5px;
-        color: #F7F7F7;
-        background-color: #428BCA;
-        text-align: center;
-        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-        font-size: 28px;
-        line-height: 1;
-    }
-
-    .botao_turmas:visited
-    {
-        background-color: #428BCA;
-    }
-
-
-    .botao
-    {
-        float: left;
-        width: 100%;
-        height: 38px;
-        padding: 5px;
-        border: 1px solid #666;
-        border-radius: 5px;
-        color: #F7F7F7;
-        background-color: #428BCA;
-        text-align: center;
-        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-        font-size: 22px;
-        line-height: 1;
-    }
-
-    .botao:hover
-    {
-        text-decoration: none;
-        color: #2a6496;
-    }
-
-
-
-    a:hover
-    {
-        color: #2a6496;
-        text-decoration: none;
-    }
-
-    a:focus
-    {
-        text-decoration: none;
-        color: #FFFFFF;
-    }
+    /*    .link a:enabled
+        {
+            background-color: #dcdcdc;
+            color: #000000;
+        }*/
 
     .link a
     {
@@ -437,42 +231,12 @@ and open the template in the editor.
     {
         color: #000;
     }
-
+    
     .link a:active
     {
         color: #000;
     }
-
-
-    .link_diversos
-    {
-        width: 100%;
-        color: #2b2b2b;
-        /*    background-color: #0066cc;*/
-        /*text-align: ;*/
-        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-        font-size: 15px;
-        /*    font-weight: bold;*/
-        text-decoration: none;
-    }
-
-
-    .table
-    {
-        font-size: 16px;
-    }
-
-    h3
-    {
-        font-size: 25px;
-    }
-
-    p
-    {
-        font-size: 16px;
-        text-align: justify;
-    }
-
+    
 
     .fim_roda_pe
     {
@@ -537,6 +301,38 @@ and open the template in the editor.
 
 
 /*-------------------------------------------------------*/
+.arquivado
+{
+    float: right;
+    width: auto;
+    height: 35px;
+    padding: 5px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    color: #000000;
+    background-color: #FFFFFF;
+    text-align: center;
+    font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+    font-size: 18px;
+}
+
+
+.botao_turmas
+{
+    float: left;
+    width: 100%;
+    height: 45px;
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #666;
+    border-radius: 5px;
+    color: #F7F7F7;
+    background-color: #428BCA;
+    text-align: center;
+    font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+    font-size: 28px;
+    line-height: 1;
+}
 
 
 .arquivado:hover
@@ -555,17 +351,25 @@ and open the template in the editor.
 }
 
 
-
-
-.link_diversos:hover{
+.link_diversos
+{
+    width: 100%;
+    color: #0066cc;
+/*    background-color: #0066cc;*/
+    text-align: center;
+    font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+    font-size: 15px;
+    font-weight: bold;
     text-decoration: none;
 }
+
 
 .invisivel
 {
     background-color: #F3F3F3;
     color: #F3F3F3;
 }
+
 
 .col-md-4
 {

@@ -18,7 +18,7 @@ class Noticia extends CI_Controller {
 
         $this->load->library('upload');
 
-//        $this->load->library('resize');
+        $this->load->library('canvas');
     }
 
     public function index() {
@@ -264,7 +264,7 @@ class Noticia extends CI_Controller {
 
             $config['remove_spaces'] = TRUE;
             $config['overwrite'] = FALSE;
-            $config['file_name'] = $nome_arquivo;
+            $config['encrypt_name'] = TRUE;
             $config['upload_path'] = $diretorio_anexo; // server directory
             $config['allowed_types'] = 'png|jpg|jpeg'; // by extension, will check for whether it is an image
             $config['max_size'] = 1024 * 1024 * 10; // in kb -> total 10MB
@@ -282,9 +282,9 @@ class Noticia extends CI_Controller {
             } else {
                 $dadosImagem = $this->upload->data();
 
-                $this->redimencionar_imagem($pasta, $dadosImagem['file_name']);
+                $imagem_mini = $this->redimencionar_imagem($pasta, $dadosImagem['file_name']);
 
-
+                // Excluindo a imagem antiga.
                 foreach ($noticia as $nt) {
                     if ($nt->imagem_mini_noticia != null) {
                         $arquivo = $pasta . $nt->imagem_mini_noticia;
@@ -295,14 +295,42 @@ class Noticia extends CI_Controller {
 
 
                 $dados = array(
-                    'imagem_mini_noticia' => $dadosImagem['file_name'],
+                    'imagem_mini_noticia' => $imagem_mini,
                 );
 
                 $this->noticia_model->alterar_dados_noticia($dados, $id_noticia);
                 echo "sucesso";
             }
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado";
+        }
+    }
+
+    public function obter_imagem_noticia_ajax() {
+        // verificando se o usuário está logado.
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+
+            $id_noticia = $this->input->post("noticia");
+
+            $retorno = "";
+
+            $noticia = $this->noticia_model->obter_noticia_por_id($id_noticia)->result();
+            if (count($noticia) == 0) {
+                $retorno = "Notícia não encontrada.";
+            } else {
+                foreach ($noticia as $nt) {
+                    if ($nt->imagem_mini_noticia != NULL) {
+                        $arquivo = "noticia/imagem_mini/" . $nt->imagem_mini_noticia;
+                        $retorno = "<img src='" . base_url($arquivo) . "' />";
+                    }
+                }
+
+                //  $retorno = "1";
+            }
+
+            echo $retorno;
+        } else {
+            echo "Acesso negado!";
         }
     }
 
@@ -364,35 +392,32 @@ class Noticia extends CI_Controller {
                 $dados = array(
                     "imagem_mini_noticia" => NULL,
                 );
-                $this->noticia_model->alterar_dados_noticia($dados,$id_noticia);
+                $this->noticia_model->alterar_dados_noticia($dados, $id_noticia);
 
                 $retorno = "1";
             }
 
             echo $retorno;
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
 
-    function redimencionar_imagem($pasta, $arquivo) {
-//        $config['image_library'] = 'gd2';
-////       $config['library_path'] = '/etc/';
-//        $config['source_image'] = $pasta;
-//        $config['create_thumb'] = TRUE;
-//        $config['maintain_ratio'] = TRUE;
-//        $config['width'] = 100;
-//        $config['hight'] = 60;
-//        $config['new_image'] = "/noticia/imagem_mini/".$arquivo;
-//
-////        $this->image_lib->initialize($config);
-//
-//        $this->load->library('image_lib',$config);
-//        
-//        if(!$this->image_lib->resize()){
-//          echo  $erro = $this->image_lib->display_errors('<p>', '</p>');
-//           
-//        }
+    function redimencionar_imagem($pasta, $imag) {
+
+        $origem_imagem = $pasta . $imag;
+        $nome_nova_imagem = 'mini_' . $imag;
+        $destino_imagem = $pasta . $nome_nova_imagem;
+
+        $img = new canvas();
+        $img->carrega($origem_imagem)
+                ->redimensiona(200, 150, 'crop')
+                ->grava($destino_imagem, 100);
+
+        if (is_file($origem_imagem))
+            unlink($origem_imagem);
+
+        return $nome_nova_imagem;
     }
 
     // Função para ativar e desativar aluno. Requisição AJAX.
@@ -428,7 +453,7 @@ class Noticia extends CI_Controller {
 
             echo $retorno;
         } else {
-            redirect(base_url("cpainel/seguranca"));
+            echo "Acesso negado!";
         }
     }
 

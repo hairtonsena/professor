@@ -36,7 +36,7 @@ class disciplina_model extends CI_Model {
 
     // Obter as turmas de uma disciplina.
     function obter_turmas_da_disciplina($id_disciplina) {
-        $this->db->where(['disciplina_id_disciplina' => $id_disciplina]);
+        $this->db->where(array('disciplina_id_disciplina' => $id_disciplina));
         return $this->db->get('turma');
     }
 

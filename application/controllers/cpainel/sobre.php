@@ -12,12 +12,10 @@ class Sobre extends CI_Controller {
         $this->load->database();
         $this->load->library('form_validation');
         $this->load->library('session');
-//        $this->load->model('cpainel/trabalho_model');
-//        $this->load->model('cpainel/turma_model');
         $this->load->model('cpainel/professor_model');
-//        $this->load->model('cpainel/avaliacao_model');
         $this->load->library('upload');
         date_default_timezone_set('UTC');
+        $this->load->library('canvas');
     }
 
     public function index() {
@@ -25,7 +23,6 @@ class Sobre extends CI_Controller {
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
             $id_professor = $this->session->userdata('id_professor');
-
             $professor = $this->professor_model->obter_professor_id($id_professor)->result();
 
             $dados = array(
@@ -135,9 +132,9 @@ class Sobre extends CI_Controller {
             $config['overwrite'] = FALSE;
             $config['encrypt_name'] = TRUE;
             $config['upload_path'] = $diretorio_anexo; // server directory
-            $config['allowed_types'] = 'jpg'; // by extension, will check for whether it is an image
-            $config['max_size'] = 1024 * 10; // in kb -> total 10MB
-            $config['is_image'] = 0;
+            $config['allowed_types'] = 'jpg|png|jpeg'; // by extension, will check for whether it is an image
+            $config['max_size'] = 1024 * 1024 * 10; // in kb -> total 10MB
+            $config['is_image'] = 1;
 
             $this->upload->initialize($config);
 
@@ -157,15 +154,15 @@ class Sobre extends CI_Controller {
                 foreach ($professor as $pr) {
                     $arquivo_antigo = $pr->imagem_professor;
                 }
-                if (file_exists("imagens/" . $arquivo_antigo)) {
+                if (is_file("imagens/" . $arquivo_antigo)) {
                     unlink("imagens/" . $arquivo_antigo);
                 }
 
-
+                $nome_imagem_mini = $this->redimencionar_imagem($diretorio_anexo, $dadosImagem['file_name']);
+                
                 $dados = array(
-                    'imagem_professor' => $dadosImagem['file_name'],
+                    'imagem_professor' => $nome_imagem_mini ,
                 );
-
 
                 $this->professor_model->alterar_dados_professor($dados, $id_professor);
 
@@ -175,6 +172,23 @@ class Sobre extends CI_Controller {
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
+    }
+
+    function redimencionar_imagem($pasta, $imag) {
+
+        $origem_imagem = $pasta . $imag;
+        $nome_nova_imagem = 'mini_' . $imag;
+        $destino_imagem = $pasta . $nome_nova_imagem;
+
+        $img = new canvas();
+        $img->carrega($origem_imagem)
+                ->redimensiona(210, 160, 'crop')
+                ->grava($destino_imagem, 100);
+
+        if (is_file($origem_imagem))
+            unlink($origem_imagem);
+
+        return $nome_nova_imagem;
     }
 
     // Função para alterar a senha do professor
@@ -199,7 +213,7 @@ class Sobre extends CI_Controller {
 
                 $this->professor_model->alterar_dados_professor($dados_alterar, $id_professor);
 
-                $this->session->set_flashdata("senha_alterada",'<div class="alert alert-success" role="alert">A senha foi alterada com sucesso!</div>');
+                $this->session->set_flashdata("senha_alterada", '<div class="alert alert-success" role="alert">A senha foi alterada com sucesso!</div>');
                 redirect(base_url("cpainel/sobre"));
             }
         } else {

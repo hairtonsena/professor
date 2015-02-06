@@ -1,8 +1,8 @@
 <?php
 $cpf_prefessor = "12345678901";
-$nome_professor;
+$nome_professor = "Teste";
 
-$imagem_professor;
+$imagem_professor ="abc";
 $professor = $this->professor_vw_model->obter_professor_cpf($cpf_prefessor)->result();
 foreach ($professor as $pf){
     $nome_professor= $pf->nome_professor;

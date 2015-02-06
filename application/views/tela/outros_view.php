@@ -30,7 +30,7 @@
         </div>
     <?php } ?>
     <!-- Só Logado -->
-    <div class="col-md-12 linha">
+<!--    <div class="col-md-12 linha">
         Trabalho
         <div style="background-color: #F3F3F3" class="col-md-12 linha">
             <div class="titulos">Teste de tema de trabalhos</div>
@@ -44,7 +44,7 @@
             <input type="text" class="form-control" placeholder="e-mail" aria-describedby="basic-addon1">
             <p>Trabalho tal - X</p>
         </div>
-    </div>
+    </div>-->
     <!-- Fim Só logado -->
 
     <div class="col-md-12 linha">

@@ -2,11 +2,6 @@
 
 class disciplina_model extends CI_Model {
 
-    // pegando todas as diciplinas do banco de dados
-//    function ver_todas_disciplina() {
-//        return $this->db->get('disciplina');
-//    }
-
     // pegando todas as diciplinas ativas do banco de dados
     function ver_todas_disciplina_ativas() {
         return $this->db->get_where('disciplina', array('status_disciplina' => 1));
@@ -17,22 +12,6 @@ class disciplina_model extends CI_Model {
         return $this->db->get_where('disciplina', array('id_disciplina' => $id_disciplina,'status_disciplina' => 1));
     }
 
-//    // salvando uma nova disciplina no banco de dados
-//    function salvar_nova_disciplina($data) {
-//        $this->db->insert('disciplina', $data);
-//    }
-//
-//    // alterando os dados de uma disciplina pelo id;
-//    function alterar_dados_disciplina($dados, $id_disciplina) {
-//        $this->db->where('id_disciplina', $id_disciplina);
-//        $this->db->update('disciplina', $dados);
-//    }
-//    // excluindo um diciplina
-//    function excluir_disciplina($id_disciplina) {
-//        $this->db->delete('disciplina', array('id_disciplina' => $id_disciplina));
-//    }
-
-    //put your code here
 }
 
 ?>
