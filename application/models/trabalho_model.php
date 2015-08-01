@@ -34,6 +34,11 @@ class trabalho_model extends CI_Model {
         return $this->db->get_where('trabalho_aluno', array('trabalho_id_trabalho' => $id_trabalho, 'aluno_id_aluno' => $id_aluno));
     }
 
+    // Função para pegar a nota de um aluno de um determinado trabalho.
+    function obter_nota_trabalho_um_aluno($id_trabalho, $id_aluno) {
+        return $this->db->get_where('nota_trabalho', array('trabalho_id_trabalho' => $id_trabalho, 'aluno_id_aluno' => $id_aluno));
+    }
+
     //--------------------------------//
     // Trabalhando com anexo trabalho //
     //--------------------------------//

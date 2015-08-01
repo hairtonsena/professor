@@ -3,13 +3,16 @@
     <head>
         <title>Professor André</title>
         <meta charset="UTF-8" />
+        <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,400,300,700" />
         <link href="<?php echo base_url('bt/css/bootstrap.min.css'); ?>" rel="stylesheet">
-        <link href="<?php echo base_url('css/estilo.css'); ?>" rel="stylesheet">
+        <!--<link href="<?php// echo base_url('css/estilo.css'); ?>" rel="stylesheet">-->
         <link href="<?php echo base_url('css/layout_geral.css'); ?>" rel="stylesheet">
+        <link href="<?php echo base_url('css/layout_geral_smart.css'); ?>" rel="stylesheet">
 
         <!--<link href='http://fonts.googleapis.com/css?family=Courgette|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>-->
         <link href="<?php echo base_url('css/saSlider.css') ?>" rel='stylesheet' type='text/css'>
-        <link href="<?php echo base_url('css/demo.css') ?>" rel='stylesheet' type='text/css'>
+        <!--<link href="<?php echo base_url('css/demo.css') ?>" rel='stylesheet' type='text/css'>-->
 
         <script>
 

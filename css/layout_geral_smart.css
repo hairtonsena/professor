@@ -1,0 +1,345 @@
+
+/*--------------------- Tela de menor que 990 px-------------------------------------*/
+
+@media (max-width:990px) {
+
+    .nome
+    {
+
+        width: 100%;
+        height: 50px;
+        text-align: left; 
+        margin-top: 10px; 
+        margin-bottom: 20px;
+        color:  #F7F7F7;
+        font-size:20px;
+    }
+
+    .icone_menu_mostrar
+    {
+        float: right;
+        width: 60px;
+        height: 60px;
+        background-color: #dcdcdc;
+    }
+
+    .conteiner_smartphone
+    {
+        width: 100%;
+        height: auto;
+        margin-top: 100px;
+        margin-left: 0px;
+        padding: 50px;
+        background-color: #F3F3F3;
+        -webkit-transition: 0.3s ease-in;
+        -moz-transition: 0.3s ease-in;
+        -o-transition: 0.3s ease-in;
+    }
+
+    .menu_smartphone {
+        float: left;
+        width: 100%;
+        height: 100px;
+
+        -webkit-transition: 0.3s ease-in;
+        -moz-transition: 0.3s ease-in;
+        -o-transition: 0.3s ease-in;
+    }
+
+    .menu_smartphone_abrir
+    {
+        width:100%;
+        height: 100px;
+        /*       
+        -webkit-transition: 0.3s ease-in;
+        -moz-transition: 0.3s ease-in; 
+        -o-transition: 0.3s ease-in;
+        */
+    }
+
+    .menu_smartphone_esconde
+    {
+        height: 10px;
+        background-color: #000000;
+    }
+
+    .menu_smartphone_esconde:hover
+    {
+        height: auto;
+    }
+
+    .menu_smartphone_esconde_menu_ver{
+        visibility: visible;
+        background-color: #0066cc;
+
+        -webkit-transition: 0.3s ease-in;
+        -moz-transition: 0.3s ease-in; 
+        -o-transition: 0.3s ease-in;
+    }
+
+    .esconder {
+        visibility: hidden;
+
+        -webkit-transition: 0.3s ease-in;
+        -moz-transition: 0.3s ease-in; 
+        -o-transition: 0.3s ease-in;
+    }
+
+    .menu_smartphone_esconde_menu
+    {
+
+        float: left;
+        margin-left: 0px;
+        width: 0px;
+        height: 0px;
+    }
+
+    .menu_smartphone_esconde_menu:hover
+    {
+        width: 100%;
+        height: auto;
+    }
+
+    .nome
+    {
+        font-size: 35px;
+    }
+
+    #esconder
+    {
+        display: none;
+
+    }
+
+
+    .arquivado
+    {
+        float: right;
+        width: auto;
+        height: 65px;
+        padding: 5px;
+        border: 1px solid #dcdcdc;
+        border-radius: 5px;
+        color: #000000;
+        background-color: #FFFFFF;
+        text-align: center;
+        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+        font-size: 40px;
+    }
+
+
+    .botao_turmas
+    {
+        float: left;
+        width: 100%;
+        height: 95px;
+        margin: 5px;
+        padding: 15px;
+        border: 1px solid #666;
+        border-radius: 5px;
+        color: #F7F7F7;
+        background-color: #428BCA;
+        text-align: center;
+        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+        font-size: 55px;
+        line-height: 1;
+    }
+
+    .link_diversos
+    {
+        width: 100%;
+        color: #2b2b2b;
+        /*    background-color: #0066cc;*/
+        /*text-align: ;*/
+        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+        font-size: 40px;
+        /*    font-weight: bold;*/
+        text-decoration: none;
+    }
+
+
+
+
+
+
+
+    /*// Trabalhando com o link do menu  */
+
+    .link_menu 
+    {
+        /*color: #ff0000;*/
+        color: #F7F7F7;
+        font-size: 26px;
+
+    }
+
+    .link_menu:hover
+    {
+        color: #000;
+    }
+
+    .link_menu:active
+    {
+        color: #000;
+    }
+
+    .link_menu:focus
+    {
+        color: #000;
+    }
+
+
+
+    /* ---- Trabalhando com a lista de notícias da pagina inicial ------*/
+    .img_lista_conteudo{
+        width: 200px;
+        height: 150px;
+        margin-right: 10px;
+    }
+
+    .link_lista_noticia{
+        text-decoration: none;
+        color: #333;
+    }
+
+
+
+    .titulo_link_lista_noticia{
+        font-size: 26px;
+        font-family: arial,helvetica,freesans,sans-serif;
+        text-align: left;
+    }
+
+
+    .box_noticia_conteudo {
+        padding-left: 10px;
+    }
+
+    .link_caixa_noticia {
+        display: block;
+        margin: 0px;
+        padding: 5px 10px 5px 10px;
+        -webkit-transition: 0.5s ease-out;
+        -moz-transition: 0.5s ease-out;
+        -o-transition: 0.5s ease-out;
+        transition: 0.5s ease-out;
+
+        border-bottom: 1px solid #F3F3F3;
+    }
+
+    .link_caixa_noticia:hover {
+        background-color: white;
+        -webkit-transition: 0.5s ease-out;
+        -moz-transition: 0.5s ease-out;
+        -o-transition: 0.5s ease-out;
+        transition: 0.5s ease-out;
+        border-bottom: 1px solid #dcdcdc;
+    }
+
+
+    /*---Trabalhando com a coluna de outros----*/
+
+    .box_coluna_outros {
+        background-color: #dfdfdf;
+        margin-top: 50px;
+    }
+
+
+
+    /*Titulo dos módulos*/ 
+    .titulo_outros{
+        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+        font-size: 28px;
+        line-height: 1;
+        /*color: #2B2B2B;*/
+        margin-top: 50px;
+    }
+
+    .complemento_titulo_outros{
+        margin-top: 30px;
+    }
+
+
+    .titulo_rss {
+        font-size: 22px;
+        font-stretch: condensed;
+        color: #2B2B2B;
+
+    }
+
+
+
+
+
+
+
+
+
+
+    .botao
+    {
+        float: left;
+        width: 100%;
+        height: 65px;
+        /*margin: 5px;*/
+        padding: 10px;
+        border: 1px solid #666;
+        /*        border-radius: 5px;*/
+        color: #F7F7F7;
+        background-color: #428BCA;
+        text-align: center;
+        font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
+        font-size: 40px;
+        line-height: 1;
+    }
+
+    .botao:hover
+    {
+        text-decoration: none;
+        color: #2a6496;
+    }
+
+
+
+    a:hover
+    {
+        color: #2a6496;
+        text-decoration: none;
+    }
+
+
+    .table
+    {
+        font-size: 30px;
+    }
+
+
+    h3
+    {
+        font-size: 50px;
+    }
+
+    p
+    {
+        font-size: 22px;
+        text-align: justify;
+        line-height: 1;
+    }
+
+
+}
+
+.fim_roda_pe_smart
+{
+    float: left;
+    width: 100%;
+    height: 67px;
+    margin-top: 0px;
+    padding-top: 20px;
+    padding-left: 10px;
+    background-color: #dcdcdc;
+    text-align: center;
+}
+
+
+

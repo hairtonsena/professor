@@ -1,5 +1,3 @@
-<!--inicio sem logar-->
-<div class="row posicao_conteiner conteiner_smartphone ">
     <div  class="col-md-7 row sem_margen_pading">
         <div class="titulos">História</div>
 

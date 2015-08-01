@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Disciplina extends CI_Controller {
+class Ifnmg extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -20,11 +20,31 @@ class Disciplina extends CI_Controller {
 
     public function index() {
 
-        if (!$this->input->get('disciplina', TRUE)) {
-            redirect(base_url());
+        // Carregar o menu disciplina
+        $disciplinas_ativas = $this->disciplina_model->ver_todas_disciplina_ativas()->result();
+        $dados_menu = array(
+            "munu_disciplina" => $disciplinas_ativas
+        );
+
+        $dados = array(
+           "disciplinas_ativa" => $disciplinas_ativas
+        );
+        
+
+        $this->load->view('tela/titulo');
+        $this->load->view('tela/menu', $dados_menu);
+        $this->load->view('ifnmg/ifnmg_view',$dados);
+        $this->load->view('tela/outros_view');
+        $this->load->view('tela/rodape');
+    }
+
+    public function disciplina() {
+
+        if ($this->uri->segment(3)==NULL) {
+            redirect(base_url());   
         }
 
-        $id_disciplina = (int) mysql_real_escape_string($this->input->get('disciplina'));
+        $id_disciplina = (int) mysql_real_escape_string($this->uri->segment(3));
         // Buscando e verificando a disciplina escolhida.
         $disciplina = $this->disciplina_model->obter_uma_disciplina($id_disciplina)->result();
         if (count($disciplina) == 0) {
@@ -49,7 +69,7 @@ class Disciplina extends CI_Controller {
 
         $this->load->view('tela/titulo');
         $this->load->view('tela/menu', $dados_menu);
-        $this->load->view('disciplina/disciplina_view', $dados);
+        $this->load->view('ifnmg/disciplina_view', $dados);
         $this->load->view('tela/outros_view');
         $this->load->view('tela/rodape');
     }
@@ -88,7 +108,7 @@ class Disciplina extends CI_Controller {
 
         $this->load->view('tela/titulo');
         $this->load->view('tela/menu', $dados_menu);
-        $this->load->view('disciplina/disciplina_turma_view', $dados);
+        $this->load->view('ifnmg/disciplina_turma_view', $dados);
         $this->load->view('tela/outros_view');
         $this->load->view('tela/rodape');
     }
@@ -121,7 +141,7 @@ class Disciplina extends CI_Controller {
 
         $this->load->view('tela/titulo');
         $this->load->view('tela/menu', $dados_menu);
-        $this->load->view('disciplina/disciplina_view', $dados);
+        $this->load->view('ifnmg/disciplina_turma_arquivada_view', $dados);
         $this->load->view('tela/outros_view');
         $this->load->view('tela/rodape');
     }

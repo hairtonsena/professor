@@ -15,7 +15,7 @@
 |
 */
 //$config['base_url']	= 'http://localhost/professor/professor/';
-// $config['base_url']	= 'http://192.168.0.107/andre/';
+// $config['base_url']	= 'http://192.168.2.100/andre/';
   $config['base_url']	= 'http://localhost/andre/';
 //  $config['base_url']	= 'http://andre.cored.com.br';
 

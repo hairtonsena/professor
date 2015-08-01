@@ -68,20 +68,64 @@ class aluno extends CI_Controller {
                 "munu_disciplina" => $disciplina_menu
             );
 
+
+
+
+
             // Buscando todas avaliações da turma selecionada.
             $avaliacoes = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
+
+            foreach ($avaliacoes as $avs) {
+                $nota_avaliacao_aluno = $this->avaliacao_model->obter_nota_avaliacao_um_aluno($avs->id_avaliacao, $id_aluno)->result();
+                if (count($nota_avaliacao_aluno) == 0) {
+                    $avs->nota_aluno = 0;
+                } else {
+                    foreach ($nota_avaliacao_aluno as $naa) {
+                        $avs->nota_aluno = $naa->valor_nota;
+                    }
+                }
+            }
+
+
 
             // Buscando todos os trabalhos da turma selecionada.
             $trabalhos = $this->trabalho_model->obter_todos_trabalhos_turma($id_turma)->result();
             foreach ($trabalhos as $trb) {
+                $nota_trabalho_aluno = $this->trabalho_model->obter_nota_trabalho_um_aluno($trb->id_trabalho, $id_aluno)->result();
+                if (count($nota_trabalho_aluno) == 0) {
+                    $trb->nota_aluno = 0;
+                } else {
+                    foreach ($nota_trabalho_aluno as $nta) {
+                        $trb->nota_aluno = $nta->valor_nota_trabalho;
+                    }
+                }
+
                 $trb->anexos_trabalho = $this->trabalho_model->obeter_anexos_trabalho($trb->id_trabalho)->result();
                 $trb->trabalho_aluno = $this->trabalho_model->obeter_aluno_trabalho($id_aluno, $trb->id_trabalho)->result();
             }
 
+            // Adicionando a nota de recuperação do aluno.
+            $avaliacao_recuperacao_turma = $this->avaliacao_model->obter_avaliacao_recuperacao($id_turma)->result();
+            foreach ($avaliacao_recuperacao_turma as $art) {
+                $nota_aluno_recuperacao = $this->avaliacao_model->obter_nota_avaliacao_recuperacao_um_aluno($art->id_avaliacao_recuperacao, $id_aluno)->result();
+                if (count($nota_aluno_recuperacao) == 0) {
+                    $art->nota_aluno = null;
+                } else {
+                    foreach ($nota_aluno_recuperacao as $nar) {
+                        $art->nota_aluno = $nar->valor_nota_avaliacao_recuperacao;
+                    }
+                }
+            }
+
+
+
+
+
             $dados = array(
                 "disciplina_turma" => $disciplina_turma,
                 "avaliacoes_turma" => $avaliacoes,
-                "trabalhos_turma" => $trabalhos
+                "trabalhos_turma" => $trabalhos,
+                "avaliacao_recuperacao_turma" => $avaliacao_recuperacao_turma
             );
 
             $this->load->view('tela/titulo');

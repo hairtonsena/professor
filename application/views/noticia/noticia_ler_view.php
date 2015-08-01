@@ -1,7 +1,5 @@
-<div class="row posicao_conteiner conteiner_smartphone ">
-
-    <div  class="col-md-7 row sem_margen_pading">
-        <div class="titulos">Publicações</div>
+    <div  class="col-md-8" style="padding-left: 0px;">
+        <div class="titulos"><a href="<?php echo base_url("publicacao") ?>"> Publicações </a> / ler</div>
         <div class="col-md-12 linha">
             <?php
             foreach ($noticia as $nt) { 
