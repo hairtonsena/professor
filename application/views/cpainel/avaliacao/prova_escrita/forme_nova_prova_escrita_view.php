@@ -28,7 +28,7 @@ foreach ($turma_disciplina as $td) {
             <div class="col-lg-12 semMargem">
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
-                    <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
+                    <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Prova escrita</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/turma/horario/" . $id_turma) ?>">Horário</a></li>
@@ -38,7 +38,7 @@ foreach ($turma_disciplina as $td) {
 
                     <div class="col-lg-6"  style="padding-top: 5px; /* border-right: 1px solid #ddd; */">
 
-                        <form class="form-horizontal" action="<?php echo base_url("cpainel/avaliacao/salvar_nova_avaliacao"); ?>" method="post" role="form">
+                        <form class="form-horizontal" action="<?php echo base_url("cpainel/avaliacao/salvar_nova_prova_escrita"); ?>" method="post" role="form">
                             <input type="hidden" name="turma" id="turma" value="<?php echo $id_turma ?>" />
                             <fieldset>
                                 <legend>Nova avaliação</legend>
@@ -66,7 +66,7 @@ foreach ($turma_disciplina as $td) {
 
                                 <div class="form-group">
                                     <div class="col-md-offset-8 col-sm-4">
-                                        <a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma); ?>" class="btn btn-default" >Cancelar</a>
+                                        <a href="<?php echo base_url("cpainel/avaliacao/prova_escrita?turma=" . $id_turma); ?>" class="btn btn-default" >Cancelar</a>
                                         <button type="submit" class="btn btn-primary"> Salvar </button>
                                     </div>
                                 </div>

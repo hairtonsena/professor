@@ -23,6 +23,10 @@ class avaliacao_model extends CI_Model {
         return $this->db->get_where('nota_avaliacao_recuperacao', array('avaliacao_recuperacao_id_avaliacao_recuperacao' => $id_avaliacao_recuperacao, 'aluno_id_aluno' => $id_aluno));
     }
 
+    public function obter_prova_on_ativa($id_turma){
+        return $this->db->get_where('prova_on_matriz',array("turma_id_turma"=>$id_turma, "status_prova_on_matriz >"=>0));
+    }
+    
 }
 
 ?>

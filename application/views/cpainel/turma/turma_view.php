@@ -6,18 +6,14 @@ foreach ($disciplina as $dc) {
     $id_disciplina = $dc->id_disciplina;
 }
 ?>
-<div class="row col-lg-12">
-    <ol class="breadcrumb">
-        <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
-        <li><a href="<?php echo base_url("cpainel/disciplina") ?>">Disciplina</a></li>
-        <li class="active">Turma </li>       
-    </ol>
+<div class="col-lg-12 semMargem">
+
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">Disciplina: <?php echo $nome_disciplina ?></div>
+        <div class="panel-heading"><a href="<?php echo base_url("cpainel/disciplina") ?>"><i class="glyphicon glyphicon-arrow-left"></i>Disciplina </a>: <?php echo $nome_disciplina ?></div>
         <div class="panel-body">
             <div class="col-lg-6 semMargem">
-                <a class="btn btn-primary" href="<?php echo base_url("cpainel/turma/nova/" . $id_disciplina); ?>">Nova Turma</a>
+                <a class="btn btn-primary" href="<?php echo base_url("cpainel/turma/nova/" . $id_disciplina); ?>"><i class="glyphicon glyphicon-plus"></i> Turma</a>
                 <a class="btn btn-default pull-right" href="<?php echo base_url("cpainel/turma/arquivada?disciplina=" . $id_disciplina); ?>">Turmas arquivadas</a>
                 <div style="margin-top: 5px">
                     <table class="table table-bordered">

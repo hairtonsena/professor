@@ -10,20 +10,13 @@ foreach ($turma_disciplina as $td) {
     $id_turma = $td->id_turma;
 }
 ?>
-<div class="row col-lg-12">
-    <ol class="breadcrumb">
-        <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
-        <li><a href="<?php echo base_url("cpainel/disciplina") ?>">Disciplina</a></li>
-        <li><a href="<?php echo base_url("cpainel/turma?disciplina=" . $id_disciplina) ?>">Turma</a></li>
-        <li><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
-        <li class="active">Novo aluno </li>       
-    </ol>
+<div class="col-lg-12 semMargem">
+
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">Disciplina: <?php echo $nome_disciplina ?></div>
-        <ul class="list-group">
-            <li class="list-group-item text-danger">Turma: <?php echo $nome_turma ?></li>
-        </ul>
+        <div class="panel-heading"><a href="<?php echo base_url("cpainel/disciplina") ?>"><i class="glyphicon glyphicon-arrow-left"></i> Disciplina</a>: <?php echo $nome_disciplina ?> / <a href="<?php echo base_url("cpainel/turma?disciplina=" . $id_disciplina) ?>"><i class="glyphicon glyphicon-arrow-left"></i>Turma</a>: <?php echo $nome_turma ?>
+        </div>
+
         <div class="panel-body">
             <div class="col-lg-12 semMargem">
                 <ul class="nav nav-tabs">
@@ -45,7 +38,7 @@ foreach ($turma_disciplina as $td) {
                                 <div class="form-group">
                                     <label for="nome_aluno" class="col-sm-2 control-label">Nome</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="nome_aluno" class="form-control" id="nome_turma" value="<?php echo set_value('nome_aluno') ?>" placeholder="Nome">
+                                        <input type="text" name="nome_aluno" class="form-control" id="nome_turma" value="<?php echo set_value('nome_aluno') ?>" placeholder="Nome do aluno">
                                         <span class="text-danger"> <?php echo form_error('nome_aluno'); ?></span>
                                     </div>
                                 </div>
@@ -53,7 +46,7 @@ foreach ($turma_disciplina as $td) {
                                     <label for="email_aluno" class="col-sm-2 control-label">Email</label>
                                     <div class="col-sm-10">
                                         <div class="input-group">
-                                            <input type="email" name="email_aluno" class="form-control" id="nome_turma" value="<?php echo set_value('email_aluno') ?>" placeholder="Email">
+                                            <input type="email" name="email_aluno" class="form-control" id="nome_turma" value="<?php echo set_value('email_aluno') ?>" placeholder="Email do aluno">
                                             <span class="input-group-addon" >Opcional</span>
                                         </div>
                                         <span class="text-danger"> <?php echo form_error('email_aluno'); ?></span>
@@ -62,14 +55,14 @@ foreach ($turma_disciplina as $td) {
                                 <div class="form-group">
                                     <label for="matricula_aluno" class="col-sm-2 control-label">Matricula</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="matricula_aluno" class="form-control" id="matricula_aluno" value="<?php echo set_value('matricula_aluno') ?>" placeholder="Matricula">
+                                        <input type="text" name="matricula_aluno" class="form-control" id="matricula_aluno" value="<?php echo set_value('matricula_aluno') ?>" placeholder="Matricula do aluno">
                                         <span class="text-danger"> <?php echo form_error('matricula_aluno'); ?></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="cpf_aluno" class="col-sm-2 control-label">CPF</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="cpf_aluno" class="form-control" id="cpf_aluno" value="<?php echo set_value('cpf_aluno') ?>" placeholder="CPF">
+                                        <input type="text" name="cpf_aluno" class="form-control" id="cpf_aluno" value="<?php echo set_value('cpf_aluno') ?>" placeholder="CPF do aluno">
                                         <span class="text-danger"> <?php echo form_error('cpf_aluno'); ?></span>
                                     </div>
                                 </div>
@@ -102,7 +95,7 @@ foreach ($turma_disciplina as $td) {
                                 </label>
                                 <div class="col-lg-12 semMargem">
                                     <div class="input-group">
-                                        <input class="form-control" name="aluno" id="ipt_aluno" />
+                                        <input class="form-control" name="aluno" id="ipt_aluno" placeholder="Buscar aluno" />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button">Pesquisar</button>
                                         </span>

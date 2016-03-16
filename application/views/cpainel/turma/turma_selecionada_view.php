@@ -12,24 +12,17 @@ foreach ($turma_disciplina as $td) {
     $status_turma = $td->status_turma;
 }
 ?>
-<div class="row col-lg-12">
-    <ol class="breadcrumb">
-        <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
-        <li><a href="<?php echo base_url("cpainel/disciplina") ?>">Disciplina</a></li>
-        <li><a href="<?php echo base_url("cpainel/turma?disciplina=" . $id_disciplina) ?>">Turma</a></li>
-        <li class="active">Alunos </li>       
-    </ol>
+<div class="col-lg-12 semMargem">
+
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">Disciplina: <?php echo $nome_disciplina ?></div>
-        <ul class="list-group">
-            <li class="list-group-item text-danger">Turma: <?php echo $nome_turma ?></li>
-        </ul>
+        <div class="panel-heading"><a href="<?php echo base_url("cpainel/disciplina") ?>"><i class="glyphicon glyphicon-arrow-left"></i> Disciplina</a>: <?php echo $nome_disciplina ?> / <a href="<?php echo base_url("cpainel/turma?disciplina=" . $id_disciplina) ?>"><i class="glyphicon glyphicon-arrow-left"></i>Turma</a>: <?php echo $nome_turma ?></div>
+
         <div class="panel-body">
             <div class="col-lg-12 semMargem">
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active"><a href="<?php echo base_url("cpainel/turma/alunos/" . $id_turma) ?>">Alunos</a></li>
-                    <li role="presentation"><a href="<?php echo base_url("cpainel/avaliacao?turma=" . $id_turma) ?>">Avaliações</a></li>
+                    <li role="presentation"><a href="<?php echo base_url("cpainel/avaliacao/prova_escrita?turma=" . $id_turma) ?>">Prova escrita</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/trabalho?turma=" . $id_turma) ?>">Trabalhos</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/notas?turma=" . $id_turma) ?>">Notas</a></li>
                     <li role="presentation"><a href="<?php echo base_url("cpainel/turma/horario/" . $id_turma) ?>">Horário</a></li>
@@ -37,7 +30,7 @@ foreach ($turma_disciplina as $td) {
                 <div class="col-lg-12 semMargem" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; ">
                     <div class="col-lg-12" style="padding-top: 5px;">
                         <?php if ($status_turma != 2) { ?>
-                            <a class="btn btn-primary" href="<?php echo base_url("cpainel/aluno/novo_turma/" . $id_turma); ?>">Novo Aluno</a>
+                        <a class="btn btn-primary" href="<?php echo base_url("cpainel/aluno/novo_turma/" . $id_turma); ?>"><i class="glyphicon glyphicon-plus"></i> Aluno</a>
                         <?php } ?> 
                         <div style="margin-top: 5px">
                             <table class="table table-bordered">
@@ -46,7 +39,6 @@ foreach ($turma_disciplina as $td) {
                                         <th> Nome </th>
                                         <th> Email </th>
                                         <th class="col-lg-1 center"> Excluir </th>
-
 
                                     </tr>
                                 </thead>
@@ -66,7 +58,7 @@ foreach ($turma_disciplina as $td) {
 
                                                     <?php } ?>
                                                 </td>                                                
-                                                <!--<td class="text-center"><span id="btnAtivarTurma_<?php // echo $at->id_aluno  ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php // echo $at->id_aluno  ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>-->
+                                                <!--<td class="text-center"><span id="btnAtivarTurma_<?php // echo $at->id_aluno   ?>"><a href="javascript:void(0)" onclick="Turma.ativar_desativar_turma('<?php // echo $at->id_aluno   ?>')"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> </a></span></td>-->
                                             </tr>
                                             <?php
                                         }

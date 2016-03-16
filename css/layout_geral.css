@@ -20,48 +20,48 @@ body {
 
 
 .container {
-    width: 1000px;
+    width: 1100px;
 }
 
 
 
 .area_informativa {
-    margin-top: 25px;
+    margin-top: 0px;
 
 
 
 }
 
-.area_informativa .logotipo_menu {
-    // width: 300px;
-    // float: left;
-
+.logotipo_menu {
+    margin-top: 50px;
     font-size: 32px;
     font-weight: bold;
     color: #0066cc;
-    padding-bottom: 25px;
+    padding-bottom: 0px;
 
 }
 
 
-.area_informativa .busca_menu{
-    /*width: 500px;*/
-    padding-top: 5px;
-    // float: left;
+.busca_menu{
+    
+  
 }
 
-.area_informativa .area_aluno_menu {
-    height: 25px;
+.area_aluno_menu {
+    text-align: right;
+    margin: 0px;
+    padding: 10px 0px 25px 0px;
+    /*padding-bottom: 30px;*/
 
 }
 
 
 .area_aluno_menu span a {
-    border-bottom: 1px solid #0066cc;
+    border-bottom: 2px solid #0066cc;
     /*background-color: ;*/
     color: #0066cc;
 
-    padding: 10px 15px 7px 15px;
+    padding: 10px 15px 3px 15px;
 }
 
 .area_aluno_menu span a:hover{
@@ -507,7 +507,7 @@ a:hover
 
 
     .titulo_link_lista_noticia{
-        font-size: 22px;
+        font-size: 18px;
         font-family: lato;
         /*font-family: arial,helvetica,freesans,sans-serif;*/
         font-weight: bold;
@@ -526,16 +526,20 @@ a:hover
     }
 
     .link_caixa_noticia {
+        
+        
+        
         background-color: white;
+        
         display: block;
         margin: 0px;
-        padding: 5px 10px 5px 10px;
+        padding: 10px 10px 10px 10px;
         -webkit-transition: 0.5s ease-out;
         -moz-transition: 0.5s ease-out;
         -o-transition: 0.5s ease-out;
         transition: 0.5s ease-out;
 
-        border-bottom: 2px solid #F3F3F3;
+        /*border-bottom: 2px solid #F3F3F3;*/
     }
 
     .link_caixa_noticia:hover {
@@ -545,7 +549,7 @@ a:hover
         -moz-transition: 0.5s ease-out;
         -o-transition: 0.5s ease-out;
         transition: 0.5s ease-out;
-        border-bottom: 2px solid #dcdcdc;
+        /*border-bottom: 2px solid #dcdcdc;*/
     }
 
     .continue_lendo{
@@ -554,11 +558,11 @@ a:hover
 
     .img_lista_conteudo
     {
-        width: 200px;
-        height: 150px;
+        width: 150px;
+        height: 120px;
         margin-right: 10px;
         /*padding: 5px;*/
-        border: 2px solid #B2B2B2 ;
+        /*border: 2px solid #B2B2B2 ;*/
     }
 
     /* Fim da estilização */
@@ -576,7 +580,7 @@ a:hover
 
     p
     {
-        font-size: 16px;
+        font-size: 14px;
         text-align: justify;
     }
 
@@ -584,13 +588,7 @@ a:hover
     .fim_roda_pe
     {
 
-        width: 100%;
-        height: 67px;
-        margin-top: 0px;
-        padding-top: 20px;
-        padding-left: 220px;
-        background-color: #dcdcdc;
-        text-align: center;
+
     }
 
 }
@@ -598,15 +596,19 @@ a:hover
 /*---Trabalhando com a coluna de outros----*/
 
 .box_coluna_outros {
-    background-color: #dfdfdf;
+    /*background-color:  #e5e5ea;*/
     margin-top: 0px;
+    
 }
 
+.box_coluna_outros p{
+    font-size: 12px;
+}
 
 /*Titulo dos módulos*/ 
 .titulo_outros{
     font-family: Segoe UI,Lucida Grande,Verdana,Arial,Helvetica,sans-serif;
-    font-size: 24px;
+    font-size: 18px;
     line-height: 1;
     /*color: #2B2B2B;*/
     margin-top: 10px;
@@ -615,6 +617,43 @@ a:hover
 .complemento_titulo_outros{
     margin-top: 30px;
 }
+
+/*Lembretes*/
+
+.box_lembrete {
+    background-color: #F0F0Fc;
+    margin-bottom: 20px;
+    padding-bottom: 1px;
+}
+
+.box_lembrete .titulo_lembrete {
+    background-color: #0066cc;
+    /*background-color: #febc05;*/
+    
+    padding: 5px 10px 5px 10px;
+    
+    font-weight: bold;
+    font-size: 16px;
+    color: white;
+    
+}
+
+.box_lembrete .texto_lembrete{
+    padding: 5px 7px 5px 7px;
+    margin: 5px 5px 5px 5px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.box_lembrete p {
+    padding: 5px;
+}
+
+
+
+
+
+
 
 .titulos
 {
@@ -652,7 +691,7 @@ a:hover
 
 /*// noticias do RSS formatando os textos*/ 
 .titulo_rss {
-    font-size: 18px;
+    font-size: 38px;
     font-stretch: condensed;
     color: #2B2B2B;
 

@@ -8,16 +8,17 @@ foreach ($disciplina as $ds) {
     $id_disciplina = $ds->id_disciplina;
 }
 ?>
-<div  class="col-md-8" style="padding-left: 0px;">
+<div  class="col-md-9" style="padding-left: 0px;">
     <div class="col-md-12 semMargem">            
         <div class="titulos">
-            <a href="<?php echo base_url("ifnmg/") ?>"> IFNMG </a> /  Discliplina</div>
-        
+            <a href="<?php echo base_url("ifnmg/") ?>"> IFNMG </a> /  Discliplina
+        </div>
+
         <h3 class="text-center"> <?php echo $nome_disciplina ?></h3>
         <?php echo $descricao_disciplina ?>
     </div>
-    
-    
+
+
     <div class="col-md-12 semMargem" >
         <div class="box_label_turma">
             <span class="titulo_turma_label">Turma </span>

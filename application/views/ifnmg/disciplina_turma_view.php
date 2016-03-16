@@ -16,7 +16,7 @@ foreach ($disciplina_turma as $dt) {
 ?>
 
 <!--inicio logado-->
-<div  class="col-md-8" style="padding-left: 0px;">
+<div  class="col-md-9" style="padding-left: 0px;">
 
     <div class="col-md-12 semMargem">
         <div class="titulos">
@@ -34,6 +34,7 @@ foreach ($disciplina_turma as $dt) {
             </span>
         </div>
     </div>
+    
     <div class="col-md-12 semMargem">
         <h4 class="titulo_subitem_turma">Horários</h4>
         <p>

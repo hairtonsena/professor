@@ -6,7 +6,7 @@
         <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,400,300,700" />
         <link href="<?php echo base_url('bt/css/bootstrap.min.css'); ?>" rel="stylesheet">
-        <!--<link href="<?php// echo base_url('css/estilo.css'); ?>" rel="stylesheet">-->
+        <!--<link href="<?php // echo base_url('css/estilo.css');   ?>" rel="stylesheet">-->
         <link href="<?php echo base_url('css/layout_geral.css'); ?>" rel="stylesheet">
         <link href="<?php echo base_url('css/layout_geral_smart.css'); ?>" rel="stylesheet">
 
@@ -23,6 +23,7 @@
                 }
             };
 
+
         </script>
 
         <script type="text/javascript" src="<?php echo base_url('js/jquery.js'); ?>"></script>
@@ -32,6 +33,11 @@
 
         <script src="<?php echo base_url("js/jquery-ui-1.10.4/ui/jquery-ui.js") ?>"></script>
         <script type="text/javascript" src="<?php echo base_url("js/jquery.form.js"); ?>"></script>
+
+        <script type="text/javascript" >
+ 
+
+        </script>
 
     </head>
     <body>

@@ -1,4 +1,4 @@
-<div  class="col-md-8" style="padding-left: 0px;">
+<div  class="col-md-9" style="padding-left: 0px;">
     <div class="col-md-12 semMargem">            
         <div class="titulos">IFNMG</div>
         <div class="img_instrutiva_pagina_ifnmg" style="background-image: url('<?php echo base_url("/imagens/56216_Papel-de-Parede-Fundo-Azul--56216_1920x1200.jpg") ?>');" >
@@ -28,17 +28,10 @@
         <div class="link_disciplinas">
 
             <?php foreach ($disciplinas_ativa as $mdp) { ?>
-                <a href="<?php  echo base_url("ifnmg/disciplina/" . $mdp->id_disciplina)  ?>"><span><?php echo $mdp->nome_disciplina; ?></span></a>
+                <a href="<?php echo base_url("ifnmg/disciplina/" . $mdp->id_disciplina) ?>"><span><?php echo $mdp->nome_disciplina; ?></span></a>
 
+            <?php } ?>
 
-
-            <?php  } ?>
-
-
-
-            <a href="#" ><span>Portugues</span></a>
-            <a href="#" ><span>Portugues</span></a>
-            <a href="#" ><span>Portugues</span></a>
         </div>
     </div>
 </div>

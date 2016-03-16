@@ -16,6 +16,28 @@ class Sobre extends CI_Controller {
         $this->load->model('aluno_model');
     }
 
+    public function carregarRSS($link = NULL) {
+        if ($link != NULL) {
+            $xml = simplexml_load_file($link)->channel;
+            return $xml;
+        }
+    }
+
+    protected $dados_menu = NULL;
+    protected $dados_conteudo = NULL;
+    protected $pg_view = 'tela/inicio_view';
+
+    protected function showTela() {
+
+        $this->dados_conteudo['xml_rss'] = $this->carregarRSS("http://g1.globo.com/dynamo/economia/rss2.xml");
+
+        $this->load->view('tela/titulo');
+        $this->load->view('tela/menu', $this->dados_menu);
+        $this->load->view($this->pg_view, $this->dados_conteudo);
+        $this->load->view('tela/outros_view');
+        $this->load->view('tela/rodape');
+    }
+
     // Funçao da pagina inicial
     public function index() {
 
@@ -33,15 +55,14 @@ class Sobre extends CI_Controller {
 
 
 
-        $dados_conteudo = array(
+        $this->dados_conteudo = array(
             "sobre_professor" => $sobre_professor
         );
 
-        $this->load->view('tela/titulo');
-        $this->load->view('tela/menu', $dados_menu);
-        $this->load->view('sobre/sobre_view', $dados_conteudo);
-        $this->load->view('tela/outros_view');
-        $this->load->view('tela/rodape');
+        $this->pg_view = 'sobre/sobre_view';
+        
+        $this->showTela();
+        
     }
 
 }

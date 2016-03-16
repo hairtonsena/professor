@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tempo de Geração: 03/02/2015 às 10:26
--- Versão do servidor: 5.5.41-0ubuntu0.14.04.1
--- Versão do PHP: 5.5.9-1ubuntu4.5
+-- Tempo de Geração: 01/08/2015 às 20:34
+-- Versão do servidor: 5.5.44-0ubuntu0.14.04.1
+-- Versão do PHP: 5.5.9-1ubuntu4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `aluno` (
 --
 
 INSERT INTO `aluno` (`id_aluno`, `nome_aluno`, `matricula_aluno`, `senha_aluno`, `cpf_aluno`, `email_aluno`, `status_aluno`) VALUES
-(1, 'Danilo Moabb', '321232', 'e10adc3949ba59abbe56e057f20f883e', '293.512.508-81', NULL, 1),
+(1, 'Danilo Moabb', '321232', '25d55ad283aa400af464c76d713c07ad', '293.512.508-81', NULL, 1),
 (2, 'Vilson Cordeiro', '654123', '', '308.022.635-69', NULL, 1),
 (3, 'Grazy coutinho', '111225', '813cabec90f224a91068c10e2898ee8a', '907.226.868-70', NULL, 1),
 (4, 'Simone Sobral', '521463', '', '99999999999', NULL, 1),
@@ -151,14 +151,15 @@ CREATE TABLE IF NOT EXISTS `avaliacao_recuperacao` (
   `turma_id_turma` int(11) NOT NULL,
   PRIMARY KEY (`id_avaliacao_recuperacao`,`turma_id_turma`),
   KEY `fk_avaliacao_recuperacao_turma1_idx` (`turma_id_turma`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Fazendo dump de dados para tabela `avaliacao_recuperacao`
 --
 
 INSERT INTO `avaliacao_recuperacao` (`id_avaliacao_recuperacao`, `descricao_avaliacao_recuperacao`, `data_avaliacao_recuperacao`, `valor_avaliacao_recuperacao`, `turma_id_turma`) VALUES
-(1, 'Avaliação de Recuperação', '2015-07-06', 100, 1);
+(1, 'Avaliação de Recuperação', '2015-07-06', 100, 1),
+(2, 'Avaliação de Recuperação', '0000-00-00', 100, 5);
 
 -- --------------------------------------------------------
 
@@ -180,8 +181,8 @@ CREATE TABLE IF NOT EXISTS `disciplina` (
 
 INSERT INTO `disciplina` (`id_disciplina`, `nome_disciplina`, `descricao_disciplina`, `status_disciplina`) VALUES
 (1, 'História', '<p>E texto sim</p>\n', 1),
-(2, 'Português', '<p>kkkkkkkkkkkk agora eu consigo ver</p>\n', 1),
-(3, 'Matemática', '<h3>Redes de Computadores I &ndash; 2014.02 &ndash; TADS</h3>\n\n<p style="text-align:justify">O aluno ter&aacute; a oportunidade de conhecer os fundamentos b&aacute;sicos do processo de comunica&ccedil;&atilde;o entre computadores. Ir&aacute; estudar os principais desafios, conceitos, protocolos, arquiteturas e tecnologias existentes nesta &aacute;rea de pesquisa sob constante evolu&ccedil;&atilde;o. Ap&oacute;s o curso, o aluno ter&aacute; uma s&oacute;lida forma&ccedil;&atilde;o te&oacute;rica para estudos avan&ccedil;ados na &aacute;rea.</p>\n', 1);
+(2, 'Português', '<p>Est&aacute; &eacute; uma descria&ccedil;&atilde;o falando sobre os principais focos que a disciplina pretende atingir.</p>\n', 1),
+(3, 'Redes de Computadores', '<div style="text-align: justify;"><span style="font-size:13px">O aluno ter&aacute; a oportunidade de conhecer os fundamentos b&aacute;sicos do processo de comunica&ccedil;&atilde;o entre computadores. Ir&aacute; estudar os principais desafios, conceitos, protocolos, arquiteturas e tecnologias existentes nesta &aacute;rea de pesquisa sob constante evolu&ccedil;&atilde;o. Ap&oacute;s o curso, o aluno ter&aacute; uma s&oacute;lida forma&ccedil;&atilde;o te&oacute;rica para estudos avan&ccedil;ados na &aacute;rea.</span></div>\n', 1);
 
 -- --------------------------------------------------------
 
@@ -197,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `nota_avaliacao` (
   PRIMARY KEY (`id_nota`,`aluno_id_aluno`,`avaliacao_id_avaliacao`),
   KEY `fk_nota_aluno1_idx` (`aluno_id_aluno`),
   KEY `fk_nota_avaliacao1_idx` (`avaliacao_id_avaliacao`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 --
 -- Fazendo dump de dados para tabela `nota_avaliacao`
@@ -205,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `nota_avaliacao` (
 
 INSERT INTO `nota_avaliacao` (`id_nota`, `valor_nota`, `aluno_id_aluno`, `avaliacao_id_avaliacao`) VALUES
 (6, 9, 4, 2),
-(7, 20, 5, 2),
+(7, 19, 5, 2),
 (8, 15, 6, 2),
 (10, 10, 4, 3),
 (11, 15, 5, 3),
@@ -215,8 +216,9 @@ INSERT INTO `nota_avaliacao` (`id_nota`, `valor_nota`, `aluno_id_aluno`, `avalia
 (20, 0, 6, 5),
 (21, 0, 3, 8),
 (22, 0, 4, 8),
-(23, 0, 5, 8),
-(24, 0, 6, 8);
+(23, 15, 5, 8),
+(24, 0, 6, 8),
+(25, 10, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -232,7 +234,7 @@ CREATE TABLE IF NOT EXISTS `nota_avaliacao_recuperacao` (
   PRIMARY KEY (`id_nota_avaliacao_recuperacao`,`avaliacao_recuperacao_id_avaliacao_recuperacao`,`aluno_id_aluno`),
   KEY `fk_nota_avaliacao_recuperacao_avaliacao_recuperacao1_idx` (`avaliacao_recuperacao_id_avaliacao_recuperacao`),
   KEY `fk_nota_avaliacao_recuperacao_aluno1_idx` (`aluno_id_aluno`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Fazendo dump de dados para tabela `nota_avaliacao_recuperacao`
@@ -240,7 +242,8 @@ CREATE TABLE IF NOT EXISTS `nota_avaliacao_recuperacao` (
 
 INSERT INTO `nota_avaliacao_recuperacao` (`id_nota_avaliacao_recuperacao`, `valor_nota_avaliacao_recuperacao`, `avaliacao_recuperacao_id_avaliacao_recuperacao`, `aluno_id_aluno`) VALUES
 (4, 0, 1, 4),
-(5, 0, 1, 6);
+(5, 0, 1, 6),
+(6, 65, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -265,7 +268,7 @@ CREATE TABLE IF NOT EXISTS `nota_trabalho` (
 INSERT INTO `nota_trabalho` (`id_nota_trabalho`, `valor_nota_trabalho`, `aluno_id_aluno`, `trabalho_id_trabalho`) VALUES
 (2, 0, 3, 12),
 (3, 0, 4, 12),
-(4, 0, 5, 12),
+(4, 5, 5, 12),
 (5, 0, 6, 12);
 
 -- --------------------------------------------------------
@@ -283,14 +286,18 @@ CREATE TABLE IF NOT EXISTS `noticia` (
   `data_noticia` date NOT NULL,
   `status_noticia` int(1) NOT NULL,
   PRIMARY KEY (`id_noticia`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Fazendo dump de dados para tabela `noticia`
 --
 
 INSERT INTO `noticia` (`id_noticia`, `url_noticia`, `titulo_noticia`, `imagem_mini_noticia`, `conteudo_noticia`, `data_noticia`, `status_noticia`) VALUES
-(10, 'PALESTRA-Gestao-de-Conflitos-Palestrante-Prof-Menegatti_1', 'PALESTRA: Gestão de Conflitos - Palestrante Prof. Menegatti', NULL, '<h1 style="color: #ff0000;">PALESTRA: Gest&atilde;o de Conflitos - Palestrante Prof. Menegatti</h1>\n<p><strong>Esse tema &eacute; uma sugest&atilde;o que servir&aacute; de base para o primeiro contato. Ap&oacute;s o briefing, o Prof. Menegatti customizar&aacute; a palestra de acordo com as informa&ccedil;&otilde;es passadas pelo cliente. Se desejar, escolha mais de uma palestra ou sugira novos t&oacute;picos.</strong></p>\n<p>&nbsp;<img src="/andre/noticia/source/topo_novo(1).jpg" alt="" width="400" height="119" /></p>\n<p><strong>&raquo; Palestra:&nbsp;COMO LIDAR COM CONFLITOS NO AMBIENTE DE TRABALHO<br /></strong><br />Se voc&ecirc; passa a maior parte do tempo no trabalho, que tal investir num ambiente produtivo e harmonioso?</p>\n<p>As empresas est&atilde;o com muita dificuldade de comunica&ccedil;&atilde;o, conviv&ecirc;ncia, trabalho em equipe e insubordina&ccedil;&atilde;o dos funcion&aacute;rios. O resultado disso &eacute; que 87% das demiss&otilde;es s&atilde;o geradas por defici&ecirc;ncia em rela&ccedil;&otilde;es interpessoais e n&atilde;o por incapacidade t&eacute;cnica. Para se ter uma ideia, da maioria dos colaboradores que s&atilde;o mandados embora, apenas 20% assumem que tiveram dificuldades pessoais, outros 80% descarregam a culpa nos colegas e na empresa.</p>', '2015-02-02', 0);
+(10, 'PALESTRA-Gestao-de-Conflitos-Palestrante-Prof-Menegatti', 'PALESTRA: Gestão de Conflitos - Palestrante Prof. Menegatti', 'mini_e2f5b36c2a1d1aa1c97f0f7bb9960ddd.jpg', '<p><strong>Esse tema &eacute; uma sugest&atilde;o que servir&aacute; de base para o primeiro contato. Ap&oacute;s o briefing, o Prof. Menegatti customizar&aacute; a palestra de acordo com as informa&ccedil;&otilde;es passadas pelo cliente. Se desejar, escolha mais de uma palestra ou sugira novos t&oacute;picos.</strong></p>\n<p>&nbsp;<img style="display: block; margin-left: auto; margin-right: auto;" src="/andre/noticia/source/topo_novo(1).jpg" alt="" width="400" height="119" /></p>\n<p><strong>&raquo; Palestra:&nbsp;COMO LIDAR COM CONFLITOS NO AMBIENTE DE TRABALHO<br /></strong><br />Se voc&ecirc; passa a maior parte do tempo no trabalho, que tal investir num ambiente produtivo e harmonioso?</p>\n<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/andre/noticia/source/img_3048.jpg" alt="" width="400" /></p>\n<p>As empresas est&atilde;o com muita dificuldade de comunica&ccedil;&atilde;o, conviv&ecirc;ncia, trabalho em equipe e insubordina&ccedil;&atilde;o dos funcion&aacute;rios. O resultado disso &eacute; que 87% das demiss&otilde;es s&atilde;o geradas por defici&ecirc;ncia em rela&ccedil;&otilde;es interpessoais e n&atilde;o por incapacidade t&eacute;cnica. Para se ter uma ideia, da maioria dos colaboradores que s&atilde;o mandados embora, apenas 20% assumem que tiveram dificuldades pessoais, outros 80% descarregam a culpa nos colegas e na empresa.</p>', '2015-02-02', 1),
+(11, 'Inicio-da-aulas', 'Início da aulas', NULL, '<h1 style="color: #ff0000;">In&iacute;cio da aulas</h1>\n<p>As aulas est&atilde;o voutando e todo devem se prepara par mais um semestre.<br />Espero que possa aproveirar ao m&aacute;ximo este semestre.</p>', '2014-02-04', 1),
+(12, 'Teste-de-data', 'Teste de data', NULL, '<p>Este &eacute; apenas um teste de data para ver se a ordena&ccedil;&atilde;o esta correta</p>', '2015-01-28', 1),
+(13, 'Teste-de-tabala', 'Teste de tabala', 'mini_dd1e15b57d7519d8a64cc2da726a5a52.jpg', '<table class=" table table-bordered">\n<tbody>\n<tr>\n<td><strong>asdfasdf</strong></td>\n<td><strong>asdfasdfsadf</strong></td>\n<td><strong>asdfasdfsadf</strong></td>\n</tr>\n<tr>\n<td>&nbsp;</td>\n<td>&nbsp;</td>\n<td>&nbsp;</td>\n</tr>\n<tr>\n<td>&nbsp;</td>\n<td>&nbsp;</td>\n<td>&nbsp;</td>\n</tr>\n</tbody>\n</table>', '2015-02-05', 1),
+(14, 'Danilo-Moabb_1', 'Danilo Moabb', 'CONVITE.jpg', '<p>Hairton sobral silva</p>\n<p><img src="/andre/noticia/source/GADO1.jpg" alt="" width="300" height="199" /></p>\n<p>lasdlflasdfl</p>\n<p><img src="/andre/noticia/source/iconePregao05.png" alt="" width="214" height="140" /></p>', '2015-02-04', 1);
 
 -- --------------------------------------------------------
 
@@ -314,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `professor` (
 --
 
 INSERT INTO `professor` (`id_professor`, `nome_professor`, `email_professor`, `senha_professor`, `cpf_professor`, `imagem_professor`, `sobre_professor`) VALUES
-(1, 'Hairton Sobral Silva', 'hairtonsena@yahoo.com.br', '25d55ad283aa400af464c76d713c07ad', '111111111', '30dc999a12bc4f377335ac07ec5745f5.jpg', '<p>Este &eacute; um texto teste s&oacute; para ver como vai ficar na pagina de sobre do professor andre aristotoles de administra&ccedil;&atilde;o. kkkk</p>\n');
+(1, 'Hairton Sobral Silva', 'hairtonsena@yahoo.com.br', '25d55ad283aa400af464c76d713c07ad', '12345678901', '30dc999a12bc4f377335ac07ec5745f5.jpg', '<p>Este &eacute; um texto teste s&oacute; para ver como vai ficar na pagina de sobre do professor andre aristotoles de administra&ccedil;&atilde;o. kkkk</p>\n');
 
 -- --------------------------------------------------------
 
@@ -381,7 +388,7 @@ CREATE TABLE IF NOT EXISTS `turma` (
   `disciplina_id_disciplina` int(5) NOT NULL,
   PRIMARY KEY (`id_turma`,`disciplina_id_disciplina`),
   KEY `fk_turma_disciplina_idx` (`disciplina_id_disciplina`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Fazendo dump de dados para tabela `turma`
@@ -389,8 +396,9 @@ CREATE TABLE IF NOT EXISTS `turma` (
 
 INSERT INTO `turma` (`id_turma`, `nome_turma`, `horario_turma`, `status_turma`, `disciplina_id_disciplina`) VALUES
 (1, '210', '<table border="1" cellpadding="1" cellspacing="1" class="table table-bordered" style="width:100%">\n	<tbody>\n		<tr>\n			<td style="text-align:center"><strong>Segunda</strong></td>\n			<td style="text-align:center"><strong>Ter&ccedil;a</strong></td>\n			<td style="text-align:center"><strong>Quarta</strong></td>\n			<td style="text-align:center"><strong>Quinta</strong></td>\n			<td style="text-align:center"><strong>Ter&ccedil;a</strong></td>\n		</tr>\n		<tr>\n			<td>asdf</td>\n			<td>asdf</td>\n			<td>as</td>\n			<td>sfd</td>\n			<td>dsf</td>\n		</tr>\n		<tr>\n			<td>asd</td>\n			<td>sadf</td>\n			<td>ffff</td>\n			<td>fdsf</td>\n			<td>&nbsp;</td>\n		</tr>\n		<tr>\n			<td>as</td>\n			<td>asdf</td>\n			<td>asd</td>\n			<td>sdf</td>\n			<td>sdf</td>\n		</tr>\n	</tbody>\n</table>\n\n<p>&nbsp;</p>\n', 1, 3),
-(3, 'agora', NULL, 1, 3),
-(4, 'Literatura', NULL, 1, 2);
+(3, 'agora', NULL, 2, 3),
+(4, 'Literatura', NULL, 1, 2),
+(5, '240', NULL, 1, 1);
 
 --
 -- Restrições para dumps de tabelas

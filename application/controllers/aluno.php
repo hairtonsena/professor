@@ -25,6 +25,10 @@ class aluno extends CI_Controller {
         redirect(base_url("aluno/disciplina_turma"));
     }
 
+    public function acesso() {
+        $this->load->view('painel_aluno/forme_acesso_aluno');
+    }
+
     public function disciplina_turma() {
         if (($this->session->userdata('id_aluno')) && ($this->session->userdata('nome_aluno')) && ($this->session->userdata('cpf_aluno')) && ($this->session->userdata('matricula_aluno')) && ($this->session->userdata('verificar_login') == 'cored.com')) {
             $id_aluno = $this->session->userdata('id_aluno');
@@ -44,7 +48,7 @@ class aluno extends CI_Controller {
             $this->load->view('tela/titulo');
             $this->load->view('tela/menu', $dados_menu);
             $this->load->view('painel_aluno/disciplina_turma_view', $dados);
-            $this->load->view('tela/outros_view');
+            // $this->load->view('tela/outros_view');
             $this->load->view('tela/rodape');
         } else {
             redirect(base_url());
@@ -86,6 +90,12 @@ class aluno extends CI_Controller {
                 }
             }
 
+            $provas_on_matriz = $this->avaliacao_model->obter_prova_on_ativa($id_turma)->result();
+
+
+
+
+
 
 
             // Buscando todos os trabalhos da turma selecionada.
@@ -122,16 +132,17 @@ class aluno extends CI_Controller {
 
 
             $dados = array(
-                "disciplina_turma" => $disciplina_turma,
-                "avaliacoes_turma" => $avaliacoes,
-                "trabalhos_turma" => $trabalhos,
-                "avaliacao_recuperacao_turma" => $avaliacao_recuperacao_turma
+            "disciplina_turma" => $disciplina_turma,
+            "avaliacoes_turma" => $avaliacoes,
+            "trabalhos_turma" => $trabalhos,
+            "prova_on_matriz" => $provas_on_matriz,
+            "avaliacao_recuperacao_turma" => $avaliacao_recuperacao_turma
             );
 
             $this->load->view('tela/titulo');
             $this->load->view('tela/menu', $dados_menu);
             $this->load->view('painel_aluno/turma_view', $dados);
-            $this->load->view('tela/outros_view');
+            // $this->load->view('tela/outros_view');
             $this->load->view('tela/rodape');
         } else {
             redirect(base_url());
@@ -246,7 +257,7 @@ class aluno extends CI_Controller {
             $this->load->view('tela/titulo');
             $this->load->view('tela/menu', $dados_menu);
             $this->load->view('painel_aluno/forme_alterar_senha_view');
-            $this->load->view('tela/outros_view');
+            // $this->load->view('tela/outros_view');
             $this->load->view('tela/rodape');
         } else {
             redirect(base_url());

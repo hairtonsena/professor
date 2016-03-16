@@ -1,5 +1,5 @@
 
-<div  class="col-md-8" style="padding-left: 0px;">
+<div  class="col-md-9" style="padding-left: 0px;">
     <div class="titulos">Publicações</div>
     <?php
     foreach ($noticias_pagina_inicial as $ntpi) {

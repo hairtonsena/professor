@@ -21,7 +21,7 @@ $(function () {
 
 
 
-
+//    $('#modalAcesso').modal("show");
 
 
 // Trabalhando com upload dos trabalhos dos alunos
@@ -205,6 +205,48 @@ function enviar_arquivo_aluno(trabalho) {
             resetFrom: true
         }).submit();
     }
+    ;
+}
 
-//        return false;
+
+Tela = {
+    abrirFomeAcessoAluno: function () {
+        this.abrirModal();
+        var pg = Config.base_url("aluno/acesso");
+
+        this.carregarConteudoModal(pg, '');
+    },
+    acesso_aluno: function () {
+        var cpf_matricula = $("#cpf_or_matricula").val();
+        var senha = $("#senha").val();
+
+        var dados = "cpf_or_matricula=" + cpf_matricula + "&senha=" + senha;
+
+
+        var pg = Config.base_url("inicio/acesso_aluno");
+
+        this.carregarConteudoModal(pg, dados)
+
+        return false;
+    },
+    carregarConteudoModal: function (pg, p) {
+        $.ajax({
+            type: "post",
+            url: pg,
+            data: p,
+            success: function (retorno) {
+                $("#conteudoModal").html(retorno);
+            }
+        });
+
+    },
+    abrirModal: function () {
+        $("#modalAcesso").modal("show");
+        $("#conteudoModal").html('<h4 class="text-center"> Carregando... </h4>');
+    },
+    fecharModal: function () {
+        $("#modalAcesso").modal("hide");
+
+    }
+
 }

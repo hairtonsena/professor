@@ -133,6 +133,83 @@ class avaliacao_model extends CI_Model {
         $this->db->update('avaliacao_recuperacao', $dados);
     }
 
+    /*
+     * Trabalhando com prova online
+     */
+
+    public function salvar_nova_prova_online($dados) {
+        $this->db->insert('prova_on_matriz', $dados);
+        return $this->db->get_where('prova_on_matriz', $dados);
+    }
+
+    public function alterar_prova_online($dados, $id_prova_online) {
+        $this->db->where("id_prova_on_matriz", $id_prova_online);
+        $this->db->update('prova_on_matriz', $dados);
+        return $this->db->get_where('prova_on_matriz', array("id_prova_on_matriz" => $id_prova_online));
+    }
+
+    public function obter_uma_prova_online($id_prova_on) {
+        return $this->db->get_where('prova_on_matriz', array('id_prova_on_matriz' => $id_prova_on));
+    }
+
+    // função para pegar todas as provas on-line que estão cadatradas para uma determinada turma.
+    function obter_todas_prova_on_matriz_turma($id_turma) {
+        return $this->db->get_where('prova_on_matriz', array('turma_id_turma' => $id_turma));
+    }
+
+    
+    public function excluir_prova_online($id_prova_online){
+        $this->db->delete("prova_on_matriz",array("id_prova_on_matriz"=>$id_prova_online));
+    }
+            
+    function obter_todas_questoes_prova_online($id_prova_online) {
+        return $this->db->get_where('questao_matriz', array('prova_on_matriz_id_prova_on_matriz' => $id_prova_online));
+    }
+
+    function salvar_questao_online($dados) {
+        $this->db->insert('questao_matriz', $dados);
+        return $this->db->get_where('questao_matriz', $dados);
+    }
+
+    function alterar_questao_online($dados, $id_questao) {
+        $this->db->where("id_questao_matriz", $id_questao);
+        $this->db->update('questao_matriz', $dados);
+        return $this->db->get_where('questao_matriz', array("id_questao_matriz" => $id_questao));
+    }
+
+    function obter_uma_questao($id_questao) {
+        return $this->db->get_where('questao_matriz', array('id_questao_matriz' => $id_questao));
+    }
+    
+    public function excluir_questao($id_questao){
+        $this->db->delete("questao_matriz",array("id_questao_matriz"=>$id_questao));
+    }
+            
+    
+    
+    
+    function salva_alternativa_questao($dados) {
+        $this->db->insert('alternativa_questao', $dados);
+        return $this->db->get_where('alternativa_questao', $dados);
+    }
+
+    function obter_alternativas_questao($id_questao) {
+        return $this->db->get_where('alternativa_questao', array("questao_matriz_id_questao_matriz" => $id_questao));
+    }
+
+    function obter_uma_alternativa($id_alternativa){
+        return $this->db->get_where("alternativa_questao",array("id_alternativa_questao"=>$id_alternativa));
+    }
+    
+    function alterar_alternativa_questao($dados,$id_alternativa){
+        $this->db->where("id_alternativa_questao",$id_alternativa);
+        $this->db->update('alternativa_questao', $dados);
+        return $this->db->get_where('alternativa_questao', array("id_alternativa_questao"=>$id_alternativa));
+    }
+
+    public function excluir_alternativa($id_alternativa){
+        $this->db->delete('alternativa_questao',array("id_alternativa_questao"=>$id_alternativa));
+    }
 }
 
 ?>

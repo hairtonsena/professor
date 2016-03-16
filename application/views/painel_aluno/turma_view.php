@@ -14,23 +14,50 @@ foreach ($disciplina_turma as $dt) {
 ?>
 
 <!--inicio logado-->
-<div  class="col-md-8 row ">
+<div  class="col-md-12 semMargem">
 
-    <div class="titulos">Painel - aluno</div>
-    <div class="titulos"><?php echo $nome_disciplina ?></div>
-    <div class="col-md-12 linha">
+
+    <div class="col-md-12 semMargem">
+
+        <div class="titulos">
+            <a href="<?php echo base_url("aluno/") ?>"> Painel aluno </a> / Disciplina e turma
+        </div>
+
+        <h3 class="text-center">
+            <?php echo $nome_disciplina ?>
+        </h3>
         <?php echo $descricao_disciplina ?>
     </div>
-    <div class="titulos">Turma: <?php echo $nome_turma ?></div>
-    <div class="col-md-12 linha">
-        <h4>Horários</h4>
+
+
+    <div class="col-md-12 semMargem" >
+        <div class="box_label_turma" style="border-bottom: 5px solid #0066cc;">
+
+            <span class="titulo_turma_label">Turma: <?php echo $nome_turma ?></span>
+        </div>
+
+    </div>
+
+    <div class="col-md-12" style="background-color: #dcdcdc; font-size: 18px;">
+        <ul class="list-inline">
+            <li><a class="" href="#" style="color: #0066cc">Horario</a></li>
+            <li><a class="" href="#">Trabalho</a></li>
+            <li><a class="" href="#">Prova online</a></li>
+        </ul>
+    </div>
+
+
+    <div class="col-md-12 semMargem">
+        <h4 class="titulo_subitem_turma">Horários</h4>
         <p>
             <?php echo $horario_turma ?>
         </p>
     </div>
 
-    <div class="col-md-12 linha">
-        <h4>Trabalhos 2</h4>
+
+
+    <div class="col-md-12 semMargem">
+        <h4 class="titulo_subitem_turma">Trabalhos</h4>
         <table class="table table-responsive">
             <thead>
                 <tr>
@@ -43,7 +70,7 @@ foreach ($disciplina_turma as $dt) {
                 <?php foreach ($trabalhos_turma as $trt) { ?>
 
                     <tr  class="botao">
-                        <td><a data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><?php echo $trt->titulo_trabalho ?></a></td>
+                        <td><a data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><i class="glyphicon glyphicon-download"></i> <?php echo $trt->titulo_trabalho ?></a></td>
                         <td class="text-center"><a data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><?php echo date('d/m/Y', strtotime($trt->data_entrega_trabalho)) ?></a></td>
                         <td class="text-center"><a data-toggle="collapse" href="#maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>" aria-expanded="false" aria-controls="maisInformacoesTrabalho_<?php echo $trt->id_trabalho ?>"><?php echo $trt->valor_nota_trabalho ?></a></td>
                     </tr>
@@ -82,7 +109,7 @@ foreach ($disciplina_turma as $dt) {
 
                                             <div class="inputFile col-lg-12 sem_margen_pading">
                                                 <h4>Enviar tabalho</h4>
-        <!--                                                    <span class="" id="textoCampoUp"><i class="glyphicon glyphicon-file"></i> Selecione o arquivo </span>-->
+            <!--                                                    <span class="" id="textoCampoUp"><i class="glyphicon glyphicon-file"></i> Selecione o arquivo </span>-->
                                                 <input type="file" class="" id="arquivo_<?php echo $trt->id_trabalho ?>" accept="application/pdf" name="arquivo">
                                             </div>
 
@@ -124,13 +151,14 @@ foreach ($disciplina_turma as $dt) {
             </tbody>
         </table>
     </div>
-    <div class="col-md-12 linha">
-        <h4>Avaliações</h4>
+
+    <div class="col-md-12 semMargem">
+        <h4 class="titulo_subitem_turma">Prova escrita</h4>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Descrição</th>
-                    <th class="col-md-3 text-center">Data entrega</th>
+                    <th class="col-md-3 text-center">Data</th>
                     <th class="col-md-1 text-center">Valor</th>
                 </tr>
             </thead>
@@ -145,8 +173,31 @@ foreach ($disciplina_turma as $dt) {
             </tbody>
         </table>
     </div>
-    <div class="col-md-12 linha">
-        <h4>Notas Aluno</h4>
+
+    <div class="col-md-12 semMargem">
+        <h4 class="titulo_subitem_turma">Prova online</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th class="col-md-3 text-center">Data e hora realizaçao</th>
+                    <th class="col-md-1 text-center">Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php for ($i=0; $i < count($prova_on_matriz);$i++) { ?>
+                    <tr>
+                        <td><?php echo $prova_on_matriz[$i]->nome_prova_on_matriz ?></td>
+                        <td class="text-center"><?php echo date('d/m/Y', strtotime($prova_on_matriz[$i]->data_realizacao_prova_on_matriz))." - ".$prova_on_matriz[$i]->hora_realizacao_prova_on_matriz ?></td>
+                        <td class="text-center"><?php echo number_format($prova_on_matriz[$i]->valor_ponto_prova_on_matriz,2) ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-12 semMargem">
+        <h4 class="titulo_subitem_turma">Notas Aluno</h4>
 
         <table class="table table-bordered">
             <thead>
@@ -280,5 +331,6 @@ foreach ($disciplina_turma as $dt) {
         </p>
 
     </div>
+</div>
 </div>
 <!--fim logado-->

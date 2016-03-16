@@ -15,6 +15,29 @@ class Inicio extends CI_Controller {
         $this->load->model('disciplina_model');
         $this->load->model('aluno_model');
         $this->load->model('noticia_model');
+//        $this->load->library('rss_lib');
+    }
+
+    public function carregarRSS($link = NULL) {
+        if ($link != NULL) {
+            $xml = simplexml_load_file($link)->channel;
+            return $xml;
+        }
+    }
+
+    protected $dados_menu = NULL;
+    protected $dados_conteudo = NULL;
+    protected $pg_view = 'tela/inicio_view';
+
+    protected function showTela() {
+
+        $this->dados_conteudo['xml_rss'] = $this->carregarRSS("http://g1.globo.com/dynamo/economia/rss2.xml");
+
+        $this->load->view('tela/titulo');
+        $this->load->view('tela/menu', $this->dados_menu);
+        $this->load->view($this->pg_view, $this->dados_conteudo);
+        $this->load->view('tela/outros_view');
+        $this->load->view('tela/rodape');
     }
 
     // Funçao da pagina inicial
@@ -25,21 +48,16 @@ class Inicio extends CI_Controller {
         $noticias_pagina_inicial = $this->noticia_model->obter_noticias_pagina_inicial()->result();
 
 
-        $dados_menu = array(
+        $this->dados_menu = array(
             "munu_disciplina" => $disciplina_menu,
         );
 
-        $dados_conteudo = array(
+        $this->dados_conteudo = array(
             "noticias_pagina_inicial" => $noticias_pagina_inicial
         );
 
-        $this->load->view('tela/titulo');
-        $this->load->view('tela/menu', $dados_menu);
-        $this->load->view('tela/inicio_view',$dados_conteudo);
-        //$this->load->view('tela/disciplina_sem_logar_view');
-        // $this->load->view('tela/disciplina_logado_view');
-        $this->load->view('tela/outros_view');
-        $this->load->view('tela/rodape');
+
+        $this->showTela();
     }
 
     // função para verificar os dados dos alunos e logar no sistema no modulo aluno.
@@ -49,9 +67,11 @@ class Inicio extends CI_Controller {
 
         if ($this->form_validation->run() == FALSE) {
 
-            $this->index();
+            $this->load->view('painel_aluno/forme_acesso_aluno');
         } else {
-            redirect(base_url("inicio"));
+            //redirect(base_url("inicio"));
+
+            echo '<script language= "JavaScript"> location.href="' . base_url() . '"</script>';
         }
     }
 
@@ -103,7 +123,7 @@ class Inicio extends CI_Controller {
     }
 
     protected function criar_sessao_aluno($aluno) {
-        
+
         $dadosUser = array(
             'id_aluno' => $aluno->id_aluno,
             'nome_aluno' => $aluno->nome_aluno,

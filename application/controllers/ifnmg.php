@@ -18,30 +18,51 @@ class Ifnmg extends CI_Controller {
         $this->load->model('trabalho_model');
     }
 
-    public function index() {
+    public function carregarRSS($link = NULL) {
+        if ($link != NULL) {
+            $xml = simplexml_load_file($link)->channel;
+            return $xml;
+        }
+    }
 
-        // Carregar o menu disciplina
-        $disciplinas_ativas = $this->disciplina_model->ver_todas_disciplina_ativas()->result();
-        $dados_menu = array(
-            "munu_disciplina" => $disciplinas_ativas
-        );
+    protected $dados_menu = NULL;
+    protected $dados_conteudo = NULL;
+    protected $pg_view = 'tela/inicio_view';
 
-        $dados = array(
-           "disciplinas_ativa" => $disciplinas_ativas
-        );
-        
+    protected function showTela() {
+
+        $this->dados_conteudo['xml_rss'] = $this->carregarRSS("http://g1.globo.com/dynamo/economia/rss2.xml");
 
         $this->load->view('tela/titulo');
-        $this->load->view('tela/menu', $dados_menu);
-        $this->load->view('ifnmg/ifnmg_view',$dados);
+        $this->load->view('tela/menu', $this->dados_menu);
+        $this->load->view($this->pg_view, $this->dados_conteudo);
         $this->load->view('tela/outros_view');
         $this->load->view('tela/rodape');
     }
 
+    public function index() {
+
+        // Carregar o menu disciplina
+        $disciplinas_ativas = $this->disciplina_model->ver_todas_disciplina_ativas()->result();
+        $this->dados_menu = array(
+            "munu_disciplina" => $disciplinas_ativas
+        );
+
+        $this->dados_conteudo = array(
+            "disciplinas_ativa" => $disciplinas_ativas
+        );
+
+        $this->pg_view = 'ifnmg/ifnmg_view';
+        
+        $this->showTela();
+        
+        
+    }
+
     public function disciplina() {
 
-        if ($this->uri->segment(3)==NULL) {
-            redirect(base_url());   
+        if ($this->uri->segment(3) == NULL) {
+            redirect(base_url());
         }
 
         $id_disciplina = (int) mysql_real_escape_string($this->uri->segment(3));
@@ -53,7 +74,7 @@ class Ifnmg extends CI_Controller {
 
         // Carregar o menu disciplina
         $disciplina_menu = $this->disciplina_model->ver_todas_disciplina_ativas()->result();
-        $dados_menu = array(
+        $this->dados_menu = array(
             "munu_disciplina" => $disciplina_menu
         );
 
@@ -62,16 +83,15 @@ class Ifnmg extends CI_Controller {
         $turmas = $this->turma_model->obter_turma_ativa_por_disciplina($id_disciplina)->result();
 
 
-        $dados = array(
+        $this->dados_conteudo = array(
             "disciplina" => $disciplina,
             "turmas" => $turmas
         );
 
-        $this->load->view('tela/titulo');
-        $this->load->view('tela/menu', $dados_menu);
-        $this->load->view('ifnmg/disciplina_view', $dados);
-        $this->load->view('tela/outros_view');
-        $this->load->view('tela/rodape');
+        $this->pg_view = 'ifnmg/disciplina_view';
+        
+        $this->showTela();
+        
     }
 
     public function turma() {
@@ -86,7 +106,7 @@ class Ifnmg extends CI_Controller {
 
         // Carregar o menu disciplina
         $disciplinas_menu = $this->disciplina_model->ver_todas_disciplina_ativas()->result();
-        $dados_menu = array(
+        $this->dados_menu = array(
             "munu_disciplina" => $disciplinas_menu
         );
 
@@ -100,17 +120,16 @@ class Ifnmg extends CI_Controller {
             $trb->anexos_trabalho = $this->trabalho_model->obeter_anexos_trabalho($trb->id_trabalho)->result();
         }
 
-        $dados = array(
+        $this->dados_conteudo = array(
             "disciplina_turma" => $disciplina_turma,
             "avaliacoes_turma" => $avaliacoes,
             "trabalhos_turma" => $trabalhos
         );
+        
+        $this->pg_view = 'ifnmg/disciplina_turma_view';
+        
+        $this->showTela();
 
-        $this->load->view('tela/titulo');
-        $this->load->view('tela/menu', $dados_menu);
-        $this->load->view('ifnmg/disciplina_turma_view', $dados);
-        $this->load->view('tela/outros_view');
-        $this->load->view('tela/rodape');
     }
 
     public function turma_arquivada() {

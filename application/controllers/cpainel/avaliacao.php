@@ -17,71 +17,92 @@ class avaliacao extends CI_Controller {
         $this->load->model('cpainel/trabalho_model');
     }
 
+    protected $dados_conteudo = NULL;
+    protected $pg_conteudo = '';
+
+    protected function show_tela() {
+        $this->load->view('cpainel/tela/titulo');
+        $this->load->view('cpainel/tela/menu');
+        $this->load->view($this->pg_conteudo, $this->dados_conteudo);
+        $this->load->view('cpainel/tela/rodape');
+    }
+
+    protected function verificar_user_logado() {
+        if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
     public function index() {
+        
+    }
+
+    public function prova_escrita() {
         // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
-            
+
             $id_turma = $this->input->get('turma');
 
 
             $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
-            if(count($query)==0){
+            if (count($query) == 0) {
                 redirect(base_url("cpainel/disciplina"));
             }
             $avaliacao_por_turma = $this->avaliacao_model->obter_todas_avaliacoes_turma($id_turma)->result();
 
 
-            $dados = array(
+            $this->dados_conteudo = array(
                 "turma_disciplina" => $query,
                 "avaliacoes_turma" => $avaliacao_por_turma
             );
 
-            $this->load->view('cpainel/tela/titulo');
-            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/avaliacao/avaliacao_view', $dados);
-            $this->load->view('cpainel/tela/rodape');
+            $this->pg_conteudo = 'cpainel/avaliacao/prova_escrita/prova_escrita_view';
+
+            $this->show_tela();
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
 
     // Função para casdastrar um nava avaliação.
-    public function nova($id_turma = NULL) {
+    public function nova_prova_escrita($id_turma = NULL) {
         // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
             if ($id_turma == null) {
                 $id_turma = $this->uri->segment(4);
             }
             $query = $this->turma_model->obter_turma_disciplina($id_turma)->result();
-            if(count($query)==0){
+            if (count($query) == 0) {
                 redirect(base_url("cpainel/disciplina"));
             }
-            
-            $dados = array(
+
+            $this->dados_conteudo = array(
                 "turma_disciplina" => $query
             );
 
-            $this->load->view('cpainel/tela/titulo');
-            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/avaliacao/forme_nova_avaliacao_view', $dados);
-            $this->load->view('cpainel/tela/rodape');
+            $this->pg_conteudo = 'cpainel/avaliacao/prova_escrita/forme_nova_prova_escrita_view';
+
+            $this->show_tela();
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
 
-    public function salvar_nova_avaliacao() {
+    public function salvar_nova_prova_escrita() {
         // veirificando usuario logado
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
+
             $this->form_validation->set_rules('descricao_avaliacao', 'Descrição', 'required|trim|min_length[4]|max_length[45]');
-            $this->form_validation->set_rules('data_avaliacao', 'Data', 'required|trim|min_length[2]|max_length[45]');
-            $this->form_validation->set_rules('valor_avaliacao', 'Valor', 'required|trim|min_length[0]|max_length[45]|callback_varificar_total_notas_distribuidas_check');
+            $this->form_validation->set_rules('data_avaliacao', 'Data', 'required|trim|min_length[8]|max_length[10]');
+            $this->form_validation->set_rules('valor_avaliacao', 'Valor', 'required|trim|min_length[1]|max_length[3]|callback_varificar_total_notas_distribuidas_check');
 
             $id_turma = $this->input->post('turma');
 
             if ($this->form_validation->run() == FALSE) {
-                $this->nova($id_turma);
+                $this->nova_prova_escrita($id_turma);
             } else {
 
                 $descricao_avaliacao = $this->input->post('descricao_avaliacao');
@@ -97,7 +118,7 @@ class avaliacao extends CI_Controller {
 
                 $this->avaliacao_model->salvar_nova_avaliacao($dados);
 
-                redirect(base_url("cpainel/avaliacao?turma=" . $id_turma));
+                redirect(base_url("cpainel/avaliacao/prova_escrita/?turma=" . $id_turma));
             }
         } else {
             redirect(base_url("cpainel/seguranca"));
@@ -153,7 +174,7 @@ class avaliacao extends CI_Controller {
     }
 
     // Finção para mostra o formulário de alterar avaliação
-    public function alterar_avaliacao($id_avaliacao = NULL) {
+    public function alterar_prova_escrita($id_avaliacao = NULL) {
         // verificando se o usuário está logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
             if ($id_avaliacao == null) {
@@ -161,10 +182,10 @@ class avaliacao extends CI_Controller {
             }
 
             $avaliacao = $this->avaliacao_model->obter_uma_avaliacao($id_avaliacao)->result();
-            if(count($avaliacao)==0){
+            if (count($avaliacao) == 0) {
                 redirect(base_url("cpainel/disciplina"));
             }
-            
+
             $id_turma;
             foreach ($avaliacao as $av) {
                 $id_turma = $av->turma_id_turma;
@@ -173,22 +194,21 @@ class avaliacao extends CI_Controller {
 
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
 
-            $dados = array(
+            $this->dados_conteudo = array(
                 "turma_disciplina" => $turma_disciplina,
                 "avaliacao" => $avaliacao
             );
 
-            $this->load->view('cpainel/tela/titulo');
-            $this->load->view('cpainel/tela/menu');
-            $this->load->view('cpainel/avaliacao/forme_alterar_avaliacao_view', $dados);
-            $this->load->view('cpainel/tela/rodape');
+            $this->pg_conteudo = 'cpainel/avaliacao/prova_escrita/forme_alterar_avaliacao_view';
+
+            $this->show_tela();
         } else {
             redirect(base_url("cpainel/seguranca"));
         }
     }
 
     // Função para salvar os dados alterados da avaliação.
-    public function salvar_avaliacao_alterada() {
+    public function salvar_prova_escrita_alterada() {
         // verificando usuário logado.
         if (($this->session->userdata('id_professor')) && ($this->session->userdata('nome_professor')) && ($this->session->userdata('email_professor')) && ($this->session->userdata('senha_professor'))) {
 
@@ -199,7 +219,7 @@ class avaliacao extends CI_Controller {
             $id_avaliacao = $this->input->post('avaliacao');
 
             if ($this->form_validation->run() == FALSE) {
-                $this->alterar_avaliacao($id_avaliacao);
+                $this->alterar_prova_escrita($id_avaliacao);
             } else {
 
 
@@ -245,7 +265,7 @@ class avaliacao extends CI_Controller {
                     $this->avaliacao_model->alterar_avaliacao($dados, $id_avaliacao);
                 }
 
-                redirect(base_url("cpainel/avaliacao/?turma=" . $id_turma));
+                redirect(base_url("cpainel/avaliacao/prova_escrita/?turma=" . $id_turma));
             }
         } else {
             redirect(base_url("cpainel/seguranca"));
@@ -285,7 +305,7 @@ class avaliacao extends CI_Controller {
                 $id_turma = $this->uri->segment(4);
             }
             $turma_disciplina = $this->turma_model->obter_turma_disciplina($id_turma)->result();
-            if(count($turma_disciplina)==0){
+            if (count($turma_disciplina) == 0) {
                 redirect(base_url("cpainel/disciplina"));
             }
             $avaliacao_recuperacao = $this->avaliacao_model->obter_avaliacao_recuperacao($id_turma)->result();
@@ -310,31 +330,31 @@ class avaliacao extends CI_Controller {
 
             $this->form_validation->set_rules('descricao', 'Descrição', 'required|trim|min_length[4]|max_length[45]');
             $this->form_validation->set_rules('data', 'Data', 'required|data|trim|min_length[8]|max_length[10]');
-           
+
 
             $id_avaliacao_recuperacao = $this->input->post('avaliacao_recuperacao');
 
             if ($this->form_validation->run() == FALSE) {
-                
+
                 echo validation_errors();
-                
             } else {
 
                 $descricao = $this->input->post('descricao');
                 $data = $this->input->post('data');
 
-                    $dados = array(
-                        "descricao_avaliacao_recuperacao" => $descricao,
-                        "data_avaliacao_recuperacao" => implode("-", array_reverse(explode("/", $data))),
-                    );
-                    $this->avaliacao_model->alterando_dados_avaliacao_recuperacao($dados, $id_avaliacao_recuperacao);
-                
-               echo "1";
+                $dados = array(
+                    "descricao_avaliacao_recuperacao" => $descricao,
+                    "data_avaliacao_recuperacao" => implode("-", array_reverse(explode("/", $data))),
+                );
+                $this->avaliacao_model->alterando_dados_avaliacao_recuperacao($dados, $id_avaliacao_recuperacao);
+
+                echo "1";
             }
         } else {
             echo "Acesso negado!";
         }
     }
+
 
 }
 

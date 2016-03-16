@@ -1,14 +1,10 @@
-<div class="row col-lg-12">
-    <ol class="breadcrumb">
-        <li><a href="<?php echo base_url("cpainel/") ?>">cpainel</a></li>
-        <li class="active">Disciplina</li>       
-    </ol>
+<div class=" col-lg-12 semMargem">
     <div class="panel panel-default">
         <!-- Default panel contents -->
         <div class="panel-heading">Disciplina</div>
         <div class="panel-body">
             <div class="col-lg-6">
-                <a  href="<?php echo base_url("cpainel/disciplina/nova_disciplina") ?>" class="btn btn-primary" id="btnNovaDdisciplina">Nova Disciplina</a>
+                <a  href="<?php echo base_url("cpainel/disciplina/nova_disciplina") ?>" class="btn btn-primary" id="btnNovaDdisciplina"><i class="glyphicon glyphicon-plus"></i><strong> Disciplina</strong></a>
 
                 <div style="margin-top: 5px">
                     <table class="table table-bordered" id="tabelaCategoria">
